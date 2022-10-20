@@ -90,14 +90,15 @@ class: inverse, mline, center, middle
 * Big Data treatment (> 1 million users with activities recorded in the past 5 years)
 
 ---
+class: title-slide, middle
 
-# Who are you?
+## Who are you?
 
 Please introduce yourself:
 
-- Where do you come from?
+- What is you first name?
 - Which school are you in?
-- What are you expecting from this lecture?
+- What is your PhD about (in few words)?
 
 ---
 class: inverse, mline, center, middle
@@ -147,18 +148,14 @@ class: title-slide, middle
 
 ## Exercise
 
-If you haven't done it already, can you look for the quantitative academic journal paper which is the closest to your PhD. 
+If you haven't done it already, can you __look for the quantitative academic journal paper which is the closest to your PhD__. 
 
-You need to download the pdf version of this paper and to send it to my email damien.dupre@dcu.ie . 
+You need to download the pdf version of this paper and to __send it to my email damien.dupre@dcu.ie__.
 
-Notes: 
+`r faa("exclamation-triangle", animate="flash", speed="slow", color="red")` Notes: 
 
 - This paper should not be one of yours if you already have published some
 - This paper should include a statistical analysis (i.e., Regression analysis, ANOVA, t-test) and if possible their corresponding $p-values$
-
-```{r}
-countdown(minutes = 10, warn_when = 60)
-```
 
 ---
 class: inverse, mline, center, middle
@@ -206,7 +203,8 @@ For example:
 - "What is the relationship between Job Satisfaction, Salary and Gender?"
 - "How does sales experience influence the performance of sales managers and sales representatives?"
 
-Important: Each variable has a **Role** and a **Type**, it is essential to learn how to identify them.
+`r faa("exclamation-triangle", animate="flash", speed="slow", color="red")` **Warning**: 
+Each variable has a **Role** and a **Type**, it is essential to learn how to identify them.
 
 ---
 
@@ -222,7 +220,7 @@ Variables can have different types:
   
 - **Continuous**: If the variable's possibilities are numbers (*e.g.*, $age$, $temperature$, ...) 
 
-> Warning: Variables can be converted to either Categorical and Continuous but it is always better to keep them in their correct scale.
+`r faa("exclamation-triangle", animate="flash", speed="slow", color="red")` **Warning**: Variables can be converted to either Categorical and Continuous but it is always better to keep them in their correct scale.
 
 ```{r out.width='30%'}
 knitr::include_graphics("img/jamovi_icons.png")
@@ -245,26 +243,6 @@ Statistics is only about identifying relationship between Predictor and Outcome 
 > An effect between 2 variables means that the changes in the values of a predictor variable are related to changes in the values of an outcome variable.
 
 > The aim of an Academic Report is to investigate if the **Variability of the Outcome Variable** is related to the variability of Predictor Variables.
-
----
-
-# Predictors, Outcomes and Controls
-
-Imagine a the variability of the Outcome Variable is a birthday cake. 
-
-Now, imagine each predictor is a guest having a slice of the cake:
-
-- **Case 1:** There is only one guest eating all the cake.
-
-  - Then the predictor explains all the variability of the outcome variable. 
-
-- **Case 2:** There is only one guest eating a slice which is not the all cake.
-
-  - The predictor explains some of the outcome's variability. A statistical test is required to know if the predictor explains a significant part of the outcome's variability.
-  
-- **Case 3:** There is more than one guest, they will take their slices of the cake which can be small or big. 
-
-   - Each predictor will explains more or less variability of the outcome. However, the more guest there is, the smaller the slices.
 
 ---
 
@@ -341,7 +319,7 @@ Hypotheses include:
 - Outcome / Dependent Variable (DV)
 - Direction of the outcome if the predictor increases
 
-**Warning:** Hypothesis cannot test equality between groups or modalities, they can only test differences or effects
+`r faa("exclamation-triangle", animate="flash", speed="slow", color="red")` **Warning:** Hypothesis cannot test equality between groups or modalities, they can only test differences or effects
 
 ---
 
@@ -350,6 +328,8 @@ Hypotheses include:
 Every hypothesis has to state a difference (between groups or according values) also called $H_a$ (for alternative hypothesis) or $H_1$
 
 Every alternative hypothesis has a null hypothesis counterpart (no difference between groups or according values) also called $H_0$ (pronounce H naught or H zero)
+
+--
 
 $H_a$ is viewed as a “challenger” hypothesis to the null hypothesis $H_0$.
   
@@ -379,9 +359,7 @@ DiagrammeR::grViz("
   }", height = 200)
 ```
 
-- Warning: 
-
-> The direction of the arrow does not involve causality, only correlation.
+`r faa("exclamation-triangle", animate="flash", speed="slow", color="red")` **Warning**: The direction of the arrow does not involve causality, only correlation.
 
 ---
 
@@ -489,7 +467,7 @@ In the following formulation templates, **replace the variable names with yours*
 
 --
 
-#### Notes:
+`r faa("exclamation-triangle", animate="flash", speed="slow", color="red")` **Warning**:
 1. An interaction effect hypothesis is also called moderation effect
 2. By default, an interaction effect involves the test of the main effect hypotheses of all Predictors involved
 3. Predictor 1 and 2 are commutable (can be inverted and produce the same hypothesis)
@@ -499,7 +477,7 @@ class: title-slide, middle
 
 ## Model Representation
 
---
+---
 
 # Model Representation
 
@@ -768,49 +746,6 @@ The value of how much of the Outcome variable changes:
 
 For example:
 > If Job Satisfaction increases by 0.1 on a scale from 0 to 5 when the Salary increases by €1, then *b* associated to Salary is 0.1
-
----
-
-# Significance of Relationships
-
-To evaluate if the strength of the relationship $b$ between a Predictor and an Outcome variable is significant, an equation is statistically tested using all the predictors related to the same Outcome.
-
-The basic equation of a statistical model is:
-
-$$Outcome = b_0 + b_n \,Predictors + Error$$
-
-where the $Predictors$ includes all the $n$ variables used as predictor in formulated hypotheses using this specific $Outcome$ variable and being associated to a specific $b$ estimate.
-
-This expresses the idea that:
-- The Outcome can be described by one or multiple predictors.
-- The remaining part of the Outcome's variability that is not explained by the predictors is call the Error.
-
----
-
-# Equations, Variables and Effect Types
-
-Except in special cases:
-- An Outcome (or Dependent Variable) has to be Continuous
-- A Predictor can be Continuous or Categorical 
-
-Example: $Job\,Satisfaction = b_{0} + b_{1}\,Salary + b_{2}\,Origin + e$
-
-In this equation:
-- $Salary$ is continuous with a main effect on $Job\,Satisfaction$ ( $b_{1}$)
-- $Origin$ is categorical with a main effect on $Job\,Satisfaction$ ( $b_{2}$)
-
----
-
-# Equations, Variables and Effect Types
-
-An interaction effect is represented by multiplying the 2 predictors involved:
-
-$$Job\,Satisfaction = b_{0} + b_{1}\,Salary + b_{2}\,Origin + b_{3}\,Salary*Origin + e$$
-
-In this equation:
-- $Salary$ is continuous with a main effect on $Job\,Satisfaction$ ( $b_{1}$)
-- $Origin$ is categorical with a main effect on $Job\,Satisfaction$ ( $b_{2}$)
-- $Salary$ and $Origin$ have an interaction effect on $Job\,Satisfaction$ ( $b_{3}$)
 
 ---
 
@@ -1280,7 +1215,7 @@ class: title-slide, middle
 
 ---
 
-# Assumptions of General Linear Regression Models
+# 4 Assumptions
 
 Statistical tests are widely used to test hypotheses, exactly how we just did but all statistical tests have requirements to meet before being applied.
 
@@ -1295,6 +1230,19 @@ The General Linear Model has 4 requirements:
 ## 4. **E**qual Variance (of the residuals) 
 
 While the assumption of a Linear Model are never perfectly met in reality, we must check if there are reasonable enough assumption that we can work with them.
+
+---
+class: title-slide, middle
+
+## Exercise
+
+In the coming days, I will send you simulated data using the variables presented in your reference paper.
+
+I will also send you hypotheses using these variables.
+
+Your task will be to test these hypotheses using the General Linear Model and to report their results exactly like in a research paper.
+
+Every student will present their results at the beginning of the next lecture.
 
 ---
 class: inverse, mline, left, middle

@@ -126,6 +126,34 @@ In the end, I want you to become a Data Scientist with enough knowledge and skil
 
 ---
 
+# Helpful Readings (Beginners)
+
+- **Teacups, giraffes, and statistics** by Hasse Walum and Desirée De Leon (2021) https://tinystats.github.io/teacups-giraffes-and-statistics/index.html
+
+- **Introduction to Modern Statistics** by Mine Çetinkaya-Rundel and Johanna Hardin (2021) https://openintro-ims.netlify.app/
+
+- **Learning statistics with jamovi: A tutorial for psychology students and other beginners** by Danielle Navarro and David Foxcroft (2019) https://www.learnstatswithjamovi.com/
+
+- **Learning statistics with R: A tutorial for psychology students and other beginners** by Danielle Navarro (2018) https://learningstatisticswithr-bookdown.netlify.app/
+
+- **Statistical Thinking for the 21st Century** by Russell A. Poldrack (2022) https://statsthinking21.github.io/statsthinking21-core-site/
+
+---
+
+# Helpful Reading (Advanced)
+
+- **Advanced Regression Methods** by Cheng Hua, Youn-Jeng Choi, and Qingzhou Shi (2021) https://bookdown.org/chua/ber642_advanced_regression/
+
+- **Analysing Data using Linear Models** by Stéphanie M. van den Berg (2022) https://bookdown.org/pingapang9/linear_models_bookdown/
+
+- **Regression and Other Stories** by Andrew Gelman, Jennifer Hill, and Aki Vehtar (2022) https://avehtari.github.io/ROS-Examples/index.html
+
+- **An Introduction to Statistical Learning** by James Gareth, Daniela Witten, Trevor Hastie, and Robert Tibshirani (2021) https://www.statlearning.com/
+
+- **Mixed Models with R, Getting started with random effects** by Michael Clark (2021) https://m-clark.github.io/mixed-models-with-R/
+
+---
+
 # Details on the Assignment
 
 Based on your research topic, I will give you some data (in January). Your task will be **to write a ready to be published research paper** that includes:
@@ -1509,13 +1537,52 @@ To print the statistical analyses:
 
 # Automatic Results with {report}
 
-```{r echo=TRUE, warning = FALSE, results='asis'}
+```{r echo=TRUE, results='asis'}
 library(report)
 
 model_gapminder <- lm(formula = lifeExp ~ gdpPercap + year, data = gapminder)
 
 report(model_gapminder)
 ```
+
+---
+
+# Automatic Checks with {performance}
+
+```{r echo=TRUE, out.width='50%'}
+library(performance)
+
+model_gapminder <- lm(formula = lifeExp ~ gdpPercap + year, data = gapminder)
+
+check_model(model_gapminder)
+```
+
+---
+
+# Automatic Everything with {easystats}
+
+The libraries {report} and {performace} are in fact included in a meta package called {easystats} (exactly like {dplyr} and {tidyr} are included in {tidyverse}).
+
+By installing {easystats} you will install all the packages within this ecosystem, see its website for more details on all the packages: https://easystats.github.io/easystats/
+
+Among the functions available, one is extremely relevant because it includes all the ones previously seen: `model_dashboard()`
+
+```{r echo=TRUE, eval=FALSE, results='asis'}
+library(easystats)
+
+model_gapminder <- lm(formula = lifeExp ~ gdpPercap + year, data = gapminder)
+
+model_dashboard(model_gapminder)
+```
+
+Have a try!
+
+---
+class: title-slide, middle
+
+## Live Demo: How to write a paper in 5 min!
+
+https://damien-dupre.github.io/mt612/doc/voodoo_mock
 
 ---
 class: title-slide, middle

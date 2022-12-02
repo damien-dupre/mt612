@@ -37,7 +37,7 @@ opts_chunk$set(
   warning = FALSE, 
   error = FALSE, 
   echo = FALSE,
-  cache = TRUE,
+  cache = FALSE,
   comment = "", 
   fig.align = "center", 
   fig.retina = 3
@@ -863,6 +863,13 @@ data %>%
 ```
 
 From the output we see that the interaction effect is significant, $z=−21.7,p<.001$. If we regard this data set as a random sample of all ships that sink after collision with an iceberg, we may conclude that in such situations, sex is a significant moderator of the difference in the numbers of survivors and non-survivors. One could also say: the proportion of people that survive a disaster like this is different in females than it is in males. 
+
+---
+class: title-slide, middle
+
+## Homework Exercise
+
+In the random data that you received, **use the categorical variable with two categories as outcome** and **select 2 continuous variables as predictors**. **Test their main effects and their interaction effect** on the categorical variable with a logistic regression.
 
 ---
 class: inverse, mline, left, middle

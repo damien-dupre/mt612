@@ -1,0 +1,1145 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+  <head>
+    <title>MT612 - Advanced Quant. Research Methods</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="Damien Dupré" />
+    <script src="libs/header-attrs-2.17/header-attrs.js"></script>
+    <link href="libs/remark-css-0.0.1/default.css" rel="stylesheet" />
+    <link href="libs/remark-css-0.0.1/metropolis.css" rel="stylesheet" />
+    <link href="libs/remark-css-0.0.1/metropolis-fonts.css" rel="stylesheet" />
+    <link href="libs/countdown-0.4.0/countdown.css" rel="stylesheet" />
+    <script src="libs/countdown-0.4.0/countdown.js"></script>
+    <link rel="stylesheet" href="css/custom_design.css" type="text/css" />
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+.title[
+# MT612 - Advanced Quant. Research Methods
+]
+.subtitle[
+## Lecture 3: Linear Mixed Models
+]
+.author[
+### Damien Dupré
+]
+.date[
+### Dublin City University
+]
+
+---
+
+
+
+
+# Independence of Observations
+
+So far, all predictors were treated as **fixed** effects: we have estimated a parameter for each predictors and tested its significance to conclude about its corresponding hypothesis
+
+We assumed many things to process linear/logistic regressions, one of them being that observations are independent from each other.
+
+This means that the **probability** of one observation taking one value is independent from the value other observations have taken.
+
+What happens when the assumptions of independence is violated?
+
+--
+
+We treat the variable relating observations as a **random** effect in a Linear Mixed Model
+
+---
+
+# Fixed vs random effects
+
+(Linear) Mixed (Effects) Models, Hierarchical (Linear) Regression, Multilevel Models, Variance Component Models, ... all refer to the same thing
+
+Linear Mixed Models are the answer to the problem of dealing with control variables. They process **fixed effect variables** and **random effect variables**.
+
+--
+
+There is no consensual definition, but Gelman (2005) lists a handful, of which:
+
+&gt; When a sample exhausts the population, the corresponding variable is fixed; when the sample is a small (i.e., negligible) part of the population the corresponding variable is random [Green and Tukey (1960)].
+
+&gt; Effects are fixed if they are interesting in themselves or random if there is interest in the underlying population (e.g., Searle, Casella and McCulloch [(1992), Section 1.4])
+
+- A mixed effects model *mixes* both fixed effects and random effects
+
+`$$Outcome = Intercept + \color{red}{Slope} \times \color{blue}{FE} + \color{green}{u} \times \color{purple}{RE} + Error$$`
+
+---
+
+# Why Mixed Models?
+
+These models are made of 2 type of effects and therefore are mixed:
+
+- **Fixed effects**: Effects that are of interest in the study
+  - Can think of these as effects whose interpretations would be included in a write up of the study
+  - They are effects assumed to be constant, i.e. they **do not vary**.
+
+- **Random effects**: Effects we're not interested in studying but whose variability we want to understand 
+  - Can think of these as effects whose interpretations would not necessarily be included in a write up of the study 
+  - They are assumed to vary by some context, i.e. they **do vary**
+
+---
+
+# Why Multilevel/Hierachical Models?
+
+**Explicitly model multilevel structure** if your data have:
+
+- different average levels of your dependent and independent variables
+- different effects varying by group
+  
+--
+
+Needed for **correct inference**:
+
+- Nested data violate key assumptions of OLS of Independent observations and Independent error terms
+
+    
+--
+
+Answer **unique research questions**:
+
+- Estimate group-level predictors and cross-level interactions
+
+---
+
+# A Quick Example
+
+.pull-left[
+You might be used to your data looking like this: An independent variable `\(x\)` and a dependent variable `\(y\)`
+
+&lt;img src="lecture_3_files/figure-html/unnamed-chunk-1-1.png" width="504" style="display: block; margin: auto;" /&gt;
+
+From this data we may conclude that `\(x\)` is **positively** correlated with `\(y\)`.
+]
+
+--
+
+.pull-right[
+However, if we introduce *groupings* of the data, a different picture emerges.
+
+&lt;br&gt;
+&lt;img src="lecture_3_files/figure-html/unnamed-chunk-2-1.png" width="504" style="display: block; margin: auto;" /&gt;
+
+In each of the groupings we find a **negative** correlation between `\(x\)` and `\(y\)`.
+]
+
+---
+
+# A Quick Example
+
+&lt;center&gt;
+This phenomenon illustrates the Simpson's Paradox
+
+&lt;img src="https://c.tenor.com/z-7D_CXyUAoAAAAC/scared-simpsons.gif" style="display: block; margin: auto;" /&gt;
+
+&lt;/center&gt;
+
+--
+
+&lt;left&gt;
+Note that it has nothing to do with the Simpsons
+
+&gt; "**Simpson’s Paradox** is a statistical phenomenon where an association between two variables in a population ***emerges***, ***disappears*** or ***reverses*** when the population is divided into subpopulations." *Stanford Encyclopedia of Philosophy 2021*
+
+Simpson's paradox teaches us that we have to be mindful of *structures* within our data.
+
+---
+
+# Data Structure
+
+.pull-left[
+
+We might have students **nested** in schools
+
+![](img/level_participants.png)
+
+Students on the **first level**, schools on the **second level**
+]
+
+--
+
+.pull-right[
+
+Or timepoints **nested** in people
+
+![](img/level_time.png)
+
+Timepoints on the **first level**, people on the **second level**
+]
+
+--
+
+We can also easily imagine a **three-level data structure**:timepoints nested in people nested in schools
+
+--
+
+More generally, any kind of control variable for which the results could be different but which hasn't been the purpose of any hypothesis, is potentially a linear mixed model.
+
+---
+
+# Data Structure
+
+There are two types of variance important to consider in our modeling:
+
+- **within-group variance** (i.e. differences *within a group*)
+
+- **between-group variance** (i.e. differences *between groups*)
+
+&lt;img src="img/elaborate.png" width="60%" style="display: block; margin: auto;" /&gt;
+
+Data points within a group are often more similar than between groups.
+
+This typically implies that the model includes **random intercepts**, and/or **random slopes**
+
+Instead of trying to define random effects, let's try to understand what they do
+
+---
+
+# Example
+
+Imagine we have a dependent variable `\(Job\,Satisfaction\)`. It is distributed like this:
+
+&lt;img src="lecture_3_files/figure-html/unnamed-chunk-5-1.png" width="504" style="display: block; margin: auto;" /&gt;
+
+---
+
+# Example - Fixed Intercept
+
+.pull-left[
+The null hypothesis estimates a linear regression with no predictors and plot the intercept (i.e, the predicted outcome doesn't change)
+
+&lt;br&gt;
+&lt;img src="lecture_3_files/figure-html/unnamed-chunk-6-1.png" width="504" style="display: block; margin: auto;" /&gt;
+]
+
+--
+
+.pull-right[
+Red lines indicates the error term for each observation.
+
+`$$js\_score_i = b_0 + \color{red}{e_i}$$`
+
+`$$\color{red}{e_i} \sim \mathcal{N}(0, \sigma_{i})$$`
+
+&lt;img src="lecture_3_files/figure-html/unnamed-chunk-7-1.png" width="504" style="display: block; margin: auto;" /&gt;
+]
+
+---
+
+# Example - Fixed Slope
+
+We now add the `\(salary\)` predictor:
+
+`$$js\_score_i = b_0 + b_1\,salary + \color{red}{e_i}$$`
+
+`$$\color{red}{e_i} \sim \mathcal{N}(0, \sigma_{i})$$`
+
+&lt;img src="lecture_3_files/figure-html/unnamed-chunk-8-1.png" width="504" style="display: block; margin: auto;" /&gt;
+
+&lt;!-- --- --&gt;
+&lt;!-- class: split-three --&gt;
+
+&lt;!-- .column[.content[ --&gt;
+&lt;!-- Imagine we have a dependent variable `\(Job\,Satisfaction\)`. It is distributed like this: --&gt;
+&lt;!-- ```{r} --&gt;
+&lt;!-- fortify(fit) |&gt;  --&gt;
+&lt;!--   ggplot(aes("Example", js_score)) + --&gt;
+&lt;!--   geom_jitter(position = pos) + --&gt;
+&lt;!--   geom_line(aes("Example", .fitted), inherit.aes = FALSE) + --&gt;
+&lt;!--   scale_x_discrete("", breaks = NULL) + --&gt;
+&lt;!--   theme_bw() + --&gt;
+&lt;!--   theme(text = element_text(size = 20)) --&gt;
+&lt;!-- ``` --&gt;
+&lt;!-- ]] --&gt;
+&lt;!-- .column[.content[ --&gt;
+
+&lt;!-- ]] --&gt;
+&lt;!-- .column[.content[ --&gt;
+
+&lt;!-- ]] --&gt;
+
+---
+class: inverse, middle, center
+
+# Enter the M U L T I L E V E L
+
+![](https://2.bp.blogspot.com/-5hzBiWsKDXo/V_04uFbYzBI/AAAAAAAAaC0/KoqIqSb7N5g6NN_SRWcamitE48a_OPrxgCEw/s400/giphy-2.gif)
+
+---
+
+# Example - Group Variable
+
+Now, we have the same dataset as before but this time we introduce a multilevel data structure, i.e. our data points are **nested** in *four different departments*.
+
+&lt;img src="lecture_3_files/figure-html/unnamed-chunk-9-1.png" width="504" style="display: block; margin: auto;" /&gt;
+
+---
+class: title-slide, middle
+
+## Linear Mixed Model with &lt;br&gt; Random Intercept
+
+---
+
+# Example - Random Intercept
+
+.pull-left[
+In a multilevel context, the **null model** estimates a **random intercept** for each group, without any predictors.
+]
+
+.pull-right[
+&lt;img src="lecture_3_files/figure-html/unnamed-chunk-10-1.png" width="504" style="display: block; margin: auto;" /&gt;
+]
+
+---
+
+# Example - Random Intercept
+
+.pull-left[
+The null model introduces an error term relating to each intercept.
+
+This shows the **within-group** variation.
+]
+
+.pull-right[
+&lt;img src="lecture_3_files/figure-html/unnamed-chunk-11-1.png" width="504" style="display: block; margin: auto;" /&gt;
+]
+
+---
+
+# Example - Random Intercept
+
+.pull-left[
+We've also introduced an error term for each group intercept, i.e. differences between the grand mean and other group-specific intercepts.
+
+This shows the **between-group** variation.
+]
+
+.pull-right[
+&lt;img src="lecture_3_files/figure-html/unnamed-chunk-12-1.png" width="504" style="display: block; margin: auto;" /&gt;
+]
+
+---
+
+# Example - Random Intercept
+
+.pull-left[
+We now introduce a dependent variable `\(salary\)` to our multilevel model but keep it fixed, i.e. it is the same across all groups.
+
+The line shows the group-adjusted slope.
+]
+
+.pull-right[
+&lt;img src="lecture_3_files/figure-html/unnamed-chunk-13-1.png" width="504" style="display: block; margin: auto;" /&gt;
+]
+
+---
+
+# Example - Random Intercept
+
+.pull-left[
+The slope is held constant across all of our groups.
+]
+
+.pull-right[
+&lt;img src="lecture_3_files/figure-html/unnamed-chunk-14-1.png" width="504" style="display: block; margin: auto;" /&gt;
+]
+
+---
+
+# Example - Random Intercept
+
+.pull-left[
+Again, in a multilevel model, error terms for individual data points are estimated by group.
+
+This shows the **within-group** variation.
+]
+
+.pull-right[
+&lt;img src="lecture_3_files/figure-html/unnamed-chunk-15-1.png" width="504" style="display: block; margin: auto;" /&gt;
+]
+
+---
+
+# Example - Random Intercept
+
+.pull-left[
+And similar as before, we have an error term for the random intercept.
+
+This shows the **between-group** variation.
+]
+
+.pull-right[
+&lt;img src="lecture_3_files/figure-html/unnamed-chunk-16-1.png" width="504" style="display: block; margin: auto;" /&gt;
+]
+
+---
+background-image: url(https://pbs.twimg.com/media/FG5TTtAWQAcdkGT?format=jpg&amp;name=large)
+background-position: 90% 90%
+background-size: 500px
+
+# What did we do?
+
+- We are taking into account the idiosyncratic differences associated with each department
+
+- By giving each department its own intercept, we are informing the model that employees from different department has a different starting point salary (i.e., when `salary` = 0)
+
+---
+class: inverse
+
+# How does it work? 
+
+Consider the following model for a single department `\(j\)`. This shows that the department.-specific effect, i.e. the deviation in `\(\mathrm{salary}\)` just for that department being who they are, can be seen as an additional source of variance.
+
+`$$\mathrm{js\_score}_{ij} = b_0 + u_j + b_1\, \mathrm{salary}_{ij} + e_{ij}$$`
+
+We would (usually) assume the following for the department effects.
+
+`$$u_j \overset{iid}{\sim} \mathcal{N}(0, \sigma_u^2) \hspace{1cm} e_{ij} \overset{iid}{\sim} \mathcal{N}(0, \sigma_e^2)$$`
+
+So the department effects are random, and specifically they are normally distributed with mean of zero and some estimated standard deviation `\(\sigma_u^2\)`. 
+
+* `\(b_0\)`: average job satisfaction for all employees when their salary is 0
+* `\(b_0 + u_j\)`: average job satisfaction for employees of a specific department `\(j\)` when their salary is 0
+* `\(b_1\)`: increase in job satisfaction for every €1 added to their salary
+
+In this context, salary is said to be a *fixed effect* only, and there is no random component. This definitely does not have to be the case though, as we'll see later.
+
+---
+class: title-slide, middle
+
+## Linear Mixed Model with &lt;br&gt; Random Intercept and Random Slope
+
+---
+
+# Example - Random Slope
+
+.pull-left[
+
+In the random-intercept, fixed slope model, all slopes are held constant, i.e. in each group **we assume the same effect of `\(salary\)` on `\(job\,satisfaction\)`**.
+
+*Is this really a reasonable assumption?*
+
+Instead we may introduce **random slopes** and let the slope vary by group.
+
+We can see that it some groups the relationship is *differs in strength* or even becomes *negative* when allowing the slopes to vary.
+
+]
+
+.pull-right[
+&lt;img src="lecture_3_files/figure-html/unnamed-chunk-17-1.png" width="504" style="display: block; margin: auto;" /&gt;
+]
+
+---
+
+# Example - Random Slope
+
+.pull-left[
+That is because in addition to all previous error terms, we are also adding an error term for each slope.
+
+The dotted lines are fixed slopes. The arrows show the added error term for each random slope.
+]
+
+.pull-right[
+&lt;img src="lecture_3_files/figure-html/unnamed-chunk-18-1.png" width="504" style="display: block; margin: auto;" /&gt;
+]
+
+---
+
+# What did we do?
+
+- The model now allows the random intercepts to vary for each department for the effect `salary`
+
+- This means we included a random slope for each department
+
+- By adding a random slope for the effect `salary` we take into account the fact that `js_score` change for each department at a different rate
+
+- Under the hood, the model uses this information to calculate the best fit line for all of the data
+
+- This method is called partial pooling and represents one of the most important (and least understood) aspects of mixed effects modelling
+
+---
+class:inverse
+
+# How does it work? 
+
+The model now includes a variable slope `\(v_i\)` according to employee's department such as:
+
+`$$js\_score_{ij} = b0 + u_j + (b_1 + v_j)\,salary_{ij} + e_{ij}$$`
+
+* `\(b_0\)`: average job satisfaction for all employees when their salary is 0
+* `\(b_0 + u_j\)`: average job satisfaction for employees of a specific department `\(j\)` when their salary is 0
+* `\(b_1\)`: average increase in job satisfaction for every $1 added to their salary
+* `\(b_1 + v_j\)`: average increase in job satisfaction for every €1 added to their salary according to their department `\(j\)`
+
+With this new variable parameter comes some specifications:
+
+`$$e_{ij} \overset{iid}{\sim} \mathcal{N}(0, \sigma_e^2) \hspace{1cm} \begin{bmatrix} u_j \\ v_j \end{bmatrix} \overset{iid}{\sim} \mathcal{N} \left( \begin{bmatrix} 0 \\ 0 \end{bmatrix}, \begin{bmatrix} \sigma_u^2 &amp; \rho_{uv}\sigma_u \sigma_v \\ \rho_{uv}\sigma_u \sigma_v &amp; \sigma_v^2 \end{bmatrix} \right)$$`
+
+This just says that both `\(u_j\)` and `\(v_j\)` come from a normal distribution:
+ * the variance of `\(u_j\)` is `\(\sigma_u^2\)`
+ * the variance of `\(v_j\)` is `\(\sigma_v^2\)`
+ * the correlation between `\(u_i\)` and `\(v_i\)` is `\(\rho_{uv}\)`
+
+---
+class: title-slide, middle
+
+## Linear Mixed Model with Jamovi
+
+---
+
+# Linear Mixed Model with Jamovi
+
+In JAMOVI, a Linear Mixed Models can be analysed using the **GAMLj** Module as follow:
+
+&lt;img src="img/mixed_model_jamovi_1.png" width="100%" style="display: block; margin: auto;" /&gt;
+
+---
+
+# Linear Mixed Model with Jamovi
+
+In the option "Random Effects", you can chose either `intercept|department` (random intercept only model) or `salary|department` (random intercept plus random slop model).
+
+&lt;img src="img/mixed_model_jamovi_2.png" width="100%" style="display: block; margin: auto;" /&gt;
+
+---
+class: title-slide, middle
+
+## Linear Mixed Model with R
+
+---
+
+# Linear Mixed Model with R
+
+For that, we will be using the `{lme4}` package in R.
+
+
+
+- The `{lmerTest}` package provides additional functionalities for testing.
+
+- `lmer()` function fits linear mixed effect regression
+
+- Random effects are specified using the notation `(1 | factor)`.
+
+---
+class: title-slide, middle
+
+## Linear Mixed Model &lt;br&gt; with Random Intercept Only
+
+---
+
+# Random Intercept Only with R
+
+1. We use the function `lmer()` from the `{lme4}` package
+2. We specify the outcome variable `js_score` and the fixed effect variable `salary`
+3. We specify the *random* part of our equation within the brackets.
+  + The first part in the brackets refers to the random slope. `1` just says: hold the slope constant, i.e. no random slope
+  + The second part in the brackets (`departement`) specifies the random intercepts, i.e. by which group we want the data to vary
+
+
+```r
+mixed_model &lt;- 
+  lmer(
+    formula = js_score ~ salary + (1|department), 
+    data = example_data
+  )
+```
+
+for department `\(j = 1, … ,J\)`, this model corresponds to the following equation:
+
+
+
+`$$\mathrm{js\_score}_{ij} = b_0 + u_j + b_1\, \mathrm{salary}_{ij} + e_{ij}$$`
+
+We would (usually) assume the following for the department effects.
+
+`$$u_j \overset{iid}{\sim} \mathcal{N}(0, \sigma_u^2) \hspace{1cm} e_{ij} \overset{iid}{\sim} \mathcal{N}(0, \sigma_e^2)$$`
+
+---
+
+# Random Intercept Only with R
+
+.pull-left[
+
+```r
+summary(mixed_model)
+```
+
+```
+Linear mixed model fit by REML ['lmerMod']
+Formula: js_score ~ salary + (1 | department)
+   Data: example_data
+
+REML criterion at convergence: 1653.2
+
+Scaled residuals: 
+    Min      1Q  Median      3Q     Max 
+-2.9899 -0.6785 -0.0269  0.6249  2.9259 
+
+Random effects:
+ Groups     Name        Variance Std.Dev.
+ department (Intercept) 296.0    17.21   
+ Residual               217.7    14.75   
+Number of obs: 200, groups:  department, 4
+
+Fixed effects:
+            Estimate Std. Error t value
+(Intercept)   4.8209     8.8451   0.545
+salary        4.5412     0.3542  12.820
+
+Correlation of Fixed Effects:
+       (Intr)
+salary -0.200
+```
+]
+
+.pull-right[
+There are three parts in this output
+1. Some meta info about your model
+2. Group-Level statistics (random effects)
+3. Fixed effects
+]
+
+---
+
+# Random Intercept Only with R
+
+## 1. Meta Info
+
+- Formula and data used for estimation.
+
+- This also states whether we are using Maximum Likelihood (ML) or Restricted Maximum Likelihood (REML) estimation. In our case, it is the latter.
+
+- It also states the REML value at convergence (if it converges), value is not particularly important.
+
+- Finally, we can also see some distribution metrics for the residuals of the metrics (also typically less important).
+
+---
+
+# Random Intercept Only with R
+
+## 2. Group-Level statistics
+
+- This part states the random effects and its distribution.
+
+- We are interested in the variance of the **random effect**, `\(\sigma_u^2\)`.
+
+- Measurements from the same individuals are correlated. The intra-class correlation (ICC) between measurements `\(Y_{ij}\)` and `\(Y_{ik}\)` from subject `\(i\)` at times `\(j\neq k\)` is
+
+`$$\rho = \frac{\sigma^2_u}{\sigma^2_u + \sigma^2_e}.$$`
+
+---
+
+# Random Intercept Only with R
+
+This is interpreted in the following way:
+
+1. Under `(Intercept)` we find the variance for the random intercept (per department), i.e. **between-group variance**. The variance on the second level (department-level) is 296.0.
+
+2. Under `Residual` we find the variance on level 1 (here: employees), i.e. **within-group variance**. The variance on the first level is 217.7
+
+This is in units of the *dependent variables*.
+
+`$$Variance_{Total} = 513.7$$`
+
+We can now calculate the Intra-Class Coefficient (ICC):
+
+`$$ICC = \frac{Variance_{L2}}{ Variance_{Total}}\,= \frac{296.0_{L2}}{513.7} = 0.57$$`
+
+&gt; 57% of the variance of job satisfaction is between departments. Typically, we say 10% of the variance should be on the second level to justify multilevel model.
+
+---
+
+# Random Intercept Only with R
+
+## 3. Fixed effects
+
+- This part tells us about the fixed effects.
+
+- The estimate for the intercept `\(b_0\)` tells us that the grand mean of income (across all department) is *4.8209* and the estimate slope `\(b_1\)` for `\(salary\)` is *4.5412*.
+
+---
+
+# Random Intercept Only with R
+
+.pull-left[
+&lt;table&gt;
+ &lt;thead&gt;
+  &lt;tr&gt;
+   &lt;th style="text-align:left;"&gt;   &lt;/th&gt;
+   &lt;th style="text-align:center;"&gt; Coefficient &lt;/th&gt;
+   &lt;th style="text-align:center;"&gt; SE &lt;/th&gt;
+   &lt;th style="text-align:center;"&gt; t &lt;/th&gt;
+  &lt;/tr&gt;
+ &lt;/thead&gt;
+&lt;tbody&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; (Intercept) &lt;/td&gt;
+   &lt;td style="text-align:center;"&gt; 4.82 &lt;/td&gt;
+   &lt;td style="text-align:center;"&gt; 8.85 &lt;/td&gt;
+   &lt;td style="text-align:center;"&gt; 0.55 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; salary &lt;/td&gt;
+   &lt;td style="text-align:center;"&gt; 4.54 &lt;/td&gt;
+   &lt;td style="text-align:center;"&gt; 0.35 &lt;/td&gt;
+   &lt;td style="text-align:center;"&gt; 12.82 &lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+]
+
+.pull-right[
+Where are my ***p*-values**? I want *p*-values!
+
+Computing *p*-values in LMM is not straightforward. It's difficult to come map estimates into **probability distributions**.
+]
+
+--
+
+Several alternatives:
+
+#### 1. Assume estimated coefficients follow a **normal distribution**: map standardised coefficients onto the normal distribution (*Mean* = 0, *SD* = 1) to get their probability.
+
+#### 2. Assume estimated coefficients follow a ***t*** or a ***F* distribution*** with *approximated* degrees of freedom:
+
+* *t* distribution: **Satterthwaite**'s approximation to degrees of freedom
+* `\(\chi^2\)` distribution: **Wald**'s `\(\chi^2\)` test
+* *F* distribution: **Kenward-Roger** ANOVA
+
+#### 3. Shift to **Bayesian** statistical inference
+
+---
+
+# Random Intercept Only with R
+
+
+```r
+library(car)
+
+mixed_model_pvalue &lt;- Anova(mixed_model, type = "III", test.statistic = "F")
+
+mixed_model_pvalue |&gt; 
+  kable()
+```
+
+&lt;table&gt;
+ &lt;thead&gt;
+  &lt;tr&gt;
+   &lt;th style="text-align:left;"&gt;   &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; F &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; Df &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; Df.res &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; Pr(&amp;gt;F) &lt;/th&gt;
+  &lt;/tr&gt;
+ &lt;/thead&gt;
+&lt;tbody&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; (Intercept) &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.2970649 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 1 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 3.255764 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.6208666 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; salary &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 164.3543965 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 1 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 195.000000 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.0000000 &lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+
+---
+
+# Random Intercept Only with R
+
+
+```r
+library(report)
+
+report(mixed_model)
+```
+
+We fitted a linear mixed model (estimated using REML and
+nloptwrap optimizer) to predict js_score with salary
+(formula: js_score ~ salary). The model included
+department as random effect (formula: ~1 | department).
+The model's total explanatory power is substantial
+(conditional R2 = 0.69) and the part related to the fixed
+effects alone (marginal R2) is of 0.26. The model's
+intercept, corresponding to salary = 0, is at 4.82 (95%
+CI [-12.62, 22.26], t(196) = 0.55, p = 0.586). Within
+this model:
+
+  - The effect of salary is statistically significant and
+positive (beta = 4.54, 95% CI [3.84, 5.24], t(196) =
+12.82, p &lt; .001; Std. beta = 0.54, 95% CI [0.46, 0.62])
+
+Standardized parameters were obtained by fitting the
+model on a standardized version of the dataset. 95%
+Confidence Intervals (CIs) and p-values were computed
+using a Wald t-distribution approximation.
+
+---
+class: title-slide, middle
+
+## Exercise: Linear Mixed Model - Random Intercept Only
+
+Using Jamovi or R, analyse a linear mixed model with the random data that has been sent to you:
+- Use a continuous variable of your choice as Outcome
+- Use a continuous variable of your choice as Predictor
+- Use the categorical variable with more than 2 categories as random effect
+
+For now, only calculate the random intercept model
+
+<div class="countdown" id="timer_ad353f6e" data-warn-when="60" data-update-every="1" tabindex="0" style="right:0;bottom:0;">
+<div class="countdown-controls"><button class="countdown-bump-down">&minus;</button><button class="countdown-bump-up">&plus;</button></div>
+<code class="countdown-time"><span class="countdown-digits minutes">10</span><span class="countdown-digits colon">:</span><span class="countdown-digits seconds">00</span></code>
+</div>
+
+---
+class: title-slide, middle
+
+## Linear Mixed Model &lt;br&gt; with Random Intercept and Random Slope
+
+---
+
+# Random Intercept and Slope with R
+
+1. We use the function `lmer` from the `lme4` package.
+2. We specify the outcome variable `js_score` and the fixed effect variable `salary`
+3. We specify the *random* part of our equation within the brackets.
+  + The first part in the brackets refers to the random slope. `salary` says: move the slope for each group on the salary scale
+  + The second part in the brackets (`departement`) specifies the random intercepts, i.e. by which group we want the data to vary.
+
+
+```r
+mixed_model &lt;- 
+  lmer(
+    formula = js_score ~ salary + (salary|department), 
+    data = example_data
+  )
+```
+
+---
+
+# Random Intercept and Slope with R
+
+
+```r
+summary(mixed_model)
+```
+
+```
+Linear mixed model fit by REML ['lmerMod']
+Formula: js_score ~ salary + (salary | department)
+   Data: example_data
+
+REML criterion at convergence: 1510.1
+
+Scaled residuals: 
+     Min       1Q   Median       3Q      Max 
+-2.37049 -0.63224  0.03878  0.62659  3.15964 
+
+Random effects:
+ Groups     Name        Variance Std.Dev. Corr 
+ department (Intercept)  53.00    7.280        
+            salary       17.49    4.182   -0.63
+ Residual               100.96   10.048        
+Number of obs: 200, groups:  department, 4
+
+Fixed effects:
+            Estimate Std. Error t value
+(Intercept)    4.821      3.900   1.236
+salary         4.541      2.105   2.157
+
+Correlation of Fixed Effects:
+       (Intr)
+salary -0.620
+```
+
+---
+
+# Random Intercept and Slope with R
+
+
+```r
+library(report)
+
+report(mixed_model)
+```
+
+We fitted a linear mixed model (estimated using REML and
+nloptwrap optimizer) to predict js_score with salary
+(formula: js_score ~ salary). The model included salary
+as random effects (formula: ~salary | department). The
+model's total explanatory power is substantial
+(conditional R2 = 0.86) and the part related to the fixed
+effects alone (marginal R2) is of 0.25. The model's
+intercept, corresponding to salary = 0, is at 4.82 (95%
+CI [-2.87, 12.51], t(194) = 1.24, p = 0.218). Within this
+model:
+
+  - The effect of salary is statistically significant and
+positive (beta = 4.54, 95% CI [0.39, 8.69], t(194) =
+2.16, p = 0.032; Std. beta = 0.54, 95% CI [0.05, 1.03])
+
+Standardized parameters were obtained by fitting the
+model on a standardized version of the dataset. 95%
+Confidence Intervals (CIs) and p-values were computed
+using a Wald t-distribution approximation.
+
+---
+
+# When our model fails to converge
+
+Sometimes, our model can't figure out **what parameters are most likely** given the data.
+
+This can be because **different values** of the same coefficient are **equally likely**.
+
+How to avoid this:
+
+* The **larger** the data, the easier to converge.
+* The larger values of the coefficients the more difficult to converge. Consider:
+- Changing units of measurement: use **seconds** instead of milliseconds (Barr, 2008).
+- **Standardising** your predictors.
+* Don't get too fancy with your model: the more **parsimonious**, the better (less parameters to estimate).
+
+---
+class: title-slide, middle
+
+## Exercise: Linear Mixed Model - Random Intercept and Slope
+
+Using Jamovi or R, analyse a linear mixed model with the random data that has been sent to you:
+- Use a continuous variable of your choice as Outcome
+- Use a continuous variable of your choice as Predictor
+- Use the categorical variable with more than 2 categories as random effect
+
+Calculate the random intercept and random slope model.
+
+<div class="countdown" id="timer_a2d219d8" data-warn-when="60" data-update-every="1" tabindex="0" style="right:0;bottom:0;">
+<div class="countdown-controls"><button class="countdown-bump-down">&minus;</button><button class="countdown-bump-up">&plus;</button></div>
+<code class="countdown-time"><span class="countdown-digits minutes">10</span><span class="countdown-digits colon">:</span><span class="countdown-digits seconds">00</span></code>
+</div>
+
+---
+class: title-slide, middle
+
+## Conclusion
+
+---
+
+# Summary of Mixed Model
+
+Mixed models allow for us to take into account observed structure in the data.
+
+If this were all it was used for, we would have more accurate inference relative to what would be had if we ignored that structure.
+
+However, we get much more! We better understand the sources of variability in the target variable.  We also get group specific estimates of the parameters in the model, allowing us to understand exactly how the groups differ from one another.
+
+Furthermore, this in turn allows for group specific prediction, and thus much more accurate prediction, assuming there is appreciable variance due to the clustering. 
+
+In short, there is much to be gained by mixed models, even in the simplest of settings.
+
+---
+
+# Summary of Mixed Model
+
+- We have spent the previous lecture building up our knowledge 
+of the linear model so that we would be prepared to understand 
+mixed effects models
+
+- They are the most suitable to take into account the control variables
+
+--
+
+- What about GLMs?
+  - Fit mixed effects models for count data and binary outcomes using `glmer()`
+  - All you have to do is specify the distribution
+
+
+```r
+glmer(
+  formula = response ~ fixed_effect + (fixed_effect|participant), 
+  family = binomial, #binomial(link = "logit")
+  data = my_data
+  )
+```
+
+
+```r
+glmer(
+  formula = counts ~ fixed_effect + (fixed_effect|participant),
+  family = poisson, #poisson(link = "log")
+  data = my_data
+  )
+```
+
+---
+class: title-slide, middle
+
+## Exercise: Generalized Linear Mixed Model (GLMM)
+
+Using Jamovi or R, analyse a generalised linear mixed model with the titanic data:
+- Use the `Survive` variable as Outcome
+- Use the `Age` and `Fare` variables of your choice as Predictor, include their interaction
+- Use the `Sex` variable as random effect
+
+<div class="countdown" id="timer_ebe2f509" data-warn-when="60" data-update-every="1" tabindex="0" style="right:0;bottom:0;">
+<div class="countdown-controls"><button class="countdown-bump-down">&minus;</button><button class="countdown-bump-up">&plus;</button></div>
+<code class="countdown-time"><span class="countdown-digits minutes">10</span><span class="countdown-digits colon">:</span><span class="countdown-digits seconds">00</span></code>
+</div>
+
+---
+class: inverse, mline, left, middle
+
+&lt;img class="circle" src="https://github.com/damien-dupre.png" width="250px"/&gt;
+
+# Thanks for your attention and don't hesitate if you have any questions!
+
+- [<svg aria-hidden="true" role="img" viewBox="0 0 512 512" style="height:1em;width:1em;vertical-align:-0.125em;margin-left:auto;margin-right:auto;font-size:inherit;fill:currentColor;overflow:visible;position:relative;"><path d="M459.37 151.716c.325 4.548.325 9.097.325 13.645 0 138.72-105.583 298.558-298.558 298.558-59.452 0-114.68-17.219-161.137-47.106 8.447.974 16.568 1.299 25.34 1.299 49.055 0 94.213-16.568 130.274-44.832-46.132-.975-84.792-31.188-98.112-72.772 6.498.974 12.995 1.624 19.818 1.624 9.421 0 18.843-1.3 27.614-3.573-48.081-9.747-84.143-51.98-84.143-102.985v-1.299c13.969 7.797 30.214 12.67 47.431 13.319-28.264-18.843-46.781-51.005-46.781-87.391 0-19.492 5.197-37.36 14.294-52.954 51.655 63.675 129.3 105.258 216.365 109.807-1.624-7.797-2.599-15.918-2.599-24.04 0-57.828 46.782-104.934 104.934-104.934 30.213 0 57.502 12.67 76.67 33.137 23.715-4.548 46.456-13.32 66.599-25.34-7.798 24.366-24.366 44.833-46.132 57.827 21.117-2.273 41.584-8.122 60.426-16.243-14.292 20.791-32.161 39.308-52.628 54.253z"/></svg> @damien_dupre](http://twitter.com/damien_dupre)
+- [<svg aria-hidden="true" role="img" viewBox="0 0 496 512" style="height:1em;width:0.97em;vertical-align:-0.125em;margin-left:auto;margin-right:auto;font-size:inherit;fill:currentColor;overflow:visible;position:relative;"><path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6zm-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3zm44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9zM244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8zM97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1zm-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7zm32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1zm-11.4-14.7c-1.6 1-1.6 3.6 0 5.9 1.6 2.3 4.3 3.3 5.6 2.3 1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2z"/></svg> @damien-dupre](http://github.com/damien-dupre)
+- [<svg aria-hidden="true" role="img" viewBox="0 0 640 512" style="height:1em;width:1.25em;vertical-align:-0.125em;margin-left:auto;margin-right:auto;font-size:inherit;fill:currentColor;overflow:visible;position:relative;"><path d="M579.8 267.7c56.5-56.5 56.5-148 0-204.5c-50-50-128.8-56.5-186.3-15.4l-1.6 1.1c-14.4 10.3-17.7 30.3-7.4 44.6s30.3 17.7 44.6 7.4l1.6-1.1c32.1-22.9 76-19.3 103.8 8.6c31.5 31.5 31.5 82.5 0 114L422.3 334.8c-31.5 31.5-82.5 31.5-114 0c-27.9-27.9-31.5-71.8-8.6-103.8l1.1-1.6c10.3-14.4 6.9-34.4-7.4-44.6s-34.4-6.9-44.6 7.4l-1.1 1.6C206.5 251.2 213 330 263 380c56.5 56.5 148 56.5 204.5 0L579.8 267.7zM60.2 244.3c-56.5 56.5-56.5 148 0 204.5c50 50 128.8 56.5 186.3 15.4l1.6-1.1c14.4-10.3 17.7-30.3 7.4-44.6s-30.3-17.7-44.6-7.4l-1.6 1.1c-32.1 22.9-76 19.3-103.8-8.6C74 372 74 321 105.5 289.5L217.7 177.2c31.5-31.5 82.5-31.5 114 0c27.9 27.9 31.5 71.8 8.6 103.9l-1.1 1.6c-10.3 14.4-6.9 34.4 7.4 44.6s34.4 6.9 44.6-7.4l1.1-1.6C433.5 260.8 427 182 377 132c-56.5-56.5-148-56.5-204.5 0L60.2 244.3z"/></svg> damien-datasci-blog.netlify.app](https://damien-datasci-blog.netlify.app)
+- [<svg aria-hidden="true" role="img" viewBox="0 0 512 512" style="height:1em;width:1em;vertical-align:-0.125em;margin-left:auto;margin-right:auto;font-size:inherit;fill:currentColor;overflow:visible;position:relative;"><path d="M501.6 4.186c-7.594-5.156-17.41-5.594-25.44-1.063L12.12 267.1C4.184 271.7-.5037 280.3 .0431 289.4c.5469 9.125 6.234 17.16 14.66 20.69l153.3 64.38v113.5c0 8.781 4.797 16.84 12.5 21.06C184.1 511 188 512 191.1 512c4.516 0 9.038-1.281 12.99-3.812l111.2-71.46l98.56 41.4c2.984 1.25 6.141 1.875 9.297 1.875c4.078 0 8.141-1.031 11.78-3.094c6.453-3.625 10.88-10.06 11.95-17.38l64-432C513.1 18.44 509.1 9.373 501.6 4.186zM369.3 119.2l-187.1 208.9L78.23 284.7L369.3 119.2zM215.1 444v-49.36l46.45 19.51L215.1 444zM404.8 421.9l-176.6-74.19l224.6-249.5L404.8 421.9z"/></svg> damien.dupre@dcu.ie](mailto:damien.dupre@dcu.ie)
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script src="libs/cols_macro.js"></script>
+<script>var slideshow = remark.create({
+"highlightStyle": "zenburn",
+"highlightLines": true,
+"countIncrementalSlides": false
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+// add `data-at-shortcutkeys` attribute to <body> to resolve conflicts with JAWS
+// screen reader (see PR #262)
+(function(d) {
+  let res = {};
+  d.querySelectorAll('.remark-help-content table tr').forEach(tr => {
+    const t = tr.querySelector('td:nth-child(2)').innerText;
+    tr.querySelectorAll('td:first-child .key').forEach(key => {
+      const k = key.innerText;
+      if (/^[a-z]$/.test(k)) res[k] = t;  // must be a single letter (key)
+    });
+  });
+  d.body.setAttribute('data-at-shortcutkeys', JSON.stringify(res));
+})(document);
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+// adds .remark-code-has-line-highlighted class to <pre> parent elements
+// of code chunks containing highlighted lines with class .remark-code-line-highlighted
+(function(d) {
+  const hlines = d.querySelectorAll('.remark-code-line-highlighted');
+  const preParents = [];
+  const findPreParent = function(line, p = 0) {
+    if (p > 1) return null; // traverse up no further than grandparent
+    const el = line.parentElement;
+    return el.tagName === "PRE" ? el : findPreParent(el, ++p);
+  };
+
+  for (let line of hlines) {
+    let pre = findPreParent(line);
+    if (pre && !preParents.includes(pre)) preParents.push(pre);
+  }
+  preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
+})(document);</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>

@@ -685,7 +685,7 @@ model_analysed <- glm(
 
 ---
 
-# Logistic Regression with R
+# Poisson Regression with R
 
 Below, we see the parameter estimates from this generalised linear model:
 
@@ -695,7 +695,7 @@ summary(model_analysed)
 
 ---
 
-# Logistic Regression with R
+# Poisson Regression with R
 
 Below, we see the output of the `report()` function:
 

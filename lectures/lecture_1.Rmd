@@ -778,6 +778,22 @@ For example:
 
 ---
 
+# Relationship between Variables
+
+This is a simple linear regression equation:
+
+$$Outcome_i = \color{blue}{b_0} + \color{lightgreen}{b_1}P\,redictor_i + \color{purple}{e_i}$$
+
+The estimate tells how much the Outcome increases/decreases/changes when the Predictor increases by 1 unit.
+
+And this is a Null Model:
+
+$$Outcome_i = \color{blue}{b_0} + \color{purple}{e_i}$$
+
+The null model basically models the mean of the outcome variable and the outcome doesn't change (i.e., increases by 0) when the Predictor increases by 1 unit.
+
+---
+
 # Notes on the Equations
 
 #### 1. Greek or Latin alphabet?

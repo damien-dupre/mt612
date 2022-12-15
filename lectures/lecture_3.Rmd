@@ -42,7 +42,7 @@ opts_chunk$set(
   warning = FALSE, 
   error = FALSE, 
   echo = FALSE,
-  cache = TRUE,
+  cache = FALSE,
   comment = "", 
   fig.align = "center", 
   fig.retina = 3

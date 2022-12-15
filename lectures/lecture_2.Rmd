@@ -387,6 +387,36 @@ We can rewrite the equation relating $Y_i$ to its predictors using the logit tra
 $$\log_{e}\left( \frac{p_i}{1-p_i} \right) = b_0 + b_1 x_{1,i} + b_2 x_{2,i} + \cdots + b_k x_{k,i} + e_i$$
 
 ---
+
+# First step
+
+$$Odds =\frac{p_{i}}{1-p_{i}}$$
+
+```{r}
+logit<-data.frame(LogOdds=seq(-2.5,2.5, by=.1), Pred=seq(-2.5,2.5, by=.1))
+logit$Odds=exp(logit$LogOdds)
+logit$Probabilities=logit$Odds/(1+logit$Odds)
+
+ggplot(data = logit, aes(x=Pred, y=Odds))+geom_point(size=2)+theme_bw()+ylim(0,13)+theme(axis.title=element_text(size=14), axis.text =element_text(size=12))
+```
+
+---
+
+# Second step
+
+$$logOdds =log(\frac{p_{i}}{1-p_{i}})$$
+
+```{r}
+ggplot(data = logit, aes(x=Pred, y=LogOdds))+geom_point(size=2)+theme_bw()+ylim(-4,4)+theme(axis.title=element_text(size=14), axis.text =element_text(size=12))
+```
+
+---
+
+# What is the model doing?
+
+<img src="img/image2a.png", width = "100%">
+
+---
 class: inverse
 
 # Logistic Regression
@@ -870,6 +900,12 @@ class: title-slide, middle
 ## Homework Exercise
 
 In the random data that you received, **use the categorical variable with two categories as outcome** and **select 2 continuous variables as predictors**. **Test their main effects and their interaction effect** on the categorical variable with a logistic regression.
+
+---
+
+# Generalized linear models
+
+<img src="img/links.png", width = "80%">
 
 ---
 class: inverse, mline, left, middle

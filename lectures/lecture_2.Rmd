@@ -225,6 +225,20 @@ ggplot(organisation_beta, aes(residuals)) +
 
 ---
 
+# Ecologically-Relevant Distributions
+
+Gaussian distribution is rarely adequate in the real life; GLMs offer ecologically meaningful alternatives
+
+- **Poisson** &mdash; counts; integers, non-negative, variance increases with mean
+
+- **Binomial** &mdash; observed proportions from a total; integers, non-negative, bounded at 0 and 1, variance largest at $\pi = 0.5$
+
+- **Binomial** &mdash; presence absence data; discrete values, 0 and 1, models probability of success
+
+- **Gamma** &mdash; concentrations; non-negative (strictly positive with log link) real values, variance increases with mean, many zero values and some high values
+
+---
+
 # Generalized Linear Models
 
 So far all the model tested had the assumption that residuals are following a normal distribution. This is the case if the outcome variable is Continuous.
@@ -892,7 +906,7 @@ data %>%
   theme(text = element_text(size = 20))
 ```
 
-From the output we see that the interaction effect is significant, $z=−21.7,p<.001$. If we regard this data set as a random sample of all ships that sink after collision with an iceberg, we may conclude that in such situations, sex is a significant moderator of the difference in the numbers of survivors and non-survivors. One could also say: the proportion of people that survive a disaster like this is different in females than it is in males. 
+From the output we see that the interaction effect is significant, $z=−21.7,p<.001$. If we regard this data set as a random sample of all ships that sink after collision with an iceberg, we may conclude that in such situations, sex is a significant moderator of the difference in the numbers of survivors and non-survivors. One could also say: the proportion of people that survive a disaster like this is different in females than it is in males.
 
 ---
 class: title-slide, middle

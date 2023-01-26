@@ -1,4 +1,4 @@
-salary_bracket,salary_center,Count
+salary_bracket,salary_center,n
 "(28000,29000]",28500,4
 "(29000,30000]",29500,8
 "(30000,31000]",30500,6

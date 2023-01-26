@@ -40,7 +40,40 @@ opts_chunk$set(
   )
 ```
 
+# Ecologically-relevant probability distributions
 
+Gaussian distribution is rarely adequate in ecology; GLMs offer ecologically meaningful alternatives
+
+.small[
+- **Poisson** &mdash; counts; integers, non-negative, variance increases with mean
+
+- **Binomial** &mdash; observed proportions from a total; integers, non-negative, bounded at 0 and 1, variance largest at $\pi = 0.5$
+
+- **Binomial** &mdash; presence absence data; discrete values, 0 and 1, models probability of success
+
+- **Gamma** &mdash; concentrations; non-negative (strictly positive with log link) real values, variance increases with mean, many zero values and some high values
+]
+
+---
+
+# Old notation
+
+Wrote linear model as
+
+$$y_i = \alpha + \beta_1 x_{1i} + \beta_2 x_{2i} + \cdots + \beta_j x_{ij} + \varepsilon_i$$
+
+And assumed
+
+$$ \varepsilon_i \sim \text{Normal}(0, \sigma^2) $$
+
+This doesn't work out the same for GLMs &mdash; we don't have residuals in the linear predictor
+
+Sampling variation comes from the response distribution
+
+---
+class: inverse, mline, center, middle
+
+# Title
 
 ---
 class: inverse, mline, left, middle

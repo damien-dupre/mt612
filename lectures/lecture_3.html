@@ -4,7 +4,7 @@
     <title>MT612 - Advanced Quant. Research Methods</title>
     <meta charset="utf-8" />
     <meta name="author" content="Damien Dupré" />
-    <script src="libs/header-attrs-2.17/header-attrs.js"></script>
+    <script src="libs/header-attrs-2.20/header-attrs.js"></script>
     <link href="libs/remark-css-0.0.1/default.css" rel="stylesheet" />
     <link href="libs/remark-css-0.0.1/metropolis.css" rel="stylesheet" />
     <link href="libs/remark-css-0.0.1/metropolis-fonts.css" rel="stylesheet" />
@@ -765,25 +765,21 @@ library(report)
 report(mixed_model)
 ```
 
-We fitted a linear mixed model (estimated using REML and
-nloptwrap optimizer) to predict js_score with salary
-(formula: js_score ~ salary). The model included
-department as random effect (formula: ~1 | department).
-The model's total explanatory power is substantial
-(conditional R2 = 0.69) and the part related to the fixed
-effects alone (marginal R2) is of 0.26. The model's
-intercept, corresponding to salary = 0, is at 4.82 (95%
-CI [-12.62, 22.26], t(196) = 0.55, p = 0.586). Within
-this model:
+We fitted a linear mixed model (estimated using REML and nloptwrap optimizer)
+to predict js_score with salary (formula: js_score ~ salary). The model
+included department as random effect (formula: ~1 | department). The model's
+total explanatory power is substantial (conditional R2 = 0.69) and the part
+related to the fixed effects alone (marginal R2) is of 0.26. The model's
+intercept, corresponding to salary = 0, is at 4.82 (95% CI [-12.62, 22.26],
+t(196) = 0.55, p = 0.586). Within this model:
 
-  - The effect of salary is statistically significant and
-positive (beta = 4.54, 95% CI [3.84, 5.24], t(196) =
-12.82, p &lt; .001; Std. beta = 0.54, 95% CI [0.46, 0.62])
+  - The effect of salary is statistically significant and positive (beta = 4.54,
+95% CI [3.84, 5.24], t(196) = 12.82, p &lt; .001; Std. beta = 0.54, 95% CI [0.46,
+0.62])
 
-Standardized parameters were obtained by fitting the
-model on a standardized version of the dataset. 95%
-Confidence Intervals (CIs) and p-values were computed
-using a Wald t-distribution approximation.
+Standardized parameters were obtained by fitting the model on a standardized
+version of the dataset. 95% Confidence Intervals (CIs) and p-values were
+computed using a Wald t-distribution approximation.
 
 ---
 class: title-slide, middle
@@ -797,7 +793,7 @@ Using Jamovi or R, analyse a linear mixed model with the random data that has be
 
 For now, only calculate the random intercept model
 
-<div class="countdown" id="timer_ad353f6e" data-warn-when="60" data-update-every="1" tabindex="0" style="right:0;bottom:0;">
+<div class="countdown" id="timer_555daf2d" data-warn-when="60" data-update-every="1" tabindex="0" style="right:0;bottom:0;">
 <div class="countdown-controls"><button class="countdown-bump-down">&minus;</button><button class="countdown-bump-up">&plus;</button></div>
 <code class="countdown-time"><span class="countdown-digits minutes">10</span><span class="countdown-digits colon">:</span><span class="countdown-digits seconds">00</span></code>
 </div>
@@ -874,25 +870,21 @@ library(report)
 report(mixed_model)
 ```
 
-We fitted a linear mixed model (estimated using REML and
-nloptwrap optimizer) to predict js_score with salary
-(formula: js_score ~ salary). The model included salary
-as random effects (formula: ~salary | department). The
-model's total explanatory power is substantial
-(conditional R2 = 0.86) and the part related to the fixed
-effects alone (marginal R2) is of 0.25. The model's
-intercept, corresponding to salary = 0, is at 4.82 (95%
-CI [-2.87, 12.51], t(194) = 1.24, p = 0.218). Within this
-model:
+We fitted a linear mixed model (estimated using REML and nloptwrap optimizer)
+to predict js_score with salary (formula: js_score ~ salary). The model
+included salary as random effects (formula: ~salary | department). The model's
+total explanatory power is substantial (conditional R2 = 0.86) and the part
+related to the fixed effects alone (marginal R2) is of 0.25. The model's
+intercept, corresponding to salary = 0, is at 4.82 (95% CI [-2.87, 12.51],
+t(194) = 1.24, p = 0.218). Within this model:
 
-  - The effect of salary is statistically significant and
-positive (beta = 4.54, 95% CI [0.39, 8.69], t(194) =
-2.16, p = 0.032; Std. beta = 0.54, 95% CI [0.05, 1.03])
+  - The effect of salary is statistically significant and positive (beta = 4.54,
+95% CI [0.39, 8.69], t(194) = 2.16, p = 0.032; Std. beta = 0.54, 95% CI [0.05,
+1.03])
 
-Standardized parameters were obtained by fitting the
-model on a standardized version of the dataset. 95%
-Confidence Intervals (CIs) and p-values were computed
-using a Wald t-distribution approximation.
+Standardized parameters were obtained by fitting the model on a standardized
+version of the dataset. 95% Confidence Intervals (CIs) and p-values were
+computed using a Wald t-distribution approximation.
 
 ---
 
@@ -922,7 +914,7 @@ Using Jamovi or R, analyse a linear mixed model with the random data that has be
 
 Calculate the random intercept and random slope model.
 
-<div class="countdown" id="timer_a2d219d8" data-warn-when="60" data-update-every="1" tabindex="0" style="right:0;bottom:0;">
+<div class="countdown" id="timer_e7d4e0f0" data-warn-when="60" data-update-every="1" tabindex="0" style="right:0;bottom:0;">
 <div class="countdown-controls"><button class="countdown-bump-down">&minus;</button><button class="countdown-bump-up">&plus;</button></div>
 <code class="countdown-time"><span class="countdown-digits minutes">10</span><span class="countdown-digits colon">:</span><span class="countdown-digits seconds">00</span></code>
 </div>
@@ -990,7 +982,7 @@ Using Jamovi or R, analyse a generalised linear mixed model with the titanic dat
 - Use the `Age` and `Fare` variables of your choice as Predictor, include their interaction
 - Use the `Sex` variable as random effect
 
-<div class="countdown" id="timer_ebe2f509" data-warn-when="60" data-update-every="1" tabindex="0" style="right:0;bottom:0;">
+<div class="countdown" id="timer_6913f451" data-warn-when="60" data-update-every="1" tabindex="0" style="right:0;bottom:0;">
 <div class="countdown-controls"><button class="countdown-bump-down">&minus;</button><button class="countdown-bump-up">&plus;</button></div>
 <code class="countdown-time"><span class="countdown-digits minutes">10</span><span class="countdown-digits colon">:</span><span class="countdown-digits seconds">00</span></code>
 </div>

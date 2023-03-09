@@ -1,0 +1,1418 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+  <head>
+    <title>MT612 - Advanced Quant. Research Methods</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="Damien Dupré" />
+    <script src="libs/header-attrs-2.20/header-attrs.js"></script>
+    <link href="libs/remark-css-0.0.1/default.css" rel="stylesheet" />
+    <link href="libs/remark-css-0.0.1/metropolis.css" rel="stylesheet" />
+    <link href="libs/remark-css-0.0.1/metropolis-fonts.css" rel="stylesheet" />
+    <script src="libs/freezeframe-5.0.2/freezeframe.min.js"></script>
+    <script src="libs/xaringanExtra-freezeframe-0.0.1/freezeframe-init.js"></script>
+    <script id="xaringanExtra-freezeframe-options" type="application/json">{"selector":"img[src$=\"gif\"]","trigger":"click","overlay":false,"responsive":true,"warnings":true}</script>
+    <script src="libs/htmlwidgets-1.6.1/htmlwidgets.js"></script>
+    <script src="libs/viz-1.8.2/viz.js"></script>
+    <link href="libs/DiagrammeR-styles-0.2/styles.css" rel="stylesheet" />
+    <script src="libs/grViz-binding-1.0.9/grViz.js"></script>
+    <link href="libs/countdown-0.4.0/countdown.css" rel="stylesheet" />
+    <script src="libs/countdown-0.4.0/countdown.js"></script>
+    <link href="libs/font-awesome-animation-1.0/font-awesome-animation-emi.css" rel="stylesheet" />
+    <script src="libs/fontawesome-5.0.13/js/fontawesome-all.min.js"></script>
+    <link rel="stylesheet" href="css/custom_design.css" type="text/css" />
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+.title[
+# MT612 - Advanced Quant. Research Methods
+]
+.subtitle[
+## Lecture 5: Path Analysis with Mediation
+]
+.author[
+### Damien Dupré
+]
+.date[
+### Dublin City University
+]
+
+---
+
+
+
+
+&lt;style type="text/css"&gt;
+.pre {
+  white-space: pre !important;
+  overflow-y: scroll !important;
+  max-height: 100vh !important;
+}
+&lt;/style&gt;
+
+# Correlation and Causality
+
+So far all the types of model tested are based on some sort of linear regression principles.
+
+However, linear regression is showing the correlation between 2 or more variables, it doesn't show causation.
+
+While identifying causality is possible, it an extremely complicated process.
+
+&lt;img src="https://media.makeameme.org/created/always-remember-correlation.jpg" width="50%" style="display: block; margin: auto;" /&gt;
+
+---
+
+# Multivariate Models
+
+Models with more than one outcome variables are a closer step toward causal models while not testing causality directly.
+
+For example, a model using a 3 variables which demonstrate that an existing relationship may be explained by a third variable, is more explanatory than a classic linear model.
+
+This model is called Mediation
+
+&gt; Mediation is a hypothesized causal model, whereby effect of a predictor to an outcome is transmitted through an intermediary variable M
+
+It is a useful tool for understanding the underlying mechanisms of how variables are related to each other.
+
+<div id="htmlwidget-af202b15f574e269bde1" style="width:800px;height:200px;" class="grViz html-widget "></div>
+<script type="application/json" data-for="htmlwidget-af202b15f574e269bde1">{"x":{"diagram":"\n  digraph {\n    graph [rankdir = LR]\n    \n    Predictor -> {Mediator Outcome}\n    Mediator -> Outcome\n\n  }","config":{"engine":"dot","options":null}},"evals":[],"jsHooks":[]}</script>
+
+---
+
+# Mediation
+
+In this example, room temperature predicts the amount that people drink; specifically, we'd expect that higher temperatures would increase drinking.
+
+<div id="htmlwidget-7f659f0c13e39e4308d1" style="width:800px;height:200px;" class="grViz html-widget "></div>
+<script type="application/json" data-for="htmlwidget-7f659f0c13e39e4308d1">{"x":{"diagram":"\n  digraph {\n    graph [rankdir = LR]\n  \n    \"Room temp\" -> \"Amount drunk\"\n\n  }","config":{"engine":"dot","options":null}},"evals":[],"jsHooks":[]}</script>
+
+However, it's possible that higher temperatures increase drinking indirectly: higher temperatures make people feel more thirsty, which in turn makes them drink more.
+
+<div id="htmlwidget-579d5553fc9f8d834d60" style="width:800px;height:200px;" class="grViz html-widget "></div>
+<script type="application/json" data-for="htmlwidget-579d5553fc9f8d834d60">{"x":{"diagram":"\n  digraph {\n    graph [rankdir = LR]\n    \n    \"Room temp\" -> {Thirst \"Amount drunk\"}\n    Thirst -> \"Amount drunk\"\n\n  }","config":{"engine":"dot","options":null}},"evals":[],"jsHooks":[]}</script>
+
+---
+# Mediation Path Diagram
+
+.pull-left[
+
+<div id="htmlwidget-06d1c6a55d9fe4e75639" style="width:400px;height:200px;" class="grViz html-widget "></div>
+<script type="application/json" data-for="htmlwidget-06d1c6a55d9fe4e75639">{"x":{"diagram":"\n  digraph {\n    graph [rankdir = LR]\n  \n    Predictor -> Outcome [label=c]\n\n  }","config":{"engine":"dot","options":null}},"evals":[],"jsHooks":[]}</script>
+
+]
+.pull-right[
+
+`\(c\)` is the **total effect** of the Predictor on the Outcome
+
+`$$c = c' + a \times b$$`
+]
+
+.pull-left[
+<div id="htmlwidget-35742d2befb97e408d3b" style="width:400px;height:200px;" class="grViz html-widget "></div>
+<script type="application/json" data-for="htmlwidget-35742d2befb97e408d3b">{"x":{"diagram":"\n  digraph {\n    graph [rankdir = LR]\n    \n    Predictor -> Mediator [label=a]\n    Mediator -> Outcome [label=b]\n    Predictor -> Outcome [label=cʹ]\n  \n  }","config":{"engine":"dot","options":null}},"evals":[],"jsHooks":[]}</script>
+]
+
+.pull-right[
+`\(a\)` - the estimate of the effect of the Predictor on the Mediator 
+
+`\(b\)` - the estimate of the effect of the Mediator on the Outcome
+
+`\(c'\)` - the **direct effect** of the Predictor on the Outcome
+
+The path `\(ab\)` is the **indirect effect** of the Predictor on the Outcome
+]
+
+---
+
+# Paths
+
+`\(c\)` is the total effect of the Predictor on the Outcome and can be found using a simple regression:
+
+
+```r
+lm(outcome ~ predictor, data = my_data)
+```
+
+`\(a\)` is the effect of the Predictor on the Mediator and can also be found using a simple regression:
+
+
+```r
+lm(mediator ~ predictor, data = my_data)
+```
+
+`\(b\)` is the effect of the mediator on the outcome, controlling for the predictor.
+
+`\(c'\)` is the direct effect which checks whether the predictor predicts the outcome after controlling for the mediator.
+
+They both can be found using a multiple linear regression:
+
+
+```r
+lm(outcome ~ predictor + mediator, data = my_data)
+```
+
+---
+
+# Is there mediation?
+
+Now that we've fit all these models, how do we work out if there is mediation?
+
+A mediation is obtained if:
+- The estimate `\(c\)`, total effect, is significantly different to 0 (**requirement 1**)
+- The estimate `\(a\)` is significantly different to 0 (**requirement 2**)
+- The estimate `\(b\)` is significant while the value of the estimate `\(c'\)` has been reduced compared to `\(c\)`
+- The indirect effect `\(ab\)` is significant
+
+A mediation also assumes that:
+- The Outcome does not affect the Mediator
+- No 3rd variable explains the relationship between the Outcome and the Mediator
+- The Mediator is measured without error
+- The residuals of the Outcome and the Mediator are not correlated
+
+---
+
+class: inverse, mline, center, middle
+
+# Application of a Mediation Analysis with Jamovi and R
+
+---
+
+# Grades and Happiness
+
+Let's take the example from [University of Virginia](https://data.library.virginia.edu/introduction-to-mediation-analysis/): `\(self-esteem\)` mediates the effect of `\(grades\)` on `\(happiness\)`
+
+Data analysis is also presented in the [Jamovi Advanced Mediation Model website](https://jamovi-amm.github.io/glm_example1.html) and the data can be downloaded [here](https://jamovi-amm.github.io/glm_example1.html)
+
+<div id="htmlwidget-9eb5bea5e6cef39f546e" style="width:800px;height:300px;" class="grViz html-widget "></div>
+<script type="application/json" data-for="htmlwidget-9eb5bea5e6cef39f546e">{"x":{"diagram":"\n  digraph {\n    graph [rankdir = LR]\n  \n    node []\n    \"self-esteem\"; \"grades\"; happiness\n    \n    \"grades\" -> {happiness \"self-esteem\"}\n    \"self-esteem\" -> happiness\n\n  }","config":{"engine":"dot","options":null}},"evals":[],"jsHooks":[]}</script>
+
+---
+
+# Mediation Effect
+
+Imagine that previous studies have suggested that higher grades predict higher happiness. This is the **Direct Effect**.
+
+&lt;img src="https://data.library.virginia.edu/files/mediation_ex1.png" width="50%" style="display: block; margin: auto;" /&gt;
+
+However, grades are not the real reason that happiness increases. Let's hypothesize that good grades boost one’s self-esteem and then high self-esteem boosts one’s happiness. This is the **Indirect Effect**.
+
+&lt;img src="https://data.library.virginia.edu/files/mediation_ex2.png" width="50%" style="display: block; margin: auto;" /&gt;
+
+Self-esteem is a mediator that explains the underlying mechanism of the relationship between grades (or `\(X\)`) and happiness (or `\(Y\)`).
+
+A mediation analysis is comprised of **three sets of regression**: `\(X\)` → `\(Y\)`, `\(X\)` → `\(M\)`, and `\(X\)` + `\(M\)` → `\(Y\)`. They are just three regression analyses!
+
+---
+
+# Analyse Mediation Effects - Step 1
+
+&lt;img src="https://data.library.virginia.edu/files/mediation_step1.png" width="70%" style="display: block; margin: auto;" /&gt;
+
+`$$Y = b_{0} + c\,X + e$$`
+
+Is `\(c\)` significant? We want `\(X\)` to affect `\(Y\)` (Direct Effect). If there is no relationship between `\(X\)` and `\(Y\)`, there is nothing to mediate.
+
+---
+
+# Analyse Mediation Effects - Step 2
+
+&lt;img src="https://data.library.virginia.edu/files/mediation_step2.png" width="70%" style="display: block; margin: auto;" /&gt;
+
+`$$M = b_{0} + a\,X + e$$`
+
+Is `\(a\)` significant? We want `\(X\)` to affect `\(M\)`. If `\(X\)` and `\(M\)` have no relationship, `\(M\)` is just a third variable that may or may not be associated with `\(Y\)`. A mediation makes sense only if `\(X\)` affects `\(M\)`.
+
+---
+
+# Analyse Mediation Effects - Step 3
+
+&lt;img src="https://data.library.virginia.edu/files/mediation_step3.png" width="70%" style="display: block; margin: auto;" /&gt;
+
+`$$Y = b_{0} + c'\,X + b\,M + e$$`
+
+Is `\(c'\)` non-significant or smaller than before? We want `\(M\)` to affect `\(Y\)`, but `\(X\)` to no longer affect `\(Y\)` (or `\(X\)` to still affect `\(Y\)` but in a smaller magnitude).
+
+- If the effect of `\(X\)` on `\(Y\)` completely disappears, `\(M\)` fully mediates between `\(X\)` and `\(Y\)`. 
+
+- If the effect of X on Y still exists, but in a smaller magnitude, M partially mediates between `\(X\)` and `\(Y\)`.
+
+---
+
+# Analyse Mediation Effects - Step 4
+
+In any case, we have to check that the Indirect effect `\(ab\)` is significant. However, a regular regression cannot test the significance of product of two estimate, only a special test can:
+
+- Sobel Test
+- Bootstrap
+
+&gt; The main difference between the two methods lies in the assumptions they make about the distribution of the data and the approach they use to estimate the standard error of the mediation effect.
+
+---
+
+# Sobel vs. Bootstrap
+
+The Sobel test:
+
+- Parametric method that assumes that the sampling distribution of the mediation effect follows a normal distribution. 
+
+- This test is easy to implement and interpret, but it may not be robust to violations of normality assumptions and may produce biased estimates when sample sizes are small.
+
+Bootstrap:
+
+- Non-parametric method that makes fewer assumptions about the distribution of the data. 
+
+- It involves resampling the data to create multiple bootstrap samples, estimating the mediation effect for each sample, and then computing the standard error and confidence intervals of the effect based on the distribution of the bootstrap estimates. 
+
+Bootstrap is generally considered more robust and reliable than Sobel when the sample size is small or the distribution of the data is non-normal.
+
+---
+
+# Data
+
+
+```r
+mediation_data &lt;- 
+  "http://static.lib.virginia.edu/statlab/materials/data/mediationData.csv" |&gt; 
+  read.csv() |&gt; 
+  rename(grades = X, happiness = Y, self_esteem = M)
+```
+
+Quick look at the first 10 rows:
+
+
+| grades| self_esteem| happiness|
+|------:|-----------:|---------:|
+|      6|           5|         6|
+|      7|           5|         5|
+|      7|           7|         4|
+|      8|           4|         8|
+|      4|           3|         5|
+|      4|           4|         7|
+
+---
+class: title-slide, middle
+
+## Mediation with Jamovi
+
+---
+
+# Data in Jamovi
+
+&lt;img src="img/mediation_jamovi_data.gif" style="display: block; margin: auto;" /&gt;
+
+---
+
+# Check Requirements in JAMOVI
+
+**Is Grades → Happiness significant?**
+
+&lt;img src="img/med_1.png" width="941" style="display: block; margin: auto;" /&gt;
+
+`\(p &lt; 0.001\)`, i.e. lower than 0.05, so `\(Grades\)` has a significant effect on `\(Happiness\)`.
+
+---
+
+# Check Requirements in JAMOVI
+
+**Is Grades → Self-esteem significant?**
+
+&lt;img src="img/med_2.png" width="1005" style="display: block; margin: auto;" /&gt;
+
+`\(p &lt; 0.001\)`, i.e. lower than 0.05, so `\(Grades\)` has a significant effect on `\(Self-esteem\)`.
+
+---
+
+# Mediation Effect Test in JAMOVI
+
+**Is `\(c'\)` lower than `\(c\)`?**
+
+&lt;img src="img/med_3.png" width="80%" style="display: block; margin: auto;" /&gt;
+
+`\(p = 0.719\)` for `\(c'\)` while `\(c\)` was significant, therefore M (self-esteem) should mediate the relationship between X (grades) and Y (happiness).
+
+However, only the test of the indirect effect `\(ab\)` can confirm this assumption.
+
+---
+
+# Available Modules
+
+To test of the indirect effect `\(ab\)` and instead of running 3 linear regressions, some modules are available in Jamovi Desktop to do them all at once and to provide additional information.
+
+- `medmod`: Is a very straight forward module designed for mediation and moderation analyses.
+  - Only 1 mediator can be used
+  - Only continuous variables
+  - No advanced moderated mediation
+  - Display percentage of mediation
+  - See more information [here](https://blog.jamovi.org/2017/09/25/medmod.html)
+  
+- `jAMM`: Jamovi Advanced Mediation Model
+  - 1 mediator or more can be used
+  - Continuous variables or Categorical Ordinal variables
+  - Possibility of moderated mediation
+  - No percentage of mediation
+  - See more information [here](https://jamovi-amm.github.io/)
+
+---
+
+# Mediation with medmod in JAMOVI
+
+Install the `medmod` module by clicking on the cross "Modules" at top right corner &gt; JAMOVI library.
+
+&lt;img src="img/mediation_jamovi_medmod.gif" style="display: block; margin: auto;" /&gt;
+
+---
+
+# Mediation with medmod in JAMOVI
+
+&lt;img src="img/mediation_jamovi_medmod.png" width="1140" style="display: block; margin: auto;" /&gt;
+
+---
+
+# Mediation with jAMM in JAMOVI
+
+Install the `jAMM` module by clicking on the cross "Modules" at top right corner &gt; JAMOVI library.
+
+Then follow the example described here: https://jamovi-amm.github.io/glm_example1.html
+
+&lt;img src="https://jamovi-amm.github.io/pics/logosm.png" style="display: block; margin: auto;" /&gt;
+
+---
+
+# Mediation with jAMM in JAMOVI
+
+&lt;img src="img/mediation_jamovi_jamm.gif" style="display: block; margin: auto;" /&gt;
+
+---
+class: title-slide, middle
+
+## Mediation with R
+
+---
+
+# mediate() from {psych}
+
+We can use the `mediate()` function from the {psych} package to add a mediating variable. 
+
+
+```r
+library(psych)
+```
+
+Importantly, we place `()` around the mediator.
+
+
+```r
+med_model &lt;- 
+  mediate(
+    happiness ~ grades + (self_esteem), # note the name of the argument is y
+    data = mediation_data
+  )
+```
+
+&lt;img src="lecture_5_files/figure-html/unnamed-chunk-28-1.png" width="504" style="display: block; margin: auto;" /&gt;
+
+---
+
+# mediate() from {psych}
+
+
+```r
+med_model # use summary() for longer output
+```
+
+
+Mediation/Moderation Analysis 
+Call: mediate(y = happiness ~ grades + (self_esteem), data = mediation_data)
+
+The DV (Y) was  happiness . The IV (X) was  grades . The mediating variable(s) =  self_esteem .
+
+Total effect(c) of  grades  on  happiness  =  0.4   S.E. =  0.11  t  =  3.56  df=  98   with p =  0.00057
+Direct effect (c') of  grades  on  happiness  removing  self_esteem  =  0.04   S.E. =  0.11  t  =  0.36  df=  97   with p =  0.72
+Indirect effect (ab) of  grades  on  happiness  through  self_esteem   =  0.36 
+Mean bootstrapped indirect effect =  0.36  with standard error =  0.08  Lower CI =  0.21    Upper CI =  0.53
+R = 0.61 R2 = 0.37   F = 28.85 on 2 and 97 DF   p-value:  0.000000000000202 
+
+ To see the longer output, specify short = FALSE in the print statement or ask for the summary
+
+---
+
+# med() from {medmod}
+
+As Jamovi is using R, all Jamovi modules are R packages. However `medmod` is not currently on CRAN and has to be installed from github.
+
+
+```r
+install.packages("remotes")
+remotes::install_github("raviselker/medmod")
+```
+
+---
+
+# med() from {medmod}
+
+The `medmod` package can handle simple models, and has some nice, readable output.
+
+
+```r
+library(medmod)
+med_model &lt;- 
+  med(
+    data = mediation_data, 
+    dep = "happiness",
+    pred = "grades", 
+    med = "self_esteem"
+  )
+med_model
+```
+
+```
+
+ MEDIATION
+
+ Mediation Estimates                                                
+ ────────────────────────────────────────────────────────────────── 
+   Effect      Estimate      SE            Z            p           
+ ────────────────────────────────────────────────────────────────── 
+   Indirect    0.35652220    0.08135460    4.3823238    0.0000117   
+   Direct      0.03960392    0.10799119    0.3667329    0.7138183   
+   Total       0.39612612    0.11004258    3.5997532    0.0003185   
+ ────────────────────────────────────────────────────────────────── 
+```
+
+---
+
+# New Data
+
+In the **muller_mediation.csv** data, participants were primed with either “might” or “morality” primes and then engaged in a one-trial prisoner’s dilemma with a fictitious partner.
+
+Additionally, participants’ social value orientation (from pro-self and pro-social) was measured. Social value orientation differentiates people in their tendency to cooperate. 
+
+Because cooperative behavior is known to be linked to expectations about the other cooperation, participants were asked to report their expectations about other’s cooperation. 
+
+The aim of the study is to show whether prime has an effect on cooperation, if social value orientation moderates the effect of prime, and if expectations have a mediating role in the experimental effects.
+Variables
+
+There are four main variables:
+- **prime**: a two-group experimental condition
+- **EXP**: expectations about the other cooperation
+- **SVO**: continuous measure of social value orientation (higher levels mean more cooperative attitude)
+- **BEH**: behavior, the amount of experimental tokens given to the public good by the participant.
+
+---
+class: title-slide, middle
+
+## Exercise
+
+Use the **muller_mediation.csv** data located in the module's Loop page under the tile "Lecture Data" (or use the R code provided here below).
+
+Test the following mediation hypothesis: the variable *EXP* explains the relationship between the variable *BEH* (outcome) and *prime* (predictor).
+
+- Test this hypothesis in Jamovi with the `medmod` and `jAMM` modules
+- Test this hypothesis in R with the {psych} and {medmod} packages
+
+
+```r
+muller_mediation &lt;- haven::read_sav("https://github.com/mcfanda/jamm_docs/blob/master/data/muller_mediation.sav?raw=true")
+```
+
+
+
+<div class="countdown" id="timer_94d0c9dc" data-warn-when="60" data-update-every="1" tabindex="0" style="right:0;bottom:0;">
+<div class="countdown-controls"><button class="countdown-bump-down">&minus;</button><button class="countdown-bump-up">&plus;</button></div>
+<code class="countdown-time"><span class="countdown-digits minutes">10</span><span class="countdown-digits colon">:</span><span class="countdown-digits seconds">00</span></code>
+</div>
+
+---
+
+class: inverse, mline, center, middle
+
+# Multiple Mediation Analysis with Jamovi and R
+
+---
+class: title-slide, middle
+
+## Exercise
+
+Use the **muller_mediation.csv** data to test the following mediation hypothesis: the variables *EXP* and *SVO* explain the relationship between the variable *BEH* (outcome) and *prime* (predictor).
+
+As `medmod` in Jamovi or in R is not suitable for more than 1 mediator variable:
+
+- Test this hypothesis in Jamovi with the `jAMM` module
+- Test this hypothesis in R with the {psych} packages
+
+<div class="countdown" id="timer_228b7ccb" data-warn-when="60" data-update-every="1" tabindex="0" style="right:0;bottom:0;">
+<div class="countdown-controls"><button class="countdown-bump-down">&minus;</button><button class="countdown-bump-up">&plus;</button></div>
+<code class="countdown-time"><span class="countdown-digits minutes">05</span><span class="countdown-digits colon">:</span><span class="countdown-digits seconds">00</span></code>
+</div>
+
+---
+
+# Multiple Mediation with jAMM
+
+&lt;img src="img/multiple_mediation.gif" style="display: block; margin: auto;" /&gt;
+
+---
+
+# Multiple Mediation with {psych}
+
+
+```r
+multi_med &lt;- 
+  mediate(
+    BEH ~ prime + (EXP) + (SVO),
+    data = muller_mediation
+  )
+```
+
+&lt;img src="lecture_5_files/figure-html/unnamed-chunk-37-1.png" width="504" style="display: block; margin: auto;" /&gt;
+
+---
+
+# Multiple Mediation with {psych}
+
+It's also possible to have multiple mediators!
+
+Simply add additional predictors surrounded by brackets.
+
+In this one, all the mediation is via EXP. SVO doesn't influence BEH
+
+
+```r
+multi_med
+```
+
+
+Mediation/Moderation Analysis 
+Call: mediate(y = BEH ~ prime + (EXP) + (SVO), data = muller_mediation)
+
+The DV (Y) was  BEH . The IV (X) was  prime . The mediating variable(s) =  EXP SVO .
+
+Total effect(c) of  prime  on  BEH  =  9.18   S.E. =  2.8  t  =  3.27  df=  98   with p =  0.0015
+Direct effect (c') of  prime  on  BEH  removing  EXP SVO  =  5.99   S.E. =  2.81  t  =  2.13  df=  96   with p =  0.036
+Indirect effect (ab) of  prime  on  BEH  through  EXP SVO   =  3.2 
+Mean bootstrapped indirect effect =  3.3  with standard error =  1.67  Lower CI =  0.53    Upper CI =  7.09
+R = 0.46 R2 = 0.21   F = 8.74 on 3 and 96 DF   p-value:  0.00000465 
+
+ To see the longer output, specify short = FALSE in the print statement or ask for the summary
+
+---
+
+class: inverse, mline, center, middle
+
+# Moderated Mediation Analysis with Jamovi and R
+
+---
+
+# Moderated Mediation
+
+It's also possible to do moderated mediation. Simply include interaction terms for moderators. 
+
+See: https://jamovi-amm.github.io/glm_example2.html
+
+&lt;img src="https://jamovi-amm.github.io/examples/muller/moderator2.png" width="50%" style="display: block; margin: auto;" /&gt;
+
+Also called conditional mediation, the Moderated Mediation includes an additional variable that has both a main effect and an interaction effect on the Outcome, the Mediator or both.
+
+---
+
+# Moderated Mediation with Jamovi
+
+As `medmod` is limited to a total of 3 variables, `jAMM` can take as many as you want.
+
+- First, design your simple mediation model and observe from the figure that variables are correctly arranged.
+- Then, to add a moderator, you need to define it as Predictor (e.g., Covariates if it is a continuous variable, Factors if it is a categorical variable).
+
+Notice that jAMM automatically updates the diagram, but we still need to declare this Predictor as a moderator. To do that, we go to `Moderators` tab, and put variable in the moderator field.
+
+For simplicity, the diagram does not show the moderator main effects (cf. the Model diagram notes in your output), but they are correctly inserted in the model. You can check out the model in the `Full model` tab.
+
+By default, a moderator is interacting with all the variables. However, if your moderation is only about a specific variable, you can remove the interactions that are not relevant in the `Full model` tab.
+
+---
+
+# Moderated Mediation with Jamovi
+
+&lt;img src="img/moderated_mediation_jamovi.gif" style="display: block; margin: auto;" /&gt;
+
+---
+
+# Moderated Mediation with Jamovi
+
+In conditional mediation models, the first thing we want to check is whether the moderator actually has a moderating effect on the components of the mediated effect. We can check that in the results table Moderation effects (interactions).
+
+&lt;img src="https://jamovi-amm.github.io/examples/muller/interactions.png" style="display: block; margin: auto;" /&gt;
+
+In the table we see that `SVO` does not moderate the path from `PRIME` to `EXP` (at least not in a substantial way), because the interaction between PRIME and SVO in predicting `EXP` is not significant. 
+
+However, SVO moderates the path from `EXP` to `BEH`, because the interaction between `EXP` and `SVO` in predicting `BEH` is clearly different from zero. This means that the conditional mediation is due to the fact that when `EXP` affects `BEH`, its effect depends on SVO.
+
+---
+
+# Moderated Mediation with Jamovi
+
+After finding a significant interaction, we know that the mediated effect depends on the levels of the moderator. Thus, we should see how the mediated effects look when estimated at different levels of the moderators. We can call these simple mediated effects.
+
+Simple mediated effects are in the Conditional Mediation results section. The results show the mediatated (indirect), direct, and total effects at different levels of the moderators. By default, the levels of the moderators are `SVO=mean-SD`, `SVO=mean`, and `SVO=mean+SD`. The levels of the moderator used to computed the conditional mediation parameters can be changed in the `Covariates Scaling` tab.
+
+&lt;img src="https://jamovi-amm.github.io/examples/muller/results0.png" width="60%" style="display: block; margin: auto;" /&gt;
+
+---
+
+# Moderated Mediation Analysis with R
+
+
+```r
+mod_medi &lt;- 
+  mediate(
+    BEH ~ prime*SVO + (EXP),
+    data = muller_mediation
+  )
+```
+
+&lt;img src="lecture_5_files/figure-html/unnamed-chunk-43-1.png" width="504" style="display: block; margin: auto;" /&gt;
+
+---
+
+# Moderated Mediation Analysis with R
+
+
+```r
+mod_medi
+```
+
+
+Mediation/Moderation Analysis 
+Call: mediate(y = BEH ~ prime * SVO + (EXP), data = muller_mediation)
+
+The DV (Y) was  BEH . The IV (X) was  prime SVO prime*SVO . The mediating variable(s) =  EXP .
+
+Total effect(c) of  prime  on  BEH  =  9.16   S.E. =  2.69  t  =  3.4  df=  96   with p =  0.00099
+Direct effect (c') of  prime  on  BEH  removing  EXP  =  6.02   S.E. =  2.72  t  =  2.21  df=  95   with p =  0.029
+Indirect effect (ab) of  prime  on  BEH  through  EXP   =  3.14 
+Mean bootstrapped indirect effect =  3.16  with standard error =  1.57  Lower CI =  0.59    Upper CI =  6.65
+
+Total effect(c) of  SVO  on  BEH  =  2.04   S.E. =  0.98  t  =  2.09  df=  96   with p =  0.039
+Direct effect (c') of  SVO  on  BEH  removing  EXP  =  2.09   S.E. =  0.93  t  =  2.25  df=  95   with p =  0.026
+Indirect effect (ab) of  SVO  on  BEH  through  EXP   =  -0.05 
+Mean bootstrapped indirect effect =  -0.07  with standard error =  0.37  Lower CI =  -0.87    Upper CI =  0.63
+
+Total effect(c) of  prime*SVO  on  BEH  =  5.15   S.E. =  1.95  t  =  2.64  df=  96   with p =  0.0098
+Direct effect (c') of  prime*SVO  on  BEH  removing  EXP  =  5.05   S.E. =  1.86  t  =  2.72  df=  95   with p =  0.0078
+Indirect effect (ab) of  prime*SVO  on  BEH  through  EXP   =  0.1 
+Mean bootstrapped indirect effect =  0.16  with standard error =  0.73  Lower CI =  -1.24    Upper CI =  1.81
+R = 0.52 R2 = 0.27   F = 8.84 on 4 and 95 DF   p-value:  0.000000646 
+
+ To see the longer output, specify short = FALSE in the print statement or ask for the summary
+
+---
+
+class: inverse, mline, center, middle
+
+# Introduction to Advanced Path Analyses for Mediation Hypotheses
+
+---
+
+# Path Analyses for Mediations
+
+Structural Equation Model (SEM) is a flexible method that allows researchers to incorporate both observed and latent variables, and to test complex models with many variables and paths.
+
+Mediations are path analyses with specific constrain to analyse simultaneously the Total, Direct, and Indirect effects.
+
+Therefore, mediations analyses can be done with SEM tools. However, while it is possible to specify Indirect Effects in SEM, it is not possible to assess the Total Effect simultaneously. 
+
+---
+
+# Terminology
+
+Broadly, variables can be categorised as either exogenous or endogenous.
+
+- **Exogenous:** are essentially predictor variables. 
+ - Only have directed arrows going out.
+
+- **Endogenous:** are outcome variables in at least one part of the model. 
+ - They have directed arrows going in.
+ - In a linear model there is only one endogenous variable, but in a path model we can have multiple.
+ 
+Most commonly used for "explanation" why a relation between an exogenous and an endogenous construct exists
+- e.g. one observes a relation between two constructs, but is unsure "why" this relation exist or if the relation is the only possible relation between the constructs
+
+---
+
+# Path Analysis in Jamovi
+
+In Jamovi, two modules allow SEM analyses: `SEMLj` and `pathj`.
+
+- The `SEMLj` module in Jamovi is split into 2 components. 
+  - Syntax allow the SEM analyses using a coding syntax for its formula in the same way that it would be done in R
+  - Interactive is made of a GUI with drag and drop variables in addition to clickable options
+
+give the possibility to either use a R code or to use a GUI. 
+
+- The `pathj` module in Jamovi is only using a GUI. However, contrary to `SEMLj`, only observed variables can be used in `pathj`. 
+
+---
+
+# Path Analysis in Jamovi
+
+&lt;img src="img/jamovi_sem_med_1.gif" style="display: block; margin: auto;" /&gt;
+
+The Indirect Effect is added by ticking a box but the Total Effect is still missing.
+
+---
+
+# Path Analysis in Jamovi
+
+You need to add the Total Effect manually in addition to ticking the box for Indirect Effects (see previous slide):
+
+&lt;img src="img/jamovi_sem_med_2.png" width="80%" style="display: block; margin: auto;" /&gt;
+
+Note: you could speficy the Indirect effect manually as well.
+
+---
+
+# Path Analysis in R
+
+- The main package used for path analyses is called {lavaan}. This package is from far the most used but also the most complicated because it involves a specific syntax to define the model.
+
+- An alternative package called {seminr} is offering a less complicated approach.
+
+The [lavaan](https://lavaan.ugent.be/index.html) package for Structural Equation Modelling can be used to fit all sort of complicated models. 
+
+
+```r
+#install.packages("lavaan")
+library(lavaan)
+```
+
+For clarity reason, it is better to specify the model used in an object first and then to run the `sem()` function which runs the model.
+
+Lavaan model can be very complicated but first, note the following:
+
+- To specify a regression path, we use `~`
+
+- To specify a covariance, we use `~~`
+
+---
+
+# General Linear Models with {lavaan}
+
+```
+lm_1 &lt;- 'happiness ~ grades'
+
+lm_2 &lt;- 'happiness ~ self_esteem'
+
+lm_3 &lt;- 'happiness ~ grades + self_esteem'
+
+lm_4 &lt;- 'happiness ~ grades
+         happiness ~ self_esteem'
+
+lm_3_cov &lt;- 'happiness ~ grades + self_esteem
+             grades ~~ self_esteem'
+
+lm_4_cov &lt;- 'happiness ~ grades
+             happiness ~ self_esteem
+             grades ~~ self_esteem'
+```
+
+<span>&lt;i class="fas  fa-exclamation-triangle faa-flash animated faa-slow " style=" color:red;"&gt;&lt;/i&gt;</span> Note: lm_3, lm_3_cov, lm_4 and lm_4_cov are the exact same models
+- Lavaan automatically merge regressions using the same outcome
+- Specifying covariance is not meaningfull when only 2 predictors are included
+
+---
+
+# Running a {lavaan} model
+
+Once we have our model statement, we then need to run our model.
+
+There are a number of functions to do this, we will only use `sem()`
+
+
+```r
+m1 &lt;- 
+  sem(
+    model, # your model statement
+    orderd = c(), # if variables are ordered categories list them
+    estimator = "ml", # name of the estimation method you wish to use
+    missing = "" , # name of the missing data method you wish to use
+    data = tbl
+  ) # your data set
+```
+
+- {lavaan} has sensible defaults, meaning most of the time you will only need to state you model and data.
+
+
+```r
+m1 &lt;- sem(model, data = tbl)
+```
+
+- There is **lots** of information on using lavaan with lots of examples [online](https://lavaan.ugent.be/)
+
+---
+
+# Viewing the results
+
+Lastly, we need to use a `summary()` function (like in `lm` and `glm`) to see results. 
+
+
+```r
+summary(m1)
+```
+
+Or for even more information in your result output:
+
+
+```r
+summary(
+  m1, # name given to our results object
+  fit.measures = TRUE, # model fit information
+  standardized = TRUE # provides standardized coefficients
+)
+```
+
+
+
+---
+
+# Mediation Example
+
+Specify the model:
+
+
+```r
+med_model &lt;- '
+  happiness ~ grades
+  happiness ~ self_esteem
+  self_esteem ~ grades
+'
+```
+
+Estimate the model:
+
+
+```r
+results_lavaan &lt;- sem(med_model, data = mediation_data)
+```
+
+Observe the results:
+
+
+```r
+summary(results_lavaan)
+```
+
+```
+lavaan 0.6.14 ended normally after 1 iteration
+
+  Estimator                                         ML
+  Optimization method                           NLMINB
+  Number of model parameters                         5
+
+  Number of observations                           100
+
+Model Test User Model:
+                                                      
+  Test statistic                                 0.000
+  Degrees of freedom                                 0
+
+Parameter Estimates:
+
+  Standard errors                             Standard
+  Information                                 Expected
+  Information saturated (h1) model          Structured
+
+Regressions:
+                   Estimate  Std.Err  z-value  P(&gt;|z|)
+  happiness ~                                         
+    grades            0.040    0.108    0.367    0.714
+    self_esteem       0.635    0.099    6.418    0.000
+  self_esteem ~                                       
+    grades            0.561    0.094    5.998    0.000
+
+Variances:
+                   Estimate  Std.Err  z-value  P(&gt;|z|)
+   .happiness         2.581    0.365    7.071    0.000
+   .self_esteem       2.633    0.372    7.071    0.000
+```
+
+However, once again we haven't specified the Indirect and the Total Effects. It has to be done manually.
+
+---
+
+# The model output
+
+.pre[
+
+```r
+summary(results_lavaan)
+```
+
+```
+lavaan 0.6.14 ended normally after 1 iteration
+
+  Estimator                                         ML
+  Optimization method                           NLMINB
+  Number of model parameters                         5
+
+  Number of observations                           100
+
+Model Test User Model:
+                                                      
+  Test statistic                                 0.000
+  Degrees of freedom                                 0
+
+Parameter Estimates:
+
+  Standard errors                             Standard
+  Information                                 Expected
+  Information saturated (h1) model          Structured
+
+Regressions:
+                   Estimate  Std.Err  z-value  P(&gt;|z|)
+  happiness ~                                         
+    grades            0.040    0.108    0.367    0.714
+    self_esteem       0.635    0.099    6.418    0.000
+  self_esteem ~                                       
+    grades            0.561    0.094    5.998    0.000
+
+Variances:
+                   Estimate  Std.Err  z-value  P(&gt;|z|)
+   .happiness         2.581    0.365    7.071    0.000
+   .self_esteem       2.633    0.372    7.071    0.000
+```
+]
+
+---
+
+# Visualising the model
+
+We can use `semPaths()` from the {semPlot} package to help us visualise the model
+
+It shows the parameter estimates within an SEM diagram
+
+
+```r
+library(semPlot)
+semPaths(results_lavaan, what = "std")
+```
+
+&lt;img src="lecture_5_files/figure-html/unnamed-chunk-57-1.png" width="504" style="display: block; margin: auto;" /&gt;
+
+---
+
+# Calculating the indirect effects 
+
+To calculate the indirect effect of X on Y in path mediation, we need a new parameter `\(a*b\)` made of:
+  - `\(a\)` = the regression coefficient for M~X
+  - `\(b\)` = the regression coefficient for Y~M
+
+Then, use the `:=` operator to create a new parameter for example called `ind` or `indirect`, or `ab` which represents our indirect effect
+
+
+```r
+med_model &lt;- '
+  happiness ~ grades
+  happiness ~ b * self_esteem
+  self_esteem ~ a * grades
+  ind := a * b
+'
+```
+
+---
+
+# Significance of the indirect effects
+
+Default method of assessing the statistical significance of indirect effects assume normal sampling distribution
+
+May not hold for indirect effects which are the product of regression coefficients
+
+Instead we can use **bootstrapping**
+  - Allows 95% confidence intervals (CIs) to be computed
+  - If 95% CI includes 0, the indirect effect is not significant at alpha = 0.05
+
+
+```r
+med_model &lt;- '
+  happiness ~ grades
+  happiness ~ b * self_esteem
+  self_esteem ~ a * grades
+  ind := a * b
+'   
+results_lavaan &lt;- 
+  sem(
+    med_model, 
+    data = mediation_data,
+    se = "bootstrap"
+  )
+```
+
+---
+
+# Output for bootstrapped CIs 
+
+.pre[
+
+```r
+summary(med_model, ci = TRUE) # we add the argument ci=TRUE to see the confidence intervals in the output
+```
+
+```
+   Length     Class      Mode 
+        1 character character 
+```
+]
+
+---
+
+# Total effects in path mediation
+
+It is a requirement to know if the **total** effect of X on Y is significant
+
+`$$Total = Indirect + Direct$$`
+
+or
+
+`$$Total = a*b + c$$`
+
+Which in lavaan is:
+
+
+```r
+med_model &lt;- '
+  happiness ~ c * grades
+  happiness ~ b * self_esteem
+  self_esteem ~ a * grades
+  ind := a * b
+  total := a * b + c
+'   
+results_lavaan &lt;- 
+  sem(
+    med_model, 
+    data = mediation_data,
+    se = "bootstrap"
+  )
+```
+
+---
+
+# Total effect in lavaan output
+
+.pre[
+
+```r
+summary(results_lavaan, ci = TRUE)
+```
+
+```
+lavaan 0.6.14 ended normally after 1 iteration
+
+  Estimator                                         ML
+  Optimization method                           NLMINB
+  Number of model parameters                         5
+
+  Number of observations                           100
+
+Model Test User Model:
+                                                      
+  Test statistic                                 0.000
+  Degrees of freedom                                 0
+
+Parameter Estimates:
+
+  Standard errors                            Bootstrap
+  Number of requested bootstrap draws             1000
+  Number of successful bootstrap draws            1000
+
+Regressions:
+                   Estimate  Std.Err  z-value  P(&gt;|z|) ci.lower ci.upper
+  happiness ~                                                           
+    grades     (c)    0.040    0.124    0.319    0.749   -0.197    0.292
+    self_estem (b)    0.635    0.107    5.956    0.000    0.418    0.845
+  self_esteem ~                                                         
+    grades     (a)    0.561    0.097    5.762    0.000    0.382    0.778
+
+Variances:
+                   Estimate  Std.Err  z-value  P(&gt;|z|) ci.lower ci.upper
+   .happiness         2.581    0.327    7.883    0.000    1.875    3.149
+   .self_esteem       2.633    0.365    7.215    0.000    1.921    3.337
+
+Defined Parameters:
+                   Estimate  Std.Err  z-value  P(&gt;|z|) ci.lower ci.upper
+    ind               0.357    0.080    4.472    0.000    0.211    0.522
+    total             0.396    0.124    3.182    0.001    0.171    0.654
+```
+]
+
+---
+
+# Why code the total effect in lavaan?
+
+We could have just added up the coefficients for the direct and indirect effects
+
+By coding it in lavaan, however, we can assess the statistical significance of the total effect
+
+Useful because the total effect has to be significant to have a mediation. Sometimes the indirect effect is significant but the total effect isn't.
+
+---
+
+# Standardised parameters
+
+Standardised parameters can be obtained in the summary using `std = TRUE`:
+
+
+```r
+summary(model1.est, ci = TRUE, std = TRUE)
+```
+
+standardized estimates (also known as standardized coefficients or beta coefficients) are the estimates of the regression coefficients after the predictor variables have been standardized. Standardizing the variables involves converting them to a common scale, typically by subtracting the mean and dividing by the standard deviation.
+
+Standardized estimates have several advantages over unstandardized estimates. 
+- First, they allow for direct comparison of the magnitude of the effects of different predictors, even when the predictors are measured on different scales.
+- Second, they can help identify which predictors are most important in explaining the outcome variable, as the estimates reflect the size of the effect of each predictor after controlling for the other predictors in the model.
+
+---
+
+# Generic mediation with lavaan
+
+Here is how to do a mediation with lavaan:
+
+
+```r
+model &lt;- ' 
+  # direct effect
+    Y ~ c*X
+  # mediator
+    M ~ a*X
+    Y ~ b*M
+  # indirect effect (a*b)
+    ab := a*b
+  # total effect
+    total := c + (a*b)
+'
+fit &lt;- sem(model, data = Data)
+```
+
+---
+
+# Reporting path mediation models 
+
+#### 1. Methods/ Analysis Strategy
+  - The model being tested (e.g. 'Y was regressed on both X and M and M was regressed on X')
+  - The estimator used (e.g., maximum likelihood estimation)
+  - The method used to test the significance of indirect effects ('bootstrapped 95% confidence intervals')
+
+#### 2. Results
+  - Model fit (for over-identified models)
+  - Can be useful to present these in a SEM diagram
+  - The parameter estimates for the path mediation  and their statistical significance
+  - The coefficient for the indirect effect and the bootstrapped 95% confidence intervals
+  - Common to also report **proportion mediation**:
+  
+`$$proportion\,mediation= \frac{indirect\,effect}{total\,effect}$$` 
+
+---
+
+# Reporting path mediation models 
+  
+<span>&lt;i class="fas  fa-exclamation-triangle faa-flash animated faa-slow " style=" color:red;"&gt;&lt;/i&gt;</span> Important to be aware of limitations:
+  - Big proportion mediation possible when total effect is small - makes effect seem more impressive
+  - Small proportion mediation even when total effect is big - can underplay importance of effect
+  - Should be interpreted in context of total effect
+
+<span>&lt;i class="fas  fa-exclamation-triangle faa-flash animated faa-slow " style=" color:red;"&gt;&lt;/i&gt;</span> Tricky interpretation if there are a mix of negative and positive effects involved
+
+---
+
+# Extensions of path mediation models
+
+We can extend our path mediation model in various ways:
+  - Several mediators in sequence or parallel
+  - Multiple outcomes
+  - Multiple predictors
+  - Multiple groups (e.g., comparing direct and indirect effects across males and females)
+  - Add covariates to adjust for potential confounders
+
+Example: Multiple mediation model
+
+
+```r
+model &lt;- '
+  Dep~b2*Aca  
+  Aca~a2*Agg
+  Dep~b1*PR!
+  PR~a1*Agg
+  Dep~c*Agg
+  
+  ind1:=a1*b1
+  ind2:=a2*b2
+
+  total=a1*b1+a2*b2+c
+'
+```
+
+---
+
+# Other path analysis models
+
+Path mediation models are a common application of path models but they are just one example
+
+Anything that can be expressed in terms of regressions between observed variables can be tested as a path model:
+  - Can include ordinal or binary variables
+  - Can include moderation
+
+Other common path analysis models include:
+  - Autoregressive models for longitudinal data
+  - Cross-lagged panel models for longitudinal data
+
+<span>&lt;i class="fas  fa-exclamation-triangle faa-flash animated faa-slow " style=" color:red;"&gt;&lt;/i&gt;</span> Cautions regarding path analysis models: **Assumption** that the paths represent causal effects is only an assumption
+
+Mediation models should ideally be estimated on longitudinal data (i.e., X time 1, M time 2, Y time 3).
+
+---
+class: inverse, mline, left, middle
+
+&lt;img class="circle" src="https://github.com/damien-dupre.png" width="250px"/&gt;
+
+# Thanks for your attention and don't hesitate if you have any questions!
+
+[<svg aria-hidden="true" role="img" viewBox="0 0 512 512" style="height:1em;width:1em;vertical-align:-0.125em;margin-left:auto;margin-right:auto;font-size:inherit;fill:currentColor;overflow:visible;position:relative;"><path d="M459.37 151.716c.325 4.548.325 9.097.325 13.645 0 138.72-105.583 298.558-298.558 298.558-59.452 0-114.68-17.219-161.137-47.106 8.447.974 16.568 1.299 25.34 1.299 49.055 0 94.213-16.568 130.274-44.832-46.132-.975-84.792-31.188-98.112-72.772 6.498.974 12.995 1.624 19.818 1.624 9.421 0 18.843-1.3 27.614-3.573-48.081-9.747-84.143-51.98-84.143-102.985v-1.299c13.969 7.797 30.214 12.67 47.431 13.319-28.264-18.843-46.781-51.005-46.781-87.391 0-19.492 5.197-37.36 14.294-52.954 51.655 63.675 129.3 105.258 216.365 109.807-1.624-7.797-2.599-15.918-2.599-24.04 0-57.828 46.782-104.934 104.934-104.934 30.213 0 57.502 12.67 76.67 33.137 23.715-4.548 46.456-13.32 66.599-25.34-7.798 24.366-24.366 44.833-46.132 57.827 21.117-2.273 41.584-8.122 60.426-16.243-14.292 20.791-32.161 39.308-52.628 54.253z"/></svg> @damien_dupre](http://twitter.com/damien_dupre)  
+[<svg aria-hidden="true" role="img" viewBox="0 0 496 512" style="height:1em;width:0.97em;vertical-align:-0.125em;margin-left:auto;margin-right:auto;font-size:inherit;fill:currentColor;overflow:visible;position:relative;"><path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6zm-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3zm44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9zM244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8zM97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1zm-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7zm32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1zm-11.4-14.7c-1.6 1-1.6 3.6 0 5.9 1.6 2.3 4.3 3.3 5.6 2.3 1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2z"/></svg> @damien-dupre](http://github.com/damien-dupre)  
+[<svg aria-hidden="true" role="img" viewBox="0 0 640 512" style="height:1em;width:1.25em;vertical-align:-0.125em;margin-left:auto;margin-right:auto;font-size:inherit;fill:currentColor;overflow:visible;position:relative;"><path d="M579.8 267.7c56.5-56.5 56.5-148 0-204.5c-50-50-128.8-56.5-186.3-15.4l-1.6 1.1c-14.4 10.3-17.7 30.3-7.4 44.6s30.3 17.7 44.6 7.4l1.6-1.1c32.1-22.9 76-19.3 103.8 8.6c31.5 31.5 31.5 82.5 0 114L422.3 334.8c-31.5 31.5-82.5 31.5-114 0c-27.9-27.9-31.5-71.8-8.6-103.8l1.1-1.6c10.3-14.4 6.9-34.4-7.4-44.6s-34.4-6.9-44.6 7.4l-1.1 1.6C206.5 251.2 213 330 263 380c56.5 56.5 148 56.5 204.5 0L579.8 267.7zM60.2 244.3c-56.5 56.5-56.5 148 0 204.5c50 50 128.8 56.5 186.3 15.4l1.6-1.1c14.4-10.3 17.7-30.3 7.4-44.6s-30.3-17.7-44.6-7.4l-1.6 1.1c-32.1 22.9-76 19.3-103.8-8.6C74 372 74 321 105.5 289.5L217.7 177.2c31.5-31.5 82.5-31.5 114 0c27.9 27.9 31.5 71.8 8.6 103.9l-1.1 1.6c-10.3 14.4-6.9 34.4 7.4 44.6s34.4 6.9 44.6-7.4l1.1-1.6C433.5 260.8 427 182 377 132c-56.5-56.5-148-56.5-204.5 0L60.2 244.3z"/></svg> damien-datasci-blog.netlify.app](https://damien-datasci-blog.netlify.app)  
+[<svg aria-hidden="true" role="img" viewBox="0 0 512 512" style="height:1em;width:1em;vertical-align:-0.125em;margin-left:auto;margin-right:auto;font-size:inherit;fill:currentColor;overflow:visible;position:relative;"><path d="M16.1 260.2c-22.6 12.9-20.5 47.3 3.6 57.3L160 376V479.3c0 18.1 14.6 32.7 32.7 32.7c9.7 0 18.9-4.3 25.1-11.8l62-74.3 123.9 51.6c18.9 7.9 40.8-4.5 43.9-24.7l64-416c1.9-12.1-3.4-24.3-13.5-31.2s-23.3-7.5-34-1.4l-448 256zm52.1 25.5L409.7 90.6 190.1 336l1.2 1L68.2 285.7zM403.3 425.4L236.7 355.9 450.8 116.6 403.3 425.4z"/></svg> damien.dupre@dcu.ie](mailto:damien.dupre@dcu.ie) 
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script src="libs/cols_macro.js"></script>
+<script>var slideshow = remark.create({
+"highlightStyle": "zenburn",
+"highlightLines": true,
+"countIncrementalSlides": false
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+// add `data-at-shortcutkeys` attribute to <body> to resolve conflicts with JAWS
+// screen reader (see PR #262)
+(function(d) {
+  let res = {};
+  d.querySelectorAll('.remark-help-content table tr').forEach(tr => {
+    const t = tr.querySelector('td:nth-child(2)').innerText;
+    tr.querySelectorAll('td:first-child .key').forEach(key => {
+      const k = key.innerText;
+      if (/^[a-z]$/.test(k)) res[k] = t;  // must be a single letter (key)
+    });
+  });
+  d.body.setAttribute('data-at-shortcutkeys', JSON.stringify(res));
+})(document);
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+// adds .remark-code-has-line-highlighted class to <pre> parent elements
+// of code chunks containing highlighted lines with class .remark-code-line-highlighted
+(function(d) {
+  const hlines = d.querySelectorAll('.remark-code-line-highlighted');
+  const preParents = [];
+  const findPreParent = function(line, p = 0) {
+    if (p > 1) return null; // traverse up no further than grandparent
+    const el = line.parentElement;
+    return el.tagName === "PRE" ? el : findPreParent(el, ++p);
+  };
+
+  for (let line of hlines) {
+    let pre = findPreParent(line);
+    if (pre && !preParents.includes(pre)) preParents.push(pre);
+  }
+  preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
+})(document);</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>

@@ -27,7 +27,7 @@ library(xaringanExtra)
 # general options --------------------------------------------------------------
 options(scipen = 999)
 set.seed(99)
-use_freezeframe()
+#use_freezeframe()
 
 # chunk options ----------------------------------------------------------------
 opts_chunk$set(

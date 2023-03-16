@@ -1,6 +1,6 @@
 ---
 title: "MT612 - Advanced Quant. Research Methods"
-subtitle: "Lecture 5: Path Analysis with Mediation"
+subtitle: "Lecture 5: Path Analysis for Mediation Hypotheses"
 author: "Damien Dupré"
 date: "Dublin City University"
 output:
@@ -240,7 +240,7 @@ DiagrammeR::grViz("
 
 # Mediation Effect
 
-Imagine that previous studies have suggested that higher grades predict higher happiness. This is the **Direct Effect**.
+Imagine that previous studies have suggested that higher grades predict higher happiness. This is the **Total Effect**.
 
 ```{r out.width="50%"}
 include_graphics("https://data.library.virginia.edu/files/mediation_ex1.png")
@@ -1044,6 +1044,28 @@ summary(results_lavaan, ci = TRUE)
 
 ---
 
+# Total effects in path mediation
+
+```{r echo=TRUE}
+med_model <- '
+  BEH ~ c * prime
+  BEH ~ b * EXP
+  EXP ~ a * prime
+  ind := a * b
+  total := a * b + c
+'   
+results_lavaan <- 
+  sem(
+    med_model, 
+    data = muller_mediation,
+    se = "bootstrap"
+  )
+
+summary(results_lavaan, ci = TRUE)
+```
+
+---
+
 # Why code the total effect in lavaan?
 
 We could have just added up the coefficients for the direct and indirect effects
@@ -1132,17 +1154,19 @@ We can extend our path mediation model in various ways:
 Example: Multiple mediation model
 
 ```{r echo=TRUE}
-model <- '
-  Dep~b2*Aca  
-  Aca~a2*Agg
-  Dep~b1*PR!
-  PR~a1*Agg
-  Dep~c*Agg
-  
-  ind1:=a1*b1
-  ind2:=a2*b2
-
-  total=a1*b1+a2*b2+c
+model <- ' 
+  # direct effect
+    BEH ~ c*prime
+  # mediator
+    EXP ~ a1*prime
+    BEH ~ b1*EXP
+    SVO ~ a2*prime
+    BEH ~ b2*SVO
+  # indirect effect (a*b)
+    ind1 := a1*b1
+    ind2 := a2*b2
+  # total effect
+    total := c + a1*b1 + a2*b2
 '
 ```
 

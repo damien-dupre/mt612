@@ -643,25 +643,12 @@ There are some other things which we will automatically be estimated here: all o
 
 # Solution
 
-.pull-left[
 We can see all the paths here:
-```{r eval=FALSE}
-lavaanify(model)
-```
 
-```{r}
-lavaanify(model)[,2:4] %>% head(13L)
+```{r echo=TRUE}
+lavaanify(model) |> 
+  select(-exo, -ustart)
 ```
-]
-
-.pull-right[
-and even make a nice diagram:
-
-```{r}
-library(semPlot)
-semPaths(lavaanify(model))
-```
-]
 
 ---
 
@@ -669,7 +656,7 @@ semPaths(lavaanify(model))
 
 Estimating the model is relatively straightforward. We pass the formula we have written to the `sem()` function, along with the data set in which we want it to look for the variables:
 
-```{r echo=TRUE, eval=FALSE}
+```{r echo=TRUE}
 model.fit <- sem(model, data = df)
 ```
 
@@ -679,10 +666,16 @@ We can then examine the parameter estimates:
 summary(model.fit)
 ```
 
-We can now, to "visualise" our model, add the estimates to the diagram:
+---
 
-```{r}
-include_graphics("img/jobsatmod.png")
+# Solution
+
+To visualise the model, use the {semPlot} package and its `semPaths()` function:
+
+```{r echo=TRUE, fig.height=5}
+# install.packages("semPlot")
+library(semPlot)
+semPaths(model.fit, what = "std")
 ```
 
 ---

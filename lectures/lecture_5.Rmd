@@ -327,6 +327,14 @@ Bootstrap is generally considered more robust and reliable than Sobel when the s
 
 ---
 
+# Cautions: Indistinguishable Models
+
+```{r}
+include_graphics("img/med versus confounding.png")
+```
+
+---
+
 # Data
 
 ```{r echo=TRUE}

@@ -11,7 +11,7 @@
 .split-three>.row:nth-of-type(2) {height: 33.33333333333%; width:100%; position: absolute; left: 0; top: 33.33333333333%;}
 .split-three>.row:nth-of-type(3) {height: 33.33333333333%; width:100%; position: absolute; bottom: 0; left: 0;}
 
-.remark-code-line-highlighted     { background-color: #4d4d4d; }
+.remark-code-line-highlighted     { background-color: #fab666; }
 
 
 /* footer */

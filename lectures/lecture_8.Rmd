@@ -1,6 +1,6 @@
 ---
 title: "MT612 - Advanced Quant. Research Methods"
-subtitle: "Lecture 8: Academic Journal Paper Templates"
+subtitle: "Lecture 8: Structural Equation Models"
 author: "Damien Dupré"
 date: "Dublin City University"
 output:
@@ -40,6 +40,122 @@ opts_chunk$set(
   )
 ```
 
+# Pre-requisites
+
+If I want to learn Structural Equation Modelling I should already have...
+
+* A very good understanding of **multiple linear regression**
+* Good familiarity with terms like **variance, covariance, correlation** 
+* It can help to have some familiarity with **data tidying** (i.e. in R), especially for converting between **long and wide data formats**
+* Formal understanding of **causal diagrams**/Directed Acyclic Graphs can be helpful
+
+---
+
+# Structural Equation Model
+
+General framework that uses various models to test relationships among variables
+
+Include different facets of statistical analyses:
+
+ - Regression model (Legendre or Gauss, 1805)
+ - Confirmatory factor analysis (Howe, 1955; Anderson & Rubin, 1956; Karl Joreskog, 1963)
+ - Latent factor structure (Spearman, 1904, 1927)
+ - Path model (Wrigh, 1918, 1921)
+ 
+A Structural Equation Model is a confirmatory factor analysis + a path model analysis.
+
+---
+
+# Structural Equation Model
+
+.pull-left[
+The confirmatory factor analysis part is called **measurement model**
+
+The path model analysis is called **structural model** and evaluate the  relationship between constructs
+
+A full SEM model is combination of measurement and structural component
+]
+
+.pull-right[
+```{r}
+include_graphics("img/structural_part_2.jpg")
+```
+]
+
+---
+
+# Basic SEM Conventions
+
+```{r}
+include_graphics("img/sem_convention_2.jpg")
+```
+
+---
+class: title-slide, middle
+
+## SEM with R
+
+---
+
+# SEM with R
+
+As we have seen with Path Analysis and CFA, the package {lavaan} provides a specific coding structure to define the SEM, see https://lavaan.ugent.be/
+
+.pull-left[
+```
+   # latent variables
+     ind60 =~ x1 + x2 + x3
+     dem60 =~ y1 + y2 + y3 + y4
+     dem65 =~ y5 + y6 + y7 + y8
+   # regressions
+     dem60 ~ ind60
+     dem65 ~ ind60 + dem60
+   # residual covariances
+     y1 ~~ y5
+     y2 ~~ y4 + y6
+     y3 ~~ y7
+     y4 ~~ y8
+     y6 ~~ y8
+```
+]
+
+.pull-right[
+```{r out.width='100%'}
+include_graphics("https://lavaan.ugent.be/tutorial/figure/sem.png")
+```
+]
+
+---
+
+# Lavaan
+
+- R package {lavaan} (**LA**tent **VA**riable **AN**alysis) (Rosseel, 2012)
+
+  - Free and open-source
+  - Easy and intuitive to use
+  - Reliable and advanced with commercial-quality
+  - Extensible
+  - Constantly upgrading
+
+---
+
+# Lavaan Syntax
+
+Formula type | Operator | Example | Description | Diagram
+:----------- | :-------: | :------| :----------| :------:
+.aqua[regression] | `~` | `y ~ x`|.aqua[y is .aqua[regressed] on x ]| <img src="img/regression.png" height="50px"/> 
+.moss[latent variable definition] | `=~` | `f =~ y1 + y2 + y3` | .moss[f is .moss[measured] by y1, y2, y3] | <img src="img/latent_var.png" height="120px"/>
+.sea_green[(co)variance] |`~~` | `y1 ~~ y1` <br> `y2 ~~ y3` |.sea_green[Variance of y1 <br> Covariance between y2 and y3] | <img src="img/co_var.png" height="120px"/> 
+.dark_coral[intercept] | `~1` | `y1 ~ 1` | .dark_coral[The intercept (mean) of y1] | <img src="img/intercept.png" height="50px"/> 
+
+---
+
+# Lavaan Syntax 
+
+Formula type | Operator | Example | Description | Diagram
+:----------- | :-------: | :------| :----------| :----:
+fixed parameter | `*`| `1*y1` | Fix the parameter (factor loading) of y1 to 1 | <img src="img/fix_para.png" height="50px"/>
+free parameter | `NA*` |`NA*y1`| The parameter (factor loading) of y1 is freely estimated  | <img src="img/free_para.png" height="50px"/>
 
 ---
 class: inverse, mline, left, middle

@@ -1,0 +1,1167 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+  <head>
+    <title>MT612 - Advanced Quant. Research Methods</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="Damien Dupré" />
+    <script src="libs/header-attrs-2.20/header-attrs.js"></script>
+    <link href="libs/remark-css-0.0.1/default.css" rel="stylesheet" />
+    <link href="libs/remark-css-0.0.1/metropolis.css" rel="stylesheet" />
+    <link href="libs/remark-css-0.0.1/metropolis-fonts.css" rel="stylesheet" />
+    <link href="libs/countdown-0.4.0/countdown.css" rel="stylesheet" />
+    <script src="libs/countdown-0.4.0/countdown.js"></script>
+    <script src="libs/htmlwidgets-1.6.1/htmlwidgets.js"></script>
+    <script src="libs/viz-1.8.2/viz.js"></script>
+    <link href="libs/DiagrammeR-styles-0.2/styles.css" rel="stylesheet" />
+    <script src="libs/grViz-binding-1.0.9/grViz.js"></script>
+    <link rel="stylesheet" href="css/custom_design.css" type="text/css" />
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+.title[
+# MT612 - Advanced Quant. Research Methods
+]
+.subtitle[
+## Lecture 6: From Path Analysis to SEM
+]
+.author[
+### Damien Dupré
+]
+.date[
+### Dublin City University
+]
+
+---
+
+
+
+
+# General Introduction
+
+By now, we are getting more comfortable with the regression world, and we can see how it is **extended to lots of different types of outcome and data structures**. However, we are still restricted to thinking about **one single outcome variable**.
+
+--
+
+.pull-left[
+We have few choices in the model we construct beyond specifying which is our outcome variable.
+
+We can visualise our multiple regression model like this: 
+
+&lt;img src="img/mregpath.png" width="245" style="display: block; margin: auto;" /&gt;
+]
+
+--
+
+.pull-right[
+Of course, there are a few other things that are included (an intercept term, the residual error, and the fact that our predictors can be correlated with one another), but the idea remains pretty much the same:
+
+&lt;img src="img/mregpath2.png" width="245" style="display: block; margin: auto;" /&gt;
+]
+
+---
+
+# General Introduction
+
+What if I my theoretical model of the world doesn’t fit this structure?
+
+--
+
+.pull-left[
+Let’s suppose I have 5 variables: Age, Parental Income, Income, Autonomy, and Job Satisfaction.
+
+&lt;img src="img/paths1nopaths.png" width="276" style="display: block; margin: auto;" /&gt;
+]
+
+--
+
+.pull-right[
+My theoretical understanding of how these things fit together leads me to link my variables to end up with something like that: 
+
+&lt;img src="img/paths1paths.png" width="276" style="display: block; margin: auto;" /&gt;
+]
+
+--
+
+In this diagram, a persons **income is influenced by their age, their parental income, and their level of autonomy**, and in turn their **income predicts their job satisfaction**. **Job satisfaction is also predicted by a persons age directly, and by their level of autonomy**, which is **also predicted by age**. It's complicated to look at, but in isolation each bit of this makes theoretical sense. 
+
+---
+
+# General Introduction
+
+Take each arrow in turn and think about what it represents:
+
+&lt;img src="img/paths1desc.png" width="550px" style="display: block; margin: auto;" /&gt;
+
+--
+
+If we think about trying to fit this "model" with the tools that we have, then we might end up wanting to fit three separate regression models, which between them specify all the different arrows in the diagram:
+
+$$
+`\begin{align}
+\textrm{Job Satisfaction}_i &amp; = b_0 + b_1\,\textrm{Age}_i + b_2\,\textrm{Autonomy}_i + b_3\,\textrm{income}_i + e \\
+\textrm{income} &amp; = b_0 + b_1\,\textrm{Age} + b_2\,\textrm{Autonomy} + b_3\,\textrm{Parental income} + e \\
+\textrm{Autonomy} &amp; = b_0 + b_1\,\textrm{Age} + e \\
+\end{align}`
+$$
+
+Does my entire model fit the data we observed? 
+
+---
+
+# General Introduction
+
+Path models
+  - Sometimes we have more than one variable that needs to be treated as an outcome/dependent variable
+  - We cant do this in a linear model.
+  - **A path model allows us to test several linear models together as a set**
+  - Good way to learn basics of *structural equation modelling*
+  
+Data reduction
+  - Surveys and psychometric tools use latent variables
+  - Here we asked lots of questions we believe relate to some construct
+  - We need a way to:
+    - Check the relationships between each question
+    - Produce plausible scores that represent this construct
+
+---
+
+# Terminology refresher
+
+Broadly, variables can be categorised as either exogenous or endogenous.
+
+- **Exogenous variables** are a bit like what we have been describing with words like "independent variable" or "predictor". In a path diagram, they have no paths coming from other variables in the system, but have paths *going to* other variables.
+
+&gt; *Exogenous variables are essentially predictors and only have directed arrows going out.*
+
+- **Endogenous variables** are more like the "outcome"/"dependent"/"response" variables we are used to. They have some path coming from another variable in the system (and may also - but not necessarily - have paths going out from them).
+
+&gt; *Endogenous variables are outcome variables in at least one part of the model. They have directed arrows going in.*
+
+---
+class: inverse, mline, center, middle
+
+# 1. Path Analysis
+
+---
+
+# Path Analysis
+
+The starting point for Path Analysis is to think about our theories in terms of the connections between variables drawn on a whiteboard.
+
+There are a few conventions to help us understand this sort of diagrammatical way of thinking. By using combinations of rectangles, ovals, single- and double-headed arrows, we can draw all sorts of model structures. In Path Diagrams, we use specific shapes and arrows to represent different things in our model.
+
+---
+
+# Path Analysis
+
+Shapes and Arrows in Path Diagrams:
+
+- **Observed variables** are represented by squares or rectangles. These are the named variables of interest which exist in our dataset - i.e. the ones which we have measured directly. 
+- **Variances/Covariances** are represented by double-headed arrows. In many diagrams these are curved. 
+- **Regressions** are shown by single headed arrows (e.g., an arrow from `\(x\)` to `\(y\)` for the path `\(y~x\)`).  
+- **Latent variables** are represented by ovals, and we will return to these in the next section
+
+&lt;img src="img/semplots.png" width="537" style="display: block; margin: auto;" /&gt;
+
+---
+
+# Path Analysis
+
+The logic behind path analysis is to estimate a system of equations that can reproduce the covariance structure that we see in the data. 
+
+1. We specify our theoretical model of the world as a system of paths between variables
+2. We collect data on the relevant variables and we observe a correlation matrix (i.e. how each variable correlates with all others)
+3. We fit our model to the data, and evaluate how well our theoretical model (a system of paths) can reproduce the correlation matrix we observed. 
+
+---
+
+# Path Analysis
+
+Thanks to [Sewal Wright](https://www.jstor.org/stable/pdf/2527551.pdf?casa_token=3QF0ad2ZoBcAAAAA:MbEkDNNdoLZr1SXE4LrnK--qrhhsTXLgsRtcWre1UvWxiQiGNUl5vWytGp34XIxhAYMZJe-MbIcBnEwXSfX6MAONevz04-sMXpEDI3IaYKk6mMX46QvX), we can express the correlation between any two variables in the system as the sum of all *compound paths* between the two variables (i.e., any paths you can trace between A and B). 
+
+Let's consider the example below, for which the paths are all labelled with lower case letters `\(a, b, c, \text{and } d\)`. 
+
+&lt;img src="img/patheq1.png" width="226" style="display: block; margin: auto;" /&gt;
+
+According to Wright's tracing rules above, write out the equations corresponding to the 3 correlations between our observed variables (remember that `\(r_{a,b} = r_{b,a}\)`, so it doesn't matter at which variable we start the paths). 
+
+- `\(r_{x1,x2} = c\)`  
+- `\(r_{x1,y} = a + bc\)`  
+- `\(r_{x2,y} =  b + ac\)`  
+
+---
+
+# Path Analysis
+
+Now let's suppose we observed the following correlation matrix:
+
+
+```
+     x1   x2    y
+x1 1.00 0.36 0.75
+x2 0.36 1.00 0.60
+y  0.75 0.60 1.00
+```
+
+We can plug these into our system of equations:
+
+- `\(r_{x1,x2} = c = 0.36\)`  
+- `\(r_{x1,y} = a + bc = 0.75\)`   
+- `\(r_{x2,y} = b + ac = 0.60\)`
+
+And with some substituting and rearranging, we can work out the values of `\(a\)`, `\(b\)` and `\(c\)`.
+
+---
+
+# Model Estimation
+
+After we have specified our model (&amp; checked it is identified) we proceed to **estimation**
+
+Model estimation refers to finding the 'best' values for the unknown parameters
+
+The **Maximum likelihood** estimation is most commonly used
+- Finds the parameters that maximise the likelihood of the data 
+- Begins with a set of starting values
+- Iterative process of improving these values (i.e. to minimise the difference between the sample covariance matrix and the covariance matrix implied by the parameter values)
+- Terminates when the values are no longer substantially improved across iterations
+- At this point **convergence** is said to have been reached
+
+---
+
+# Model Estimation
+
+Maximum likelihood estimation assumptions:
+
+1. Large sample size
+2. Multivariate normality
+3. Variables are on a continuous scale
+
+If we believe these are not met, there are alternatives:
+- Robust maximum likelihood estimation for non-normal data
+- Weighted least squares, unweighted least squares or diagonally weighted least squares for ordinal data
+
+Estimation is quite a complex topic, for now, working with ML will suffice.
+
+---
+
+# Model Fit 
+
+In things like multiple regression, we have been using "model fit" to be the measure of "how much variance can we explain in `\(y\)` with our set of predictors?". For a path model, examining "model fit" is more like asking **"how well does our model reproduce the characteristics of the data that we observed?"**.  
+  
+We can represent the "characteristics of our data" in a covariance matrix, so one way of thinking of "model fit" is as **"how well can our model reproduce our observed covariance matrix?"**.  
+
+
+```
+               js_score    income  autonomy          age parentincome
+js_score      1.9696505 0.4318520 1.0143258 -0.185060758  0.386403609
+income        0.4318520 0.8251202 0.5424346  0.500719469  0.306222155
+autonomy      1.0143258 0.5424346 1.2627313  0.231339725  0.112781836
+age          -0.1850608 0.5007195 0.2313397  0.792750472  0.005039455
+parentincome  0.3864036 0.3062222 0.1127818  0.005039455  0.921057785
+```
+
+---
+
+# Model Fit 
+
+For these kind of models, a `\(\chi^2\)` value is obtained which reflects reflects the discrepancy between the _model-implied covariance matrix_ and the _observed covariance matrix_. We can then calculate a p-value for this `\(\chi^2\)` statistic by using the `\(\chi^2\)` distribution with the degrees of freedom equivalent to that of the model.  
+
+If we denote the sample covariance matrix as `\(S\)` and the model-implied covariance matrix as `\(\Sigma(\theta)\)`, then we can think of the null hypothesis here as `\(H_0: S - \Sigma(\hat\theta) = 0\)`. 
+
+__In this way our null hypothesis is sort of like saying that our theoretical model is correct__ (and can therefore perfectly reproduce the covariance matrix).
+
+- If the `\(\chi^2\)` statistic is not significant, we have no evidence to support rejecting our null hypothesis that our model provides a reasonable fit to the data.
+
+- A significant `\(\chi^2\)` value indicates that there is a discrepancy between the observed data and the model's predicted values, suggesting that the model does not fit the data well.
+
+---
+
+# Model Fit
+
+In summary, when we use maximum likelihood estimation we obtain a `\(\chi^2\)` value for the model
+
+A statistically significant `\(\chi^2\)` suggests the model does not do a good job of reproducing the observed variance-covariance matrix  
+
+However, `\(\chi^2\)` does not work well in practice, it leads to the rejection of models that are only trivially mis-specified.
+
+The `\(\chi^2\)` statistic is known to be sensitive to sample size, meaning that larger sample sizes will tend to produce significant `\(\chi^2\)` values even if the differences between the observed and predicted values are small. 
+
+---
+
+# Model Fit
+
+There are alternatives to `\(\chi^2\)` measuring the Absolute fit:
+- Standardised root mean square residual (**SRMR**) which measures the discrepancy between the observed correlation matrix and model-implied correlation matrix
+  - ranges from 0 to 1 with 0=perfect fit
+  - values &lt;.05 considered good
+
+- Root mean square square error of approximation (**RMSEA**) is a parsimony-corrected index which corrects for the complexity of the model. It adds a penalty for having more degrees of freedom
+  - 0=perfect fit
+  - values &lt;.05 considered good
+
+---
+
+# Model Fit
+
+There are also Incremental fit indices which compares the model to a more restricted baseline model. Usually an 'independence' model where all observed variable covariances fixed to 0.
+
+- Comparative fit index (**CFI**)
+  - ranges between 0 and 1 with 1=perfect fit
+  - values &gt; .95 considered good
+
+- Tucker-Lewis index (**TLI**)
+  - includes a parsimony penalty
+  - values &gt;.95 considered good
+
+---
+class: title-slide, middle
+
+## Path Analysis with Jamovi
+
+---
+
+# PATHj in Jamovi
+
+The `PATHj` module is a jamovi interface to {lavaan} R package (Rosseel 2012). It implements path analysis, so SEM models with observed variables (no latent variables). The module handles **continuous dependent (endogenous) variables**, **continuous and categorical independent (exogenous) variables**, **linear and interaction effects**.
+
+See https://pathj.github.io/index.html for more details
+
+---
+
+# PATHj in Jamovi
+
+.pull-left[
+To run a model, we first select the variables and their role. `Endogenous Variables are the ones that will receive a path in the final model. Exogenous Variables are specified depending on their measurement level. Categorical exogenous variables go in Exogenous Factors, continuous variables in Exogenous Covariates.
+]
+
+.pull-right[
+A model with two endogenous variables, one continuous and one factor as exogenous predictors is set as follows:
+
+&lt;img src="https://pathj.github.io/pics/help/input_variables_filled.png" style="display: block; margin: auto;" /&gt;
+]
+
+---
+
+# PATHj in Jamovi
+
+Factors are handled by decomposing the variable in K-1 contrast variables and insert them in the model in place of the categorical variable. The type of contrast used, for each factor, can be seen and changed in the Factors Coding tab.
+
+Continuous variables are left unchanged, but their scale can be changed in the Continuous Variables Scaling tab, for easily centering, or standardizing the variables.
+
+Multigroup Analysis Factor is used to run multigroup analyses.
+
+---
+
+# PATHj in Jamovi
+
+Then we specify the predictors of each endogenous variable. First we select on the right panel the endogenous model that needs to be set, then select the predictor(s) and fill the `Models for Endogenous Vars` field clicking the arrow. 
+
+Interactions among predictors are included by selecting more then one term on the left, and bring them in the right panel with the arrow
+
+&lt;img src="https://pathj.github.io/pics/help/input_endogenous.png" style="display: block; margin: auto;" /&gt;
+
+In this example, `\(y1\)` is predicted by `\(y2\)`, `\(x3\)` and `\(groups_a\)` variables, whereas `\(y2\)` is predicted by `\(x3\)` and `\(groups_a\)`.
+
+---
+class: title-slide, middle
+
+## Path Analysis with R
+
+---
+
+# Path Analysis with R
+
+R package {lavaan} (**LA**tent **VA**riable **AN**alysis) (Rosseel, 2012)
+- Free and open-source
+- Easy and intuitive to use
+- Reliable and advanced with commercial-quality
+- Extensible
+- Constantly upgrading
+
+
+```r
+install.packages("lavaan")
+library(lavaan)
+```
+  
+This is the main package in R for fitting path diagrams (as well as more cool models like factor analysis structures and structural equation models). There is a huge scope of what this package can do.  
+The first thing to get to grips with is the various new operators which it allows us to use.   
+
+Our old multiple regression formula in R was specified as `y ~ x1 + x2 + x3 + ... `.  
+In __lavaan__, we continue to fit regressions using the `~` symbol, but we can also specify the construction of latent variables using `=~` and residual variances &amp; covariances using `~~`.  
+
+---
+
+# Path Analysis with R
+
+Formula type | Operator | Example | Description | Diagram
+:----------- | :-------: | :------| :----------| :------:
+.aqua[regression] | `~` | `y ~ x`|.aqua[y is .aqua[regressed] on x ]| &lt;img src="img/regression.png" height="50px"/&gt; 
+.moss[latent variable definition] | `=~` | `f =~ y1 + y2 + y3` | .moss[f is .moss[measured] by y1, y2, y3] | &lt;img src="img/latent_var.png" height="120px"/&gt;
+.sea_green[(co)variance] |`~~` | `y1 ~~ y1` &lt;br&gt; `y2 ~~ y3` |.sea_green[Variance of y1 &lt;br&gt; Covariance between y2 and y3] | &lt;img src="img/co_var.png" height="120px"/&gt; 
+.dark_coral[intercept] | `~1` | `y1 ~ 1` | .dark_coral[The intercept (mean) of y1] | &lt;img src="img/intercept.png" height="50px"/&gt; 
+
+---
+
+# Path Analysis with R
+
+Formula type | Operator | Example | Description | Diagram
+:----------- | :-------: | :------| :----------| :----:
+fixed parameter | `*`| `1*y1` | Fix the parameter (factor loading) of y1 to 1 | &lt;img src="img/fix_para.png" height="50px"/&gt;
+free parameter | `NA*` |`NA*y1`| The parameter (factor loading) of y1 is freely estimated  | &lt;img src="img/free_para.png" height="50px"/&gt;
+
+In practice, fitting models in __lavaan__ tends to be a little different from things like `lm()`.
+
+Instead of including the model formula *inside* the fit function (e.g., `lm(y ~ x1 + x2, data = df)`), we tend to do it in a step-by-step process. 
+
+This is because as our models become more complex, our formulas can pretty long!   
+
+We write the model as a character string (e.g. `model &lt;- "y ~ x1 + x2"`) and then we pass that formula along with the data to the relevant __lavaan__ function, which for our purposes will be the `sem()` function, `sem(model, data = mydata)`. 
+
+---
+
+# Path Analysis with R
+
+Here is a a multiple regression fitted with __lavaan__ below. 
+
+- the `lm()` way:
+
+
+```r
+result_lm &lt;- lm(outcome_1 ~ predictor_1 + predictor_2, data = my_data)
+```
+
+- the {lavaan} way:
+
+
+```r
+model &lt;- "
+# regression
+    outcome_1 ~ predictor_1 + predictor_2
+"
+result_sem &lt;- sem(model, data = my_data)
+```
+
+The coefficients from the `lm()` model and the estimated parameters from the `sem()` model are the exact same:
+
+
+```r
+summary(result_lm)
+
+summary(result_sem)
+```
+
+---
+
+# Path Analysis with R
+
+Obviously, a more complicated path analysis involving more than one multiple linear regression is possible
+
+.pull-left[
+&lt;img src="img/example2.png" width="1067" style="display: block; margin: auto;" /&gt;
+]
+
+.pull-right[
+
+```r
+reg_model &lt;- '
+# path analysis with 3 outcome variables
+    u1 ~ x1 + x2 + x3
+    u2 ~ x1 + x2 + x3
+    u3 ~ u1 + u2 + x2 
+'
+
+reg_sem &lt;- sem(
+    model = reg_model, 
+    data = my_data
+  )
+```
+]
+
+Notes: 
+- The covariance of the Exogenous variables is set by default
+- See how the SEM model is included between simple or double quotation marks. within this quotation marks it is possible to include some comments with `#`
+
+---
+
+# Path Analysis with R
+
+Regarding interaction effects, there is a big difference between PATHj and {lavaan}:
+- PATHj in Jamovi provides an easy solution by creating an interaction effect when selecting two variables and bringing them in the model
+- {lavaan} in R doesn't have a natural syntax to specify interaction effects.
+
+---
+
+# Path Analysis with R
+
+We cannot do:
+
+
+```r
+model &lt;-'
+  Outcome ~ Predictor1 * Predictor2
+'
+sem(model, data = my_data)
+```
+
+The symbol `*` is dedicated to the assignment of a coefficient label like `\(b_0\)`, `\(b_1\)`, or like `\(a\)`, `\(b\)`, `\(c\)` and `\(c'\)` in the case of mediation path analysis.
+
+--
+
+We cannot do either:
+
+
+```r
+model &lt;-'
+  Outcome ~ Predictor1 + Predictor2 + Predictor1:Predictor2
+'
+sem(model, data = my_data)
+```
+
+The symbol `:` doesn't exist in {lavaan} syntax.
+
+---
+
+# Path Analysis with R
+
+Prior testing the model, we need to manually create a new variable that codes the interaction:
+
+
+```r
+my_data &lt;- mutate(
+  my_data,
+  Predictor1_Predictor2 = Predictor1 * Predictor2
+  )
+
+model &lt;-'
+  Outcome ~ Predictor1 + Predictor2 + Predictor1_Predictor2
+'
+sem(model, data = my_data)
+```
+
+---
+
+# Path Analysis with R
+
+- `summary()`: outputs an overview of the fitted model
+- `parameterEstimates()`: returns estimated model parameters
+- `standardizedSolution()`: returns standardized parameter estimates
+- `fitted()` and `fitted.values()`: return the model-implied covariance matrix (and mean vector)
+- `resid()` and `residuals()`: returns (unstandardized) residuals]
+- `vcov()`: returns the estimated covariance matrix of the parameter estimates
+- `AIC()` and `BIC()`: return the AIC and BIC values
+- `fitMeasures()`: returns various fit measures such as CFI/TLI
+
+---
+class: title-slide, middle
+
+## Exercise
+
+With the `sem_data.csv` data, test the following model involving Age, Parental Income, Income, Autonomy, and Job Satisfaction with Jamovi or with R.
+
+&lt;img src="img/paths1paths.png" width="150%" style="display: block; margin: auto;" /&gt;
+
+<div class="countdown" id="timer_71784c37" data-warn-when="60" data-update-every="1" tabindex="0" style="right:0;bottom:0;">
+<div class="countdown-controls"><button class="countdown-bump-down">&minus;</button><button class="countdown-bump-up">&plus;</button></div>
+<code class="countdown-time"><span class="countdown-digits minutes">10</span><span class="countdown-digits colon">:</span><span class="countdown-digits seconds">00</span></code>
+</div>
+
+---
+
+# Solution
+
+The first part of estimating a path model involves specifying the model. This means basically writing down the paths that are included in your theoretical model. 
+
+Let's start by looking at the example about job satisfaction, income, autonomy and age.  
+
+And now let's suppose that we collected data on these variables: 
+
+
+|   js_score|     income|   autonomy|        age| parentincome|
+|----------:|----------:|----------:|----------:|------------:|
+| -1.1884065| -0.4756777| -1.4483132| -1.6588480|    0.2403251|
+| -0.6248266|  0.5557276|  0.6023297|  0.5194764|    1.6237248|
+|  1.5634165| -1.3348762| -0.3502460| -0.7190015|   -1.2911269|
+|  0.1289531| -1.1833471| -1.3170266| -0.6293706|    1.5992806|
+| -0.5281355| -0.1880767|  0.3190851| -0.5324229|   -0.7847860|
+| -0.1543179| -0.0165408|  0.6818950| -0.7182648|    0.3025805|
+
+---
+
+# Solution
+
+Remember we said that we could specify all these paths using three regression models? Well, to specify our path model, we simply write these out like we would do in `lm()`, but this time we do so all in one character string. We still have to make sure that we use the correct variable names, as when we make R estimate the model, it will look in the data for things like "js_score". 
+
+
+```r
+model &lt;- "
+  js_score ~ age + autonomy + income
+  income ~ autonomy + age + parentincome
+  autonomy ~ age
+"
+```
+
+There are some other things which we will automatically be estimated here: all our exogenous variables (the ones with arrows only going _from_ them) will be free to correlate with one another. We can write this explicitly in the model if we like, using the two tildes `~~` between our two exogenous variables `age` and `parentincome`. We will also get the variances of all our variables. 
+
+---
+
+# Solution
+
+.pull-left[
+We can see all the paths here:
+
+
+
+```
+            lhs op          rhs
+1      js_score  ~          age
+2      js_score  ~     autonomy
+3      js_score  ~       income
+4        income  ~     autonomy
+5        income  ~          age
+6        income  ~ parentincome
+7      autonomy  ~          age
+8      js_score ~~     js_score
+9        income ~~       income
+10     autonomy ~~     autonomy
+11          age ~~          age
+12          age ~~ parentincome
+13 parentincome ~~ parentincome
+```
+]
+
+.pull-right[
+and even make a nice diagram:
+
+&lt;img src="lecture_6_files/figure-html/unnamed-chunk-26-1.png" width="504" style="display: block; margin: auto;" /&gt;
+]
+
+---
+
+# Solution
+
+Estimating the model is relatively straightforward. We pass the formula we have written to the `sem()` function, along with the data set in which we want it to look for the variables:
+
+
+```r
+model.fit &lt;- sem(model, data = df)
+```
+
+We can then examine the parameter estimates: 
+
+
+```r
+summary(model.fit)
+```
+
+We can now, to "visualise" our model, add the estimates to the diagram:
+
+&lt;img src="img/jobsatmod.png" width="276" style="display: block; margin: auto;" /&gt;
+
+---
+class: inverse, mline, center, middle
+
+# 3. Latent Variables
+
+---
+
+# Latent Variables
+
+.pull-left[
+- We can't just ask: "How much job satisfaction do you experience on a scale of 1-10?" and expect a good measure.
+- We **operationalise** the concept into distinct questions, e.g.:
+
+  * How do you like your income?
+  * Are your colleagues friendly?
+  * How is your boss?
+  
+- All of these questions capture *something* about job satisfaction, but none of them capture it exactly.
+]
+
+.pull-right[
+&lt;img src="img/cfa.jpg" width="90%" style="display: block; margin: auto;" /&gt;
+]
+
+---
+
+# Latent Variables
+
+**We shouldn't**
+* Chuck all of these similar questions into a single regression model (because of multicollinearity)
+* Sum up all of the responses uncritically:
+  * What if they are all on different scales and need to be weighted differently?
+  * What if some of the questions are worse measures of the concept than others?
+  * What if some questions are more salient for some groups of people than others?
+  
+**We can**
+* Use factor analysis/construct a latent variable to try and capture the 'underlying' concept.
+
+&lt;img src="lecture_6_files/figure-html/unnamed-chunk-31-1.png" width="216" style="display: block; margin: auto;" /&gt;
+
+---
+
+# Latent Variables
+
+.pull-left[
+Confirmatory Factor Analysis (CFA) constructs a latent variable that simultaneously predicts multiple indicator (or observed) variables.
+
+Its scale is arbitrary but is commonly fixed to either a) a marker variable or b) a standardised distribution (mean = 0, sd = 1).
+]
+
+.pull-right[
+
+
+<div class="grViz html-widget html-fill-item-overflow-hidden html-fill-item" id="htmlwidget-af202b15f574e269bde1" style="width:504px;height:504px;"></div>
+<script type="application/json" data-for="htmlwidget-af202b15f574e269bde1">{"x":{"diagram":" digraph plot { \n graph [ overlap = true, fontsize = 10 ] \n node [ shape = box ] \n node [shape = box] \n js_q1; js_q2; js_q3 \n node [shape = oval] \n jobsatisfaction \n \n edge [ color = black ] \n  jobsatisfaction->js_q1 [label = \"0.86\"] jobsatisfaction->js_q2 [label = \"0.71\"] jobsatisfaction->js_q3 [label = \"0.75\"] \n}","config":{"engine":"dot","options":null}},"evals":[],"jsHooks":[]}</script>
+]
+
+---
+class: title-slide, middle
+
+## Confirmatory Factor Analysis with Jamovi
+
+---
+
+# Confirmatory Factor Analysis with Jamovi
+
+Confirmatory Factor Analysis can be done with the default Jamovi library
+
+&lt;img src="https://mblogthumb-phinf.pstatic.net/MjAyMDA1MDlfMjAg/MDAxNTg5MDExMjMxMDY1._yJ9YvPo_Zi77MDqCk5wa7-4SNyQF20R8csO-y8NFOEg.T-Ji0dV10rc6qch5N5vJ7WqMaTaeVxhBLFZmkpnrDJQg.PNG.shoutjoy/image.png?type=w800" style="display: block; margin: auto;" /&gt;
+
+---
+
+# Confirmatory Factor Analysis with Jamovi
+
+Outputs from Jamovi include the factor loadings, factor covariance, `\(\chi^2\)`, and fit measures.
+
+&lt;img src="img/cfa_jamovi.png" width="1276" style="display: block; margin: auto;" /&gt;
+
+
+---
+class: title-slide, middle
+
+## Confirmatory Factor Analysis with R
+
+---
+
+# Confirmatory Factor Analysis with R
+
+In the same way as we have done path analyses, we will use {lavaan} to run our CFA.
+
+.pull-left[
+First, define a reflective latent variable in the model
+
+```r
+model &lt;- "
+  F1 =~ x1 + x2 + x3 + x4
+"
+```
+
+&lt;img src="img/sample_syntax1.png" width="40%" style="display: block; margin: auto;" /&gt;
+]
+
+.pull-right[
+Multiple factors can be estimated as well as their covariance
+
+```r
+model &lt;- "
+  F1 =~ x1 + x2 + x3 + x4
+  F2 =~ x5 + X6 + x6 + x8
+  F1 ~~ F2
+"
+```
+
+&lt;img src="img/sample_syntax2.png" width="60%" style="display: block; margin: auto;" /&gt;
+]
+
+---
+
+# Confirmatory Factor Analysis with R
+
+Then run the `cfa()` function with this model and your data:
+
+
+```r
+cfa_results &lt;- cfa(model, data = my_data)
+```
+
+Results are printed with the function `summary()`:
+
+
+```r
+summary(cfa_results)
+```
+
+---
+class: title-slide, middle
+
+## Exercise
+
+With the `sem_data.csv` data, calculate the latent variable Job Satisfaction from the items q1, q2, and q3 with Jamovi or with R.
+
+<div class="countdown" id="timer_70eb74ad" data-warn-when="60" data-update-every="1" tabindex="0" style="right:0;bottom:0;">
+<div class="countdown-controls"><button class="countdown-bump-down">&minus;</button><button class="countdown-bump-up">&plus;</button></div>
+<code class="countdown-time"><span class="countdown-digits minutes">05</span><span class="countdown-digits colon">:</span><span class="countdown-digits seconds">00</span></code>
+</div>
+
+---
+class: inverse, mline, center, middle
+
+# 4. Structural Equation Model
+
+---
+
+# Structural Equation Model
+
+A Structural Equation Model (SEM) is a complex path analysis between multiple variables including multiple Outcomes and using factor analysis for latent variable estimation.
+
+If I want to learn Structural Equation Modelling I should already have...
+
+* A very good understanding of **multiple linear regression**
+* Good familiarity with terms like **variance, covariance, correlation** 
+* Formal understanding of **causal diagrams**/Directed Acyclic Graphs can be helpful
+
+---
+
+# Structural Equation Model
+
+.pull-left[
+The confirmatory factor analysis part is called **measurement model**
+
+The path model analysis is called **structural model** and evaluate the  relationship between constructs
+
+A full SEM model is combination of measurement and structural component
+]
+
+.pull-right[
+&lt;img src="img/structural_part_2.jpg" width="728" style="display: block; margin: auto;" /&gt;
+]
+
+---
+
+# Structural Equation Model
+
+&lt;img src="img/sem_convention_2.jpg" width="1697" style="display: block; margin: auto;" /&gt;
+
+---
+class: title-slide, middle
+
+## Structural Equation Model with Jamovi
+
+---
+
+# Structural Equation Model with Jamovi
+
+Structural Equation Model with Jamovi are done with the `SEMLj` module. See its website: https://semlj.github.io/
+
+`SEMLj` installs two options: syntax and interactive.
+
+&lt;img src="https://semlj.github.io/pics/menu.png" width="80%" style="display: block; margin: auto;" /&gt;
+
+- The syntax panel accepts {lavaan} syntax as describe in the {lavaan} website and used with the R package
+- The interface panel allows to define a set of endogenous and exogenous variables, measured by one or more observed variables just by drag and drop
+
+---
+
+# Structural Equation Model with Jamovi
+
+`SEMLj` syntax
+
+&lt;img src="https://semlj.github.io/pics/syntax/panel_syntax.png" width="50%" style="display: block; margin: auto;" /&gt;
+
+---
+
+# Structural Equation Model with Jamovi
+
+`SEMLj` interface
+
+&lt;img src="https://semlj.github.io/pics/gui/panel_vars.png" width="30%" style="display: block; margin: auto;" /&gt;
+
+Note:
+- The observed variable that are not used to create a latent factor have to be added alone in `Add New Latent` (as Endogenous or Exogenous Variable depending on their role).
+- The factor can be renamed from the interface by double-click on their default name (i.e., Endogenous or Exogenous).
+
+---
+
+# Structural Equation Model with Jamovi
+
+The regressions between latent variables created by one or multiple observed variable can be defined in the option `Endogenous models`
+
+&lt;img src="https://semlj.github.io/pics/gui/panel_endo.png" style="display: block; margin: auto;" /&gt;
+
+---
+class: title-slide, middle
+
+## Structural Equation Model with R
+
+---
+
+# Structural Equation Model with R
+
+Once again the package {lavaan} will be used with the function `sem()` exactly like with path analyses. However, the model will now include factor loadings, covariance, and regressions (see https://lavaan.ugent.be/ for more details).
+
+.pull-left[
+```
+   # latent variables
+     ind60 =~ x1 + x2 + x3
+     dem60 =~ y1 + y2 + y3 + y4
+     dem65 =~ y5 + y6 + y7 + y8
+   # regressions
+     dem60 ~ ind60
+     dem65 ~ ind60 + dem60
+   # residual covariances
+     y1 ~~ y5
+     y2 ~~ y4 + y6
+     y3 ~~ y7
+     y4 ~~ y8
+     y6 ~~ y8
+```
+]
+
+.pull-right[
+&lt;img src="https://lavaan.ugent.be/tutorial/figure/sem.png" width="100%" style="display: block; margin: auto;" /&gt;
+]
+
+---
+
+# Structural Equation Model with R
+
+.pull-left[
+Estimate factors, covariance, and regressions: 
+
+
+```r
+model &lt;- "
+  F1 =~ x1 + x2 + x3 + x4
+  F2 =~ x5 + X6 + x7 + x8
+  F3 =~ x9 + X10 + x11 + x12
+  F1 ~~ F2
+  F3 ~ F1 + F2
+"
+```
+]
+
+.pull-right[
+&lt;img src="img/sample_syntax3.png" width="735" style="display: block; margin: auto;" /&gt;
+]
+
+---
+
+# Structural Equation Model with R
+
+.pull-left[
+Insert comments in the syntax:
+
+
+```r
+model &lt;- "
+  F1 =~ x1 + x2 + x3 + x4
+  F2 =~ x5 + X6 + x7 + x8
+  F3 =~ x9 + X10 + x11 + x12
+  
+  # covariance
+  F1 ~~ F2
+  
+  # F3 is regressed on F1 and F2
+  F3 ~ F1 + F2
+"
+```
+]
+
+.pull-right[
+&lt;img src="img/sample_syntax3.png" width="735" style="display: block; margin: auto;" /&gt;
+]
+
+---
+
+# Structural Equation Model with R
+
+.pull-left[
+Label parameters if you need to:
+
+
+```r
+model &lt;- "
+  F1 =~ x1 + x2 + x3 + x4
+  F2 =~ x5 + X6 + x7 + x8
+  F3 =~ x9 + X10 + x11 + x12
+  
+  # covariance
+  F1 ~~ F2
+  
+  # F3 is regressed on F1 and F2
+  F3 ~ b1*F1 + b2*F2
+"
+```
+]
+
+.pull-right[
+&lt;img src="img/sample_syntax4.png" width="728" style="display: block; margin: auto;" /&gt;
+]
+
+---
+class: title-slide, middle
+
+## Exercise
+
+With the `sem_data.csv` data, **test the following model** involving Age, Parental Income, Income, Autonomy, and Job Satisfaction with Jamovi or with R. 
+
+**Job Satisfaction has to be estimated from js_q1, js_q2, and js_q3** but do not use "js_score" as a name because it already exists in the dataset.
+
+&lt;img src="img/paths1paths.png" width="150%" style="display: block; margin: auto;" /&gt;
+
+<div class="countdown" id="timer_32186ded" data-warn-when="60" data-update-every="1" tabindex="0" style="right:0;bottom:0;">
+<div class="countdown-controls"><button class="countdown-bump-down">&minus;</button><button class="countdown-bump-up">&plus;</button></div>
+<code class="countdown-time"><span class="countdown-digits minutes">10</span><span class="countdown-digits colon">:</span><span class="countdown-digits seconds">00</span></code>
+</div>
+
+---
+class: inverse, mline, left, middle
+
+&lt;img class="circle" src="https://github.com/damien-dupre.png" width="250px"/&gt;
+
+# Thanks for your attention and don't hesitate if you have any questions!
+
+- [<svg aria-hidden="true" role="img" viewBox="0 0 512 512" style="height:1em;width:1em;vertical-align:-0.125em;margin-left:auto;margin-right:auto;font-size:inherit;fill:currentColor;overflow:visible;position:relative;"><path d="M459.37 151.716c.325 4.548.325 9.097.325 13.645 0 138.72-105.583 298.558-298.558 298.558-59.452 0-114.68-17.219-161.137-47.106 8.447.974 16.568 1.299 25.34 1.299 49.055 0 94.213-16.568 130.274-44.832-46.132-.975-84.792-31.188-98.112-72.772 6.498.974 12.995 1.624 19.818 1.624 9.421 0 18.843-1.3 27.614-3.573-48.081-9.747-84.143-51.98-84.143-102.985v-1.299c13.969 7.797 30.214 12.67 47.431 13.319-28.264-18.843-46.781-51.005-46.781-87.391 0-19.492 5.197-37.36 14.294-52.954 51.655 63.675 129.3 105.258 216.365 109.807-1.624-7.797-2.599-15.918-2.599-24.04 0-57.828 46.782-104.934 104.934-104.934 30.213 0 57.502 12.67 76.67 33.137 23.715-4.548 46.456-13.32 66.599-25.34-7.798 24.366-24.366 44.833-46.132 57.827 21.117-2.273 41.584-8.122 60.426-16.243-14.292 20.791-32.161 39.308-52.628 54.253z"/></svg> @damien_dupre](http://twitter.com/damien_dupre)
+- [<svg aria-hidden="true" role="img" viewBox="0 0 496 512" style="height:1em;width:0.97em;vertical-align:-0.125em;margin-left:auto;margin-right:auto;font-size:inherit;fill:currentColor;overflow:visible;position:relative;"><path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6zm-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3zm44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9zM244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8zM97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1zm-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7zm32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1zm-11.4-14.7c-1.6 1-1.6 3.6 0 5.9 1.6 2.3 4.3 3.3 5.6 2.3 1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2z"/></svg> @damien-dupre](http://github.com/damien-dupre)
+- [<svg aria-hidden="true" role="img" viewBox="0 0 640 512" style="height:1em;width:1.25em;vertical-align:-0.125em;margin-left:auto;margin-right:auto;font-size:inherit;fill:currentColor;overflow:visible;position:relative;"><path d="M579.8 267.7c56.5-56.5 56.5-148 0-204.5c-50-50-128.8-56.5-186.3-15.4l-1.6 1.1c-14.4 10.3-17.7 30.3-7.4 44.6s30.3 17.7 44.6 7.4l1.6-1.1c32.1-22.9 76-19.3 103.8 8.6c31.5 31.5 31.5 82.5 0 114L422.3 334.8c-31.5 31.5-82.5 31.5-114 0c-27.9-27.9-31.5-71.8-8.6-103.8l1.1-1.6c10.3-14.4 6.9-34.4-7.4-44.6s-34.4-6.9-44.6 7.4l-1.1 1.6C206.5 251.2 213 330 263 380c56.5 56.5 148 56.5 204.5 0L579.8 267.7zM60.2 244.3c-56.5 56.5-56.5 148 0 204.5c50 50 128.8 56.5 186.3 15.4l1.6-1.1c14.4-10.3 17.7-30.3 7.4-44.6s-30.3-17.7-44.6-7.4l-1.6 1.1c-32.1 22.9-76 19.3-103.8-8.6C74 372 74 321 105.5 289.5L217.7 177.2c31.5-31.5 82.5-31.5 114 0c27.9 27.9 31.5 71.8 8.6 103.9l-1.1 1.6c-10.3 14.4-6.9 34.4 7.4 44.6s34.4 6.9 44.6-7.4l1.1-1.6C433.5 260.8 427 182 377 132c-56.5-56.5-148-56.5-204.5 0L60.2 244.3z"/></svg> damien-datasci-blog.netlify.app](https://damien-datasci-blog.netlify.app)
+- [<svg aria-hidden="true" role="img" viewBox="0 0 512 512" style="height:1em;width:1em;vertical-align:-0.125em;margin-left:auto;margin-right:auto;font-size:inherit;fill:currentColor;overflow:visible;position:relative;"><path d="M16.1 260.2c-22.6 12.9-20.5 47.3 3.6 57.3L160 376V479.3c0 18.1 14.6 32.7 32.7 32.7c9.7 0 18.9-4.3 25.1-11.8l62-74.3 123.9 51.6c18.9 7.9 40.8-4.5 43.9-24.7l64-416c1.9-12.1-3.4-24.3-13.5-31.2s-23.3-7.5-34-1.4l-448 256zm52.1 25.5L409.7 90.6 190.1 336l1.2 1L68.2 285.7zM403.3 425.4L236.7 355.9 450.8 116.6 403.3 425.4z"/></svg> damien.dupre@dcu.ie](mailto:damien.dupre@dcu.ie)
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script src="libs/cols_macro.js"></script>
+<script>var slideshow = remark.create({
+"highlightStyle": "zenburn",
+"highlightLines": true,
+"countIncrementalSlides": false
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+// add `data-at-shortcutkeys` attribute to <body> to resolve conflicts with JAWS
+// screen reader (see PR #262)
+(function(d) {
+  let res = {};
+  d.querySelectorAll('.remark-help-content table tr').forEach(tr => {
+    const t = tr.querySelector('td:nth-child(2)').innerText;
+    tr.querySelectorAll('td:first-child .key').forEach(key => {
+      const k = key.innerText;
+      if (/^[a-z]$/.test(k)) res[k] = t;  // must be a single letter (key)
+    });
+  });
+  d.body.setAttribute('data-at-shortcutkeys', JSON.stringify(res));
+})(document);
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+// adds .remark-code-has-line-highlighted class to <pre> parent elements
+// of code chunks containing highlighted lines with class .remark-code-line-highlighted
+(function(d) {
+  const hlines = d.querySelectorAll('.remark-code-line-highlighted');
+  const preParents = [];
+  const findPreParent = function(line, p = 0) {
+    if (p > 1) return null; // traverse up no further than grandparent
+    const el = line.parentElement;
+    return el.tagName === "PRE" ? el : findPreParent(el, ++p);
+  };
+
+  for (let line of hlines) {
+    let pre = findPreParent(line);
+    if (pre && !preParents.includes(pre)) preParents.push(pre);
+  }
+  preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
+})(document);</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>

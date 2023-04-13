@@ -1,0 +1,45 @@
+ID
+Ex_Sample - If=1, indicates that participant should be excluded from initial analyses
+Ex_Cross - If=1, indicates that participant should be excluded from cross-national comparisons
+Consent
+Sex
+SexPref - Sexual orientation
+Age (in years)
+Country_Res - country where they live
+Country_Born
+
+HPP_9 - Historical Pathogen prevalence (Schaller & Murray, 2010)
+GDP - Gross domestic product (CIA World Factbook)
+GINI - Income inequality (high scores = high income inequality, CIA World Factbook)
+SexRatio(2017est) - Total national sex ratio estimated for 2017 (CIA World Factbook)
+SexRatio(15-54) - National sex ratio averaged across two age cohorts (CIA World Factbook)
+UNRegion - UN regions dummy coded (1=Africa, 2=Asia-Pacific, 3=E Europe, 4=Latin America and Caribbean, 5=W Europe & Ohters)
+
+RelStatus - Whether the participant considered themselves in a long term romantic relationship (1=Yes, 2=No)
+RelLength (in years - calculated from RelY+(RelM/12))
+
+Ethnicity
+SRA - Self-rated attractiveness (1-7 scale, high scores = high attractiveness compared to average)
+SRM - Self-rated masculinity (1-7 scale, 7 = high masculinity)
+SRH - Self-rated health (1-7 scale, high scores = high health)
+SRA_Partner - Rated attractiveness of partner (1-7 scale)
+SRM_Partner - Rated masculinity of partner (1-7 scale)
+SRH_Partner - Rated health of partner (1-7 scale)
+
+Kiss_Imp_Initial - Importance of kissing at the initial phases of a relationship
+Kiss_Imp_Est - Importance of kissing at the established phases of a relationship
+Kiss_Freq - Frequency of kissing, in general, within romantic relationships
+Hug_Freq - Frequency of hugging/cuddling (without kissing), in general, within romantic relationships
+Sex_Freq - Frequency of sex, in general, within romantic relationships
+Kiss_Satis - Satisfaction with amount of kissing, in general, within romantic relationships
+Hug_Satis - Satisfaction with amount of hugging/cuddling, in general, within romantic relationships
+Sex_Satis - Satisfaction with amount of sexual intercourse, in general, within romantic relationships
+
+Constituents of a 'good kiss'
+GK_Breath - Pleasantness of breath
+GK_Scent - Scent of their body
+GK_Taste - Taste of lips/skin
+GK_Wet - Wetness of kiss
+GK_Contact - Involvement of touching/physical contact/caressing
+GK_Arous - Physical arousal
+GK_SynchStyle - Same kissing style (partner)

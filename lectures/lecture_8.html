@@ -1,0 +1,1014 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+  <head>
+    <title>MT612 - Advanced Quant. Research Methods</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="Damien Dupré" />
+    <script src="libs/header-attrs-2.20/header-attrs.js"></script>
+    <link href="libs/remark-css-0.0.1/default.css" rel="stylesheet" />
+    <link href="libs/remark-css-0.0.1/metropolis.css" rel="stylesheet" />
+    <link href="libs/remark-css-0.0.1/metropolis-fonts.css" rel="stylesheet" />
+    <link href="libs/countdown-0.4.0/countdown.css" rel="stylesheet" />
+    <script src="libs/countdown-0.4.0/countdown.js"></script>
+    <link rel="stylesheet" href="css/custom_design.css" type="text/css" />
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+.title[
+# MT612 - Advanced Quant. Research Methods
+]
+.subtitle[
+## Lecture 8: Practice Session
+]
+.author[
+### Damien Dupré
+]
+.date[
+### Dublin City University
+]
+
+---
+
+
+
+
+# The Final Lecture
+
+.pull-left[
+In the previous lectures, either with Jamovi or with R, we have seen how to perform:
+
+- General Linear Models
+- Generalized Linear Models
+- General(ized) Linear Mixed Models
+- Generalized Additive (Mixed) Models
+- Mediation Path Models
+- Structural Equations Models
+
+Let's practice these models with some exercises!
+]
+
+.pull-right[
+&lt;img src="https://i.redd.it/btzpd57funha1.jpg" style="display: block; margin: auto;" /&gt;
+]
+
+---
+class: inverse, mline, center, middle
+
+# Liang et al. (2018) 
+
+## Righting a wrong: Retaliation on a voodoo doll symbolizing an abusive supervisor restores justice
+
+---
+
+# Liang et al. (2018) 
+
+Liang et al. won the IG Nobel prize of Economics with the paper **"Righting a wrong: Retaliation on a voodoo doll symbolizing an abusive supervisor restores justice"** published in The Leadership Quarterly for investigating whether it is effective for employees to use Voodoo dolls to retaliate against abusive bosses (https://www.sciencedirect.com/science/article/pii/S104898431730276X).
+
+&lt;img src="https://newworkplace.files.wordpress.com/2018/04/img_4820.jpg" style="display: block; margin: auto;" /&gt;
+
+---
+
+# Liang et al. (2018)
+
+Participants were randomly assigned into four conditions: **abusive supervision/no retaliation (AS/NR)**, **abusive supervision/retaliation (AS/R)**, **neutral Interaction/no retaliation (NI/NR)** and **neutral Interaction/retaliation (NI/R)**. 
+
+In the experimental conditions (i.e., AS/NR and AS/R), participants were asked to **recall and visualize a workplace interaction with abusive supervision**. While in the control conditions (i.e., NI/NR and NI/R), participants were asked to **recall and visualize a workplace neutral interaction**.
+
+Then, participants did another task that involved an online voodoo doll:
+
+- In the retaliation condition, participants used voodoo doll by labelling the voodoo doll with their supervisor's initials and by using pins, pliers, fire on the doll.
+
+- In the no retaliation condition, participants were shown a screenshot of the voodoo doll, they were asked to label the doll as “Nobody”, and trace the outline of the doll with a cursor.
+
+Participants were then asked to do another task that involved **completing five word fragments**, which was used to assess participants' implicit injustice perceptions. Each of the five word fragments can be completed to form either an injustice related word or a neutral word. For example, the fragment un_ _ual can be completed as “unusual” (i.e., neutral word), or “unequal” (i.e., injustice word).
+
+---
+class: title-slide, middle
+
+## Exercise: Reformulate Liang et al. (2018)'s hypothesis
+
+Retaliation moderates the positive relation between abusive supervision and subordinate injustice perceptions, such that the relationship is weaker when retaliation is high rather than low.
+
+<div class="countdown" id="timer_7e74d50a" data-warn-when="60" data-update-every="1" tabindex="0" style="right:0;bottom:0;">
+<div class="countdown-controls"><button class="countdown-bump-down">&minus;</button><button class="countdown-bump-up">&plus;</button></div>
+<code class="countdown-time"><span class="countdown-digits minutes">05</span><span class="countdown-digits colon">:</span><span class="countdown-digits seconds">00</span></code>
+</div>
+
+---
+
+# Liang et al. (2018)'s Hypothesis
+
+The effect of retaliation on implicit injustice perceptions is higher in the abusive supervision than it is in the neutral interaction.
+
+&lt;img src="https://ars.els-cdn.com/content/image/1-s2.0-S104898431730276X-gr1.jpg" style="display: block; margin: auto;" /&gt;
+
+Note, this model involves also the two main effects of retaliation on implicit injustice perceptions and condition on implicit injustice perceptions such as:
+- the average implicit injustice perception is higher in the condition without retaliation than the average implicit injustice perception with retaliation
+- the average implicit injustice perception is higher in the condition of abusive supervision than the average implicit injustice perception in the condition of neutral interaction
+
+---
+class: title-slide, middle
+
+## Exercise: Set the data up in Jamovi or in R
+
+Open the file "**liang_data_2.csv**"
+
+<div class="countdown" id="timer_729a2014" data-warn-when="60" data-update-every="1" tabindex="0" style="right:0;bottom:0;">
+<div class="countdown-controls"><button class="countdown-bump-down">&minus;</button><button class="countdown-bump-up">&plus;</button></div>
+<code class="countdown-time"><span class="countdown-digits minutes">03</span><span class="countdown-digits colon">:</span><span class="countdown-digits seconds">00</span></code>
+</div>
+
+---
+
+# R Setup
+
+### Load libraries
+
+
+```r
+library(tidyverse)
+```
+
+### Load data
+
+```r
+watkins_data &lt;- 
+  read_csv("~/mt612/data/liang_2019/liang_data.csv")
+```
+
+
+---
+class: title-slide, middle
+
+## Exercise: Test the following General Linear Model, check its assumptions, and interpret its effects
+
+`$$implicit\,injustice\,perception_{i} = b_{0} + b_{1}\,retaliation_{i} + b_{2}\,condition_{i} + \\b_{3}\,retaliation*condition_{i} + e_{i}$$`
+
+`$$e_{i} \sim \mathcal{N}(0, \sigma_{i})$$`
+
+<div class="countdown" id="timer_365e1952" data-warn-when="60" data-update-every="1" tabindex="0" style="right:0;bottom:0;">
+<div class="countdown-controls"><button class="countdown-bump-down">&minus;</button><button class="countdown-bump-up">&plus;</button></div>
+<code class="countdown-time"><span class="countdown-digits minutes">03</span><span class="countdown-digits colon">:</span><span class="countdown-digits seconds">00</span></code>
+</div>
+
+---
+
+# General Linear Model
+
+
+```r
+liang_data |&gt; 
+  summarise(m_iip = mean(TARGET, na.rm = TRUE), .by = c(AS, Ret)) |&gt; 
+  ggplot(aes(as.factor(AS), m_iip, fill = as.factor(Ret)))  +
+  geom_col(position = position_dodge()) +
+  labs(
+    x = "Condition (NI vs AS)", 
+    y = "Implicit Injustice Perception", 
+    fill = "Retaliation"
+  ) +
+  theme_bw() +
+  theme(text = element_text(size = 20))
+```
+
+&lt;img src="lecture_8_files/figure-html/unnamed-chunk-9-1.png" width="720" style="display: block; margin: auto;" /&gt;
+
+
+```r
+model &lt;- lm(TARGET ~ AS + Ret + AS : Ret, data = liang_data)
+```
+
+---
+
+# General Linear Model
+
+
+```r
+summary(model)
+```
+
+```
+
+Call:
+lm(formula = TARGET ~ AS + Ret + AS:Ret, data = liang_data)
+
+Residuals:
+    Min      1Q  Median      3Q     Max 
+-0.8723 -0.6182 -0.5085  0.3818  2.4915 
+
+Coefficients:
+            Estimate Std. Error t value   Pr(&gt;|t|)    
+(Intercept)   0.5085     0.1034   4.915 0.00000183 ***
+AS            0.3639     0.1554   2.342     0.0201 *  
+Ret           0.1137     0.1573   0.723     0.4703    
+AS:Ret       -0.3679     0.2228  -1.651     0.1003    
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+Residual standard error: 0.7946 on 202 degrees of freedom
+Multiple R-squared:  0.02739,	Adjusted R-squared:  0.01295 
+F-statistic: 1.896 on 3 and 202 DF,  p-value: 0.1314
+```
+
+---
+
+# General Linear Model
+
+
+```r
+library(report)
+report(model)
+```
+
+We fitted a linear model (estimated using OLS) to predict TARGET with AS and
+Ret (formula: TARGET ~ AS + Ret + AS:Ret). The model explains a statistically
+not significant and weak proportion of variance (R2 = 0.03, F(3, 202) = 1.90, p
+= 0.131, adj. R2 = 0.01). The model's intercept, corresponding to AS = 0 and
+Ret = 0, is at 0.51 (95% CI [0.30, 0.71], t(202) = 4.92, p &lt; .001). Within this
+model:
+
+  - The effect of AS is statistically significant and positive (beta = 0.36, 95%
+CI [0.06, 0.67], t(202) = 2.34, p = 0.020; Std. beta = 0.12, 95% CI [-0.02,
+0.25])
+  - The effect of Ret is statistically non-significant and positive (beta = 0.11,
+95% CI [-0.20, 0.42], t(202) = 0.72, p = 0.470; Std. beta = -0.04, 95% CI
+[-0.18, 0.09])
+  - The effect of AS × Ret is statistically non-significant and negative (beta =
+-0.37, 95% CI [-0.81, 0.07], t(202) = -1.65, p = 0.100; Std. beta = -0.12, 95%
+CI [-0.25, 0.02])
+
+Standardized parameters were obtained by fitting the model on a standardized
+version of the dataset. 95% Confidence Intervals (CIs) and p-values were
+computed using a Wald t-distribution approximation.
+
+---
+
+# General Linear Model
+
+
+```r
+library(performance)
+check_model(model, check = "qq")
+```
+
+&lt;img src="lecture_8_files/figure-html/unnamed-chunk-13-1.png" width="720" style="display: block; margin: auto;" /&gt;
+
+```r
+check_normality(model)
+```
+
+```
+Warning: Non-normality of residuals detected (p &lt; .001).
+```
+
+---
+
+# General Linear Model
+
+
+```r
+liang_data |&gt; 
+  ggplot(aes(TARGET)) +
+  geom_histogram() +
+  theme_bw() +
+  theme(text = element_text(size = 20))
+```
+
+&lt;img src="lecture_8_files/figure-html/unnamed-chunk-14-1.png" width="720" style="display: block; margin: auto;" /&gt;
+
+As the outcome variable is a count, a Generalized Linear Model with Poisson distribution would actually be better than a regular General Linear Model with Normal distribution of the residuals.
+
+---
+class: title-slide, middle
+
+## Exercise: Test the following Generalized Linear Model
+
+`$$implicit\,injustice\,perception_{i} = b_{0} + b_{1}\,retaliation_{i} + b_{2}\,condition_{i} + \\b_{3}\,retaliation*condition_{i}$$`
+
+`$$implicit\,injustice\,perception_{i} \sim Poisson(\lambda_{i})$$`
+
+<div class="countdown" id="timer_61a07f69" data-warn-when="60" data-update-every="1" tabindex="0" style="right:0;bottom:0;">
+<div class="countdown-controls"><button class="countdown-bump-down">&minus;</button><button class="countdown-bump-up">&plus;</button></div>
+<code class="countdown-time"><span class="countdown-digits minutes">05</span><span class="countdown-digits colon">:</span><span class="countdown-digits seconds">00</span></code>
+</div>
+
+---
+
+# Generalized Linear Model
+
+
+```r
+model &lt;- glm(TARGET ~ AS + Ret + AS : Ret, data = liang_data, family = poisson)
+summary(model)
+```
+
+.small[
+
+```
+
+Call:
+glm(formula = TARGET ~ AS + Ret + AS:Ret, family = poisson, data = liang_data)
+
+Deviance Residuals: 
+    Min       1Q   Median       3Q      Max  
+-1.3209  -1.1119  -1.0084   0.4453   2.3805  
+
+Coefficients:
+            Estimate Std. Error z value Pr(&gt;|z|)    
+(Intercept)  -0.6763     0.1826  -3.705 0.000212 ***
+AS            0.5398     0.2402   2.247 0.024657 *  
+Ret           0.2019     0.2628   0.768 0.442295    
+AS:Ret       -0.5463     0.3505  -1.559 0.119086    
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+(Dispersion parameter for poisson family taken to be 1)
+
+    Null deviance: 220.75  on 205  degrees of freedom
+Residual deviance: 215.42  on 202  degrees of freedom
+AIC: 439.25
+
+Number of Fisher Scoring iterations: 5
+```
+]
+
+---
+
+# Generalized Linear Model
+
+
+```r
+library(report)
+report(model)
+```
+
+We fitted a poisson model (estimated using ML) to predict TARGET with AS and
+Ret (formula: TARGET ~ AS + Ret + AS:Ret). The model's explanatory power is
+weak (Nagelkerke's R2 = 0.04). The model's intercept, corresponding to AS = 0
+and Ret = 0, is at -0.68 (95% CI [-1.06, -0.34], p &lt; .001). Within this model:
+
+  - The effect of AS is statistically significant and positive (beta = 0.54, 95%
+CI [0.07, 1.02], p = 0.025; Std. beta = 0.14, 95% CI [-0.03, 0.31])
+  - The effect of Ret is statistically non-significant and positive (beta = 0.20,
+95% CI [-0.32, 0.72], p = 0.442; Std. beta = -0.03, 95% CI [-0.21, 0.14])
+  - The effect of AS × Ret is statistically non-significant and negative (beta =
+-0.55, 95% CI [-1.24, 0.14], p = 0.119; Std. beta = -0.14, 95% CI [-0.31,
+0.04])
+
+Standardized parameters were obtained by fitting the model on a standardized
+version of the dataset. 95% Confidence Intervals (CIs) and p-values were
+computed using a Wald z-distribution approximation.
+
+---
+class: inverse, mline, center, middle
+
+# Watkins et al. (2019) 
+
+## National income inequality predicts cultural variation in mouth to mouth kissing
+
+---
+
+# Watkins et al. (2019)
+
+Watkins et al. won the IG Nobel prize of Economics with the paper **"National income inequality predicts cultural variation in mouth to mouth kissing"** published in Scientific Reports for trying to quantify the relationship between different countries’ national income inequality and the average amount of mouth-to-mouth kissing (https://www.nature.com/articles/s41598-019-43267-7).
+
+&lt;img src="https://improbable.com/wp-content/uploads/2019/05/kssingpaper.jpg" style="display: block; margin: auto;" /&gt;
+
+2379 participants eligible for analyses comparing nations answered a **survey about their attitudes toward mouth-to-mouth kissing** (643 males, Mage = 32.34 years, SD = 11.85 years, 71% in a long-term romantic relationship, 89% reported their orientation as heterosexual).
+
+---
+
+# Watkins et al. (2019)
+
+Participants were asked:
+
+- **how important they thought kissing** was i) at the very initial stages of a romantic relationship and ii) during the established phases of a committed, long-term relationship on a 0 (not at all important) to 100 (extremely important) scale.
+
+- when they are **in a romantic relationship** i) how often they kiss their partner, ii) just hug or cuddle their partner (a single hug or cuddle without kissing involved), iii) have sexual intercourse with their partner, on a 0 (not at all) to 100 (very often) scale. 
+
+- their **satisfaction with the amount of kissing/hugging-cuddling/sexual intercourse** (in general, when they are in a romantic relationship) on a 0 (not at all satisfied) to 100 (very satisfied) scale.
+
+---
+class: title-slide, middle
+
+## Exercise: Set the data up in Jamovi or in R
+
+Open the file "**watkins_data.csv**"
+
+<div class="countdown" id="timer_2d64b017" data-warn-when="60" data-update-every="1" tabindex="0" style="right:0;bottom:0;">
+<div class="countdown-controls"><button class="countdown-bump-down">&minus;</button><button class="countdown-bump-up">&plus;</button></div>
+<code class="countdown-time"><span class="countdown-digits minutes">03</span><span class="countdown-digits colon">:</span><span class="countdown-digits seconds">00</span></code>
+</div>
+
+---
+
+# R Setup
+
+### Load libraries
+
+
+```r
+library(tidyverse)
+```
+
+### Load data
+
+```r
+watkins_data &lt;- 
+  read_csv("~/mt612/data/watkins_2019_data/watkins_data.csv")
+```
+
+---
+class: title-slide, middle
+
+## Exercise: Test the following General Linear Model, check its assumptions, and interpret its effects
+
+`$$Kiss\_Freq_{i} = b_{0} + b_{1}\,Kiss\_Imp\_Initial_{i} + b_{2}\,Kiss\_Imp\_Est_{i} + \\b_{3}\,Kiss\_Satis_{i} + e_{i}$$`
+
+`$$e_{i} \sim \mathcal{N}(0, \sigma_{i})$$`
+
+<div class="countdown" id="timer_2c38726f" data-warn-when="60" data-update-every="1" tabindex="0" style="right:0;bottom:0;">
+<div class="countdown-controls"><button class="countdown-bump-down">&minus;</button><button class="countdown-bump-up">&plus;</button></div>
+<code class="countdown-time"><span class="countdown-digits minutes">03</span><span class="countdown-digits colon">:</span><span class="countdown-digits seconds">00</span></code>
+</div>
+
+---
+
+# General Linear Model
+
+
+```r
+watkins_data |&gt; 
+  pivot_longer(c(Kiss_Imp_Initial, Kiss_Imp_Est, Kiss_Satis)) |&gt; 
+  ggplot(aes(value, Kiss_Freq)) +
+  geom_point(alpha = 0.1, size = 1) +
+  geom_smooth(method = "lm", se = FALSE) +
+  facet_wrap(~ name) +
+  theme_bw() +
+  theme(text = element_text(size = 20))
+```
+
+&lt;img src="lecture_8_files/figure-html/unnamed-chunk-24-1.png" width="720" style="display: block; margin: auto;" /&gt;
+
+
+```r
+model &lt;- lm(
+  formula = Kiss_Freq ~ Kiss_Imp_Initial + Kiss_Imp_Est + Kiss_Satis, 
+  data = watkins_data)
+```
+
+---
+
+# General Linear Model
+
+
+```r
+summary(model)
+```
+
+```
+
+Call:
+lm(formula = Kiss_Freq ~ Kiss_Imp_Initial + Kiss_Imp_Est + Kiss_Satis, 
+    data = watkins_data)
+
+Residuals:
+    Min      1Q  Median      3Q     Max 
+-82.130  -7.991   2.636   8.599  56.739 
+
+Coefficients:
+                 Estimate Std. Error t value             Pr(&gt;|t|)    
+(Intercept)      10.66914    1.78148   5.989        0.00000000244 ***
+Kiss_Imp_Initial  0.01218    0.01548   0.787                0.431    
+Kiss_Imp_Est      0.49901    0.01936  25.779 &lt; 0.0000000000000002 ***
+Kiss_Satis        0.31970    0.01440  22.196 &lt; 0.0000000000000002 ***
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+Residual standard error: 15.47 on 2340 degrees of freedom
+  (644 observations deleted due to missingness)
+Multiple R-squared:  0.4174,	Adjusted R-squared:  0.4167 
+F-statistic: 558.9 on 3 and 2340 DF,  p-value: &lt; 0.00000000000000022
+```
+
+---
+
+# General Linear Model
+
+
+```r
+library(report)
+report(model)
+```
+
+We fitted a linear model (estimated using OLS) to predict Kiss_Freq with
+Kiss_Imp_Initial, Kiss_Imp_Est and Kiss_Satis (formula: Kiss_Freq ~
+Kiss_Imp_Initial + Kiss_Imp_Est + Kiss_Satis). The model explains a
+statistically significant and substantial proportion of variance (R2 = 0.42,
+F(3, 2340) = 558.88, p &lt; .001, adj. R2 = 0.42). The model's intercept,
+corresponding to Kiss_Imp_Initial = 0, Kiss_Imp_Est = 0 and Kiss_Satis = 0, is
+at 10.67 (95% CI [7.18, 14.16], t(2340) = 5.99, p &lt; .001). Within this model:
+
+  - The effect of Kiss Imp Initial is statistically non-significant and positive
+(beta = 0.01, 95% CI [-0.02, 0.04], t(2340) = 0.79, p = 0.431; Std. beta =
+0.01, 95% CI [-0.02, 0.05])
+  - The effect of Kiss Imp Est is statistically significant and positive (beta =
+0.50, 95% CI [0.46, 0.54], t(2340) = 25.78, p &lt; .001; Std. beta = 0.48, 95% CI
+[0.44, 0.51])
+  - The effect of Kiss Satis is statistically significant and positive (beta =
+0.32, 95% CI [0.29, 0.35], t(2340) = 22.20, p &lt; .001; Std. beta = 0.36, 95% CI
+[0.33, 0.39])
+
+Standardized parameters were obtained by fitting the model on a standardized
+version of the dataset. 95% Confidence Intervals (CIs) and p-values were
+computed using a Wald t-distribution approximation.
+
+---
+
+# General Linear Model
+
+
+```r
+library(performance)
+check_model(model, check = "linearity")
+```
+
+&lt;img src="lecture_8_files/figure-html/unnamed-chunk-28-1.png" width="720" style="display: block; margin: auto;" /&gt;
+
+---
+
+# General Linear Model
+
+
+```r
+library(performance)
+check_model(model, check = "qq")
+```
+
+&lt;img src="lecture_8_files/figure-html/unnamed-chunk-29-1.png" width="720" style="display: block; margin: auto;" /&gt;
+
+```r
+check_normality(model)
+```
+
+```
+Warning: Non-normality of residuals detected (p &lt; .001).
+```
+
+---
+
+# General Linear Model
+
+
+```r
+library(performance)
+check_model(model, check = "homogeneity")
+```
+
+&lt;img src="lecture_8_files/figure-html/unnamed-chunk-30-1.png" width="720" style="display: block; margin: auto;" /&gt;
+
+```r
+check_heteroscedasticity(model)
+```
+
+```
+Warning: Heteroscedasticity (non-constant error variance) detected (p &lt; .001).
+```
+
+---
+class: title-slide, middle
+
+## Exercise: Convert Kiss_Freq as a binomial variable and test the following Generalized Linear Model
+
+`$$\textrm{logit}(p_{\texttt{high kiss}}) = b_{0} + b_{1}\,Kiss\_Imp\_Initial_{i} + b_{2}\,Kiss\_Imp\_Est_{i} + b_{3}\,Kiss\_Satis_{i} \\
+\texttt{Kiss_Freq} \sim Bern(p_{\texttt{high kiss}})$$`
+
+<div class="countdown" id="timer_51a37b9c" data-warn-when="60" data-update-every="1" tabindex="0" style="right:0;bottom:0;">
+<div class="countdown-controls"><button class="countdown-bump-down">&minus;</button><button class="countdown-bump-up">&plus;</button></div>
+<code class="countdown-time"><span class="countdown-digits minutes">05</span><span class="countdown-digits colon">:</span><span class="countdown-digits seconds">00</span></code>
+</div>
+
+---
+
+# Generalized Linear Model
+
+
+```r
+watkins_transformed_data &lt;- watkins_data |&gt; 
+  mutate(Kiss_Freq_c = case_when(
+    Kiss_Freq &gt; mean(Kiss_Freq, na.rm = TRUE) ~ 1, # Kiss_Freq &gt; 50 ~ 1,
+    Kiss_Freq &lt;= mean(Kiss_Freq, na.rm = TRUE) ~ 0) # Kiss_Freq &lt;= 50 ~ 0)
+  )
+```
+
+---
+
+# Generalized Linear Model
+
+
+```r
+watkins_transformed_data  |&gt; 
+  pivot_longer(c(Kiss_Imp_Initial, Kiss_Imp_Est, Kiss_Satis)) |&gt; 
+  ggplot(aes(value, Kiss_Freq_c)) +
+  geom_point(alpha = 0.1, size = 1) +
+  stat_smooth(method = "glm", method.args = list(family = "binomial"), se = FALSE) +
+  facet_wrap(~ name) +
+  theme_bw() +
+  theme(text = element_text(size = 20))
+```
+
+&lt;img src="lecture_8_files/figure-html/unnamed-chunk-33-1.png" width="720" style="display: block; margin: auto;" /&gt;
+
+
+```r
+model &lt;- glm(
+  formula = Kiss_Freq_c ~ Kiss_Imp_Initial + Kiss_Imp_Est + Kiss_Satis, 
+  data = watkins_transformed_data, 
+  family = binomial)
+```
+
+---
+
+# Generalized Linear Model
+
+
+```r
+summary(model)
+```
+
+```
+
+Call:
+glm(formula = Kiss_Freq_c ~ Kiss_Imp_Initial + Kiss_Imp_Est + 
+    Kiss_Satis, family = binomial, data = watkins_transformed_data)
+
+Deviance Residuals: 
+    Min       1Q   Median       3Q      Max  
+-2.1128  -0.8459   0.4799   0.7689   3.1650  
+
+Coefficients:
+                   Estimate Std. Error z value            Pr(&gt;|z|)    
+(Intercept)      -7.0732398  0.3614399 -19.570 &lt;0.0000000000000002 ***
+Kiss_Imp_Initial -0.0002383  0.0024659  -0.097               0.923    
+Kiss_Imp_Est      0.0537627  0.0034956  15.380 &lt;0.0000000000000002 ***
+Kiss_Satis        0.0382420  0.0024240  15.776 &lt;0.0000000000000002 ***
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+(Dispersion parameter for binomial family taken to be 1)
+
+    Null deviance: 3142.9  on 2343  degrees of freedom
+Residual deviance: 2404.8  on 2340  degrees of freedom
+  (644 observations deleted due to missingness)
+AIC: 2412.8
+
+Number of Fisher Scoring iterations: 4
+```
+
+---
+
+# Generalized Linear Model
+
+
+```r
+library(report)
+report(model)
+```
+
+We fitted a logistic model (estimated using ML) to predict Kiss_Freq_c with
+Kiss_Imp_Initial, Kiss_Imp_Est and Kiss_Satis (formula: Kiss_Freq_c ~
+Kiss_Imp_Initial + Kiss_Imp_Est + Kiss_Satis). The model's explanatory power is
+substantial (Tjur's R2 = 0.29). The model's intercept, corresponding to
+Kiss_Imp_Initial = 0, Kiss_Imp_Est = 0 and Kiss_Satis = 0, is at -7.07 (95% CI
+[-7.79, -6.38], p &lt; .001). Within this model:
+
+  - The effect of Kiss Imp Initial is statistically non-significant and negative
+(beta = -2.38e-04, 95% CI [-5.11e-03, 4.56e-03], p = 0.923; Std. beta =
+-5.67e-03, 95% CI [-0.12, 0.11])
+  - The effect of Kiss Imp Est is statistically significant and positive (beta =
+0.05, 95% CI [0.05, 0.06], p &lt; .001; Std. beta = 1.04, 95% CI [0.91, 1.17])
+  - The effect of Kiss Satis is statistically significant and positive (beta =
+0.04, 95% CI [0.03, 0.04], p &lt; .001; Std. beta = 0.86, 95% CI [0.76, 0.97])
+
+Standardized parameters were obtained by fitting the model on a standardized
+version of the dataset. 95% Confidence Intervals (CIs) and p-values were
+computed using a Wald z-distribution approximation.
+
+---
+
+# Generalized Linear Model
+
+Beta regression would work for response values in (0,1); because we have response values in (0,1] (with a fair number of these values equal to 1), we will need to consider **one-inflated beta regression**
+
+
+```r
+watkins_transformed_data &lt;- 
+  watkins_data |&gt; 
+  dplyr::select(Kiss_Freq, Kiss_Imp_Initial, Kiss_Imp_Est, Kiss_Satis) |&gt; 
+  mutate(Kiss_Freq = Kiss_Freq/100) |&gt; 
+  drop_na()
+
+# install.packages("gamlss")
+library(gamlss)
+
+model &lt;- gamlss(
+  Kiss_Freq ~ Kiss_Imp_Initial + Kiss_Imp_Est + Kiss_Satis, 
+  family = BEINF(), 
+  data = watkins_transformed_data)
+```
+
+```
+GAMLSS-RS iteration 1: Global Deviance = 779.7658 
+GAMLSS-RS iteration 2: Global Deviance = 658.7879 
+GAMLSS-RS iteration 3: Global Deviance = 656.0627 
+GAMLSS-RS iteration 4: Global Deviance = 656.0332 
+GAMLSS-RS iteration 5: Global Deviance = 656.0329 
+```
+
+---
+
+# Generalized Linear Model
+
+`model &lt;- gamlss()`: This creates a GAMLSS model object and assigns it to the variable model.
+
+`Kiss_Freq ~ Kiss_Imp_Initial + Kiss_Imp_Est + Kiss_Satis`: This is the formula for the model, which specifies the outcome variable (Kiss_Freq) and the predictor variables (Kiss_Imp_Initial, Kiss_Imp_Est, and Kiss_Satis).
+
+`family = BEINF()`: This specifies the distributional family for the model. `BEINF()` stands for beta inflated distribution, which is a type of one-inflated beta regression model.
+
+`data = Kissing_transformed_data`: This specifies the data set to use for the model, which is called Kissing_transformed_data.
+
+---
+
+# Generalized Linear Model
+
+
+```r
+summary(model)
+```
+
+```
+******************************************************************
+Family:  c("BEINF", "Beta Inflated") 
+
+Call:  gamlss(formula = Kiss_Freq ~ Kiss_Imp_Initial + Kiss_Imp_Est +  
+    Kiss_Satis, family = BEINF(), data = watkins_transformed_data) 
+
+Fitting method: RS() 
+
+------------------------------------------------------------------
+Mu link function:  logit
+Mu Coefficients:
+                   Estimate Std. Error t value            Pr(&gt;|t|)    
+(Intercept)      -1.5038360  0.0978016 -15.376 &lt;0.0000000000000002 ***
+Kiss_Imp_Initial  0.0005625  0.0008629   0.652               0.515    
+Kiss_Imp_Est      0.0188164  0.0010458  17.992 &lt;0.0000000000000002 ***
+Kiss_Satis        0.0123146  0.0007745  15.900 &lt;0.0000000000000002 ***
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+------------------------------------------------------------------
+Sigma link function:  logit
+Sigma Coefficients:
+            Estimate Std. Error t value            Pr(&gt;|t|)    
+(Intercept) -0.63912    0.02185  -29.25 &lt;0.0000000000000002 ***
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+------------------------------------------------------------------
+Nu link function:  log 
+Nu Coefficients:
+            Estimate Std. Error t value            Pr(&gt;|t|)    
+(Intercept)  -5.1761     0.3171  -16.32 &lt;0.0000000000000002 ***
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+------------------------------------------------------------------
+Tau link function:  log 
+Tau Coefficients:
+            Estimate Std. Error t value            Pr(&gt;|t|)    
+(Intercept) -1.14368    0.04835  -23.65 &lt;0.0000000000000002 ***
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+------------------------------------------------------------------
+No. of observations in the fit:  2344 
+Degrees of Freedom for the fit:  7
+      Residual Deg. of Freedom:  2337 
+                      at cycle:  5 
+ 
+Global Deviance:     656.0329 
+            AIC:     670.0329 
+            SBC:     710.3502 
+******************************************************************
+```
+
+---
+class: title-slide, middle
+
+## Exercise: Let's forget about the linear assumptions, let's test the following Mediation Model, and interpret its effects
+
+`$$Kiss\_Freq_{i} = b_{0} + c_{1}\,Kiss\_Imp\_Initial_{i} + c_{2}\,Kiss\_Imp\_Est_{i} + e_{i}$$`
+
+`$$Kiss\_Satis_{i} = b_{0} + a_{1}\,Kiss\_Imp\_Initial_{i} + a_{2}\,Kiss\_Imp\_Est_{i} + e_{i}$$`
+
+`$$Kiss\_Freq_{i} = b_{0} + b\,Kiss\_Satis_{i} + c'_{1}\,Kiss\_Imp\_Initial_{i} + c'_{2}\,Kiss\_Imp\_Est_{i} + e_{i}$$`
+
+`$$e_{i} \overset{iid}\sim \mathcal{N}(0, \sigma_{i})$$`
+
+<div class="countdown" id="timer_5a733a04" data-warn-when="60" data-update-every="1" tabindex="0" style="right:0;bottom:0;">
+<div class="countdown-controls"><button class="countdown-bump-down">&minus;</button><button class="countdown-bump-up">&plus;</button></div>
+<code class="countdown-time"><span class="countdown-digits minutes">05</span><span class="countdown-digits colon">:</span><span class="countdown-digits seconds">00</span></code>
+</div>
+
+---
+
+# Mediation Model
+
+
+```r
+library(psych)
+model &lt;- mediate(
+  Kiss_Freq ~ Kiss_Imp_Initial + Kiss_Imp_Est + (Kiss_Satis), 
+  data = watkins_data)
+```
+
+&lt;img src="lecture_8_files/figure-html/unnamed-chunk-40-1.png" width="504" style="display: block; margin: auto;" /&gt;
+
+---
+
+# Mediation Model
+
+
+```r
+print(model)
+```
+
+
+Mediation/Moderation Analysis 
+Call: mediate(y = Kiss_Freq ~ Kiss_Imp_Initial + Kiss_Imp_Est + (Kiss_Satis), 
+    data = watkins_data)
+
+The DV (Y) was  Kiss_Freq . The IV (X) was  Kiss_Imp_Initial Kiss_Imp_Est . The mediating variable(s) =  Kiss_Satis .
+
+Total effect(c) of  Kiss_Imp_Initial  on  Kiss_Freq  =  -0.02   S.E. =  0.02  t  =  -1.42  df=  2985   with p =  0.16
+Direct effect (c') of  Kiss_Imp_Initial  on  Kiss_Freq  removing  Kiss_Satis  =  0.01   S.E. =  0.01  t  =  0.81  df=  2984   with p =  0.42
+Indirect effect (ab) of  Kiss_Imp_Initial  on  Kiss_Freq  through  Kiss_Satis   =  -0.03 
+Mean bootstrapped indirect effect =  -0.03  with standard error =  0.01  Lower CI =  -0.05    Upper CI =  -0.02
+
+Total effect(c) of  Kiss_Imp_Est  on  Kiss_Freq  =  0.58   S.E. =  0.02  t  =  31.1  df=  2985   with p &lt; 0.001
+Direct effect (c') of  Kiss_Imp_Est  on  Kiss_Freq  removing  Kiss_Satis  =  0.5   S.E. =  0.02  t  =  28.85  df=  2984   with p &lt; 0.001
+Indirect effect (ab) of  Kiss_Imp_Est  on  Kiss_Freq  through  Kiss_Satis   =  0.08 
+Mean bootstrapped indirect effect =  0.08  with standard error =  0.01  Lower CI =  0.06    Upper CI =  0.1
+R = 0.64 R2 = 0.41   F = 690.99 on 3 and 2984 DF   p-value:  0 
+
+ To see the longer output, specify short = FALSE in the print statement or ask for the summary
+
+---
+class: inverse, mline, left, middle
+
+&lt;img class="circle" src="https://github.com/damien-dupre.png" width="250px"/&gt;
+
+# Thanks for your attention and don't hesitate if you have any questions!
+
+- [<svg aria-hidden="true" role="img" viewBox="0 0 512 512" style="height:1em;width:1em;vertical-align:-0.125em;margin-left:auto;margin-right:auto;font-size:inherit;fill:currentColor;overflow:visible;position:relative;"><path d="M459.37 151.716c.325 4.548.325 9.097.325 13.645 0 138.72-105.583 298.558-298.558 298.558-59.452 0-114.68-17.219-161.137-47.106 8.447.974 16.568 1.299 25.34 1.299 49.055 0 94.213-16.568 130.274-44.832-46.132-.975-84.792-31.188-98.112-72.772 6.498.974 12.995 1.624 19.818 1.624 9.421 0 18.843-1.3 27.614-3.573-48.081-9.747-84.143-51.98-84.143-102.985v-1.299c13.969 7.797 30.214 12.67 47.431 13.319-28.264-18.843-46.781-51.005-46.781-87.391 0-19.492 5.197-37.36 14.294-52.954 51.655 63.675 129.3 105.258 216.365 109.807-1.624-7.797-2.599-15.918-2.599-24.04 0-57.828 46.782-104.934 104.934-104.934 30.213 0 57.502 12.67 76.67 33.137 23.715-4.548 46.456-13.32 66.599-25.34-7.798 24.366-24.366 44.833-46.132 57.827 21.117-2.273 41.584-8.122 60.426-16.243-14.292 20.791-32.161 39.308-52.628 54.253z"/></svg> @damien_dupre](http://twitter.com/damien_dupre)
+- [<svg aria-hidden="true" role="img" viewBox="0 0 496 512" style="height:1em;width:0.97em;vertical-align:-0.125em;margin-left:auto;margin-right:auto;font-size:inherit;fill:currentColor;overflow:visible;position:relative;"><path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6zm-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3zm44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9zM244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8zM97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1zm-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7zm32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1zm-11.4-14.7c-1.6 1-1.6 3.6 0 5.9 1.6 2.3 4.3 3.3 5.6 2.3 1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2z"/></svg> @damien-dupre](http://github.com/damien-dupre)
+- [<svg aria-hidden="true" role="img" viewBox="0 0 640 512" style="height:1em;width:1.25em;vertical-align:-0.125em;margin-left:auto;margin-right:auto;font-size:inherit;fill:currentColor;overflow:visible;position:relative;"><path d="M579.8 267.7c56.5-56.5 56.5-148 0-204.5c-50-50-128.8-56.5-186.3-15.4l-1.6 1.1c-14.4 10.3-17.7 30.3-7.4 44.6s30.3 17.7 44.6 7.4l1.6-1.1c32.1-22.9 76-19.3 103.8 8.6c31.5 31.5 31.5 82.5 0 114L422.3 334.8c-31.5 31.5-82.5 31.5-114 0c-27.9-27.9-31.5-71.8-8.6-103.8l1.1-1.6c10.3-14.4 6.9-34.4-7.4-44.6s-34.4-6.9-44.6 7.4l-1.1 1.6C206.5 251.2 213 330 263 380c56.5 56.5 148 56.5 204.5 0L579.8 267.7zM60.2 244.3c-56.5 56.5-56.5 148 0 204.5c50 50 128.8 56.5 186.3 15.4l1.6-1.1c14.4-10.3 17.7-30.3 7.4-44.6s-30.3-17.7-44.6-7.4l-1.6 1.1c-32.1 22.9-76 19.3-103.8-8.6C74 372 74 321 105.5 289.5L217.7 177.2c31.5-31.5 82.5-31.5 114 0c27.9 27.9 31.5 71.8 8.6 103.9l-1.1 1.6c-10.3 14.4-6.9 34.4 7.4 44.6s34.4 6.9 44.6-7.4l1.1-1.6C433.5 260.8 427 182 377 132c-56.5-56.5-148-56.5-204.5 0L60.2 244.3z"/></svg> damien-datasci-blog.netlify.app](https://damien-datasci-blog.netlify.app)
+- [<svg aria-hidden="true" role="img" viewBox="0 0 512 512" style="height:1em;width:1em;vertical-align:-0.125em;margin-left:auto;margin-right:auto;font-size:inherit;fill:currentColor;overflow:visible;position:relative;"><path d="M16.1 260.2c-22.6 12.9-20.5 47.3 3.6 57.3L160 376V479.3c0 18.1 14.6 32.7 32.7 32.7c9.7 0 18.9-4.3 25.1-11.8l62-74.3 123.9 51.6c18.9 7.9 40.8-4.5 43.9-24.7l64-416c1.9-12.1-3.4-24.3-13.5-31.2s-23.3-7.5-34-1.4l-448 256zm52.1 25.5L409.7 90.6 190.1 336l1.2 1L68.2 285.7zM403.3 425.4L236.7 355.9 450.8 116.6 403.3 425.4z"/></svg> damien.dupre@dcu.ie](mailto:damien.dupre@dcu.ie)
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script src="libs/cols_macro.js"></script>
+<script>var slideshow = remark.create({
+"highlightStyle": "zenburn",
+"highlightLines": true,
+"countIncrementalSlides": false
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+// add `data-at-shortcutkeys` attribute to <body> to resolve conflicts with JAWS
+// screen reader (see PR #262)
+(function(d) {
+  let res = {};
+  d.querySelectorAll('.remark-help-content table tr').forEach(tr => {
+    const t = tr.querySelector('td:nth-child(2)').innerText;
+    tr.querySelectorAll('td:first-child .key').forEach(key => {
+      const k = key.innerText;
+      if (/^[a-z]$/.test(k)) res[k] = t;  // must be a single letter (key)
+    });
+  });
+  d.body.setAttribute('data-at-shortcutkeys', JSON.stringify(res));
+})(document);
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+// adds .remark-code-has-line-highlighted class to <pre> parent elements
+// of code chunks containing highlighted lines with class .remark-code-line-highlighted
+(function(d) {
+  const hlines = d.querySelectorAll('.remark-code-line-highlighted');
+  const preParents = [];
+  const findPreParent = function(line, p = 0) {
+    if (p > 1) return null; // traverse up no further than grandparent
+    const el = line.parentElement;
+    return el.tagName === "PRE" ? el : findPreParent(el, ++p);
+  };
+
+  for (let line of hlines) {
+    let pre = findPreParent(line);
+    if (pre && !preParents.includes(pre)) preParents.push(pre);
+  }
+  preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
+})(document);</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>

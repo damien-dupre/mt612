@@ -1,6 +1,6 @@
 ---
 title: "MT612 - Advanced Quant. Research Methods"
-subtitle: "Lecture 7: PCA, EFA, and CFA"
+subtitle: "Lecture 7: PCA, EFA, CFA, and Structural Equation Models"
 author: "Damien Dupré"
 date: "Dublin City University"
 output:

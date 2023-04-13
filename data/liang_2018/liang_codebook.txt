@@ -1,0 +1,17 @@
+NoUse: 42 participants indicated that they don’t want us to use their data (0 = use; 1 = do not use)
+Ret_MC: Participants in Retaliation condition who did not retaliate (0 = include; 1 = exclude). 30 participants did not engage in retaliation
+AS: Supervisory treatment condition (0 = neutral; 1 = AS)
+Ret: Retaliation condition (0 = no retaliation; 1 = retaliation)
+NeuNoRet: Neutral interaction/no retaliation
+NeuRet: Neutral interaction/retaliation
+ASNoRet: AS/no retaliation
+ASRet: AS/retaliation
+c1: Comply Retaliation in NeuRet condition (n = 13), 0 = non-compliers, 1 = compliers, everyone not in the NeuRet condition coded as 0
+c2: Comply Retaliation in ASRet condition (n = 11), 0 = non-compliers, 1 = compliers, everyone not in the ASRet condition coded as 0
+ret_r: Recoded conditions so those who failed the ret MC check were coded as NoRet (0 = no retaliation; 1 = retaliation)
+y: Injustice ratio
+Age: Age in years
+Gender: 0 = male; 1 = female
+Tenure: Supervisor tenure in months
+x: Bobko conditions (1 = NeuNoRet; 2 = NeuRet; 3 = ASRet; 4 = ASNoRet)
+TARGET: Injustice words

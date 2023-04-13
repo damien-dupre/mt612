@@ -1,6 +1,6 @@
 ---
 title: "MT612 - Advanced Quant. Research Methods"
-subtitle: "Lecture 8: Structural Equation Models"
+subtitle: "Lecture 8: Practice Session"
 author: "Damien Dupré"
 date: "Dublin City University"
 output:
@@ -20,6 +20,7 @@ library(anicon)
 library(countdown)
 library(emo)
 library(fontawesome)
+library(knitr)
 library(tidyverse)
 
 # general options --------------------------------------------------------------
@@ -38,124 +39,519 @@ opts_chunk$set(
   fig.align = "center", 
   fig.retina = 3
   )
+
+# data -------------------------------------------------------------------------
+watkins_data <- read_csv("~/Library/CloudStorage/OneDrive-Personal/Projects/mt612/data/watkins_2019/watkins_data.csv")
+
+liang_data <- read_csv("~/Library/CloudStorage/OneDrive-Personal/Projects/mt612/data/liang_2018/liang_data_2.csv")
 ```
 
-# Pre-requisites
-
-If I want to learn Structural Equation Modelling I should already have...
-
-* A very good understanding of **multiple linear regression**
-* Good familiarity with terms like **variance, covariance, correlation** 
-* It can help to have some familiarity with **data tidying** (i.e. in R), especially for converting between **long and wide data formats**
-* Formal understanding of **causal diagrams**/Directed Acyclic Graphs can be helpful
-
----
-
-# Structural Equation Model
-
-General framework that uses various models to test relationships among variables
-
-Include different facets of statistical analyses:
-
- - Regression model (Legendre or Gauss, 1805)
- - Confirmatory factor analysis (Howe, 1955; Anderson & Rubin, 1956; Karl Joreskog, 1963)
- - Latent factor structure (Spearman, 1904, 1927)
- - Path model (Wrigh, 1918, 1921)
- 
-A Structural Equation Model is a confirmatory factor analysis + a path model analysis.
-
----
-
-# Structural Equation Model
+# The Final Lecture
 
 .pull-left[
-The confirmatory factor analysis part is called **measurement model**
+In the previous lectures, either with Jamovi or with R, we have seen how to perform:
 
-The path model analysis is called **structural model** and evaluate the  relationship between constructs
+- General Linear Models
+- Generalized Linear Models
+- General(ized) Linear Mixed Models
+- Generalized Additive (Mixed) Models
+- Mediation Path Models
+- Structural Equations Models
 
-A full SEM model is combination of measurement and structural component
+Let's practice these models with some exercises!
 ]
 
 .pull-right[
 ```{r}
-include_graphics("img/structural_part_2.jpg")
+include_graphics("https://i.redd.it/btzpd57funha1.jpg")
+```
+]
+
+---
+class: inverse, mline, center, middle
+
+# Liang et al. (2018) 
+
+## Righting a wrong: Retaliation on a voodoo doll symbolizing an abusive supervisor restores justice
+
+---
+
+# Liang et al. (2018) 
+
+Liang et al. won the IG Nobel prize of Economics with the paper **"Righting a wrong: Retaliation on a voodoo doll symbolizing an abusive supervisor restores justice"** published in The Leadership Quarterly for investigating whether it is effective for employees to use Voodoo dolls to retaliate against abusive bosses (https://www.sciencedirect.com/science/article/pii/S104898431730276X).
+
+```{r}
+include_graphics("https://newworkplace.files.wordpress.com/2018/04/img_4820.jpg")
+```
+
+---
+
+# Liang et al. (2018)
+
+Participants were randomly assigned into four conditions: **abusive supervision/no retaliation (AS/NR)**, **abusive supervision/retaliation (AS/R)**, **neutral Interaction/no retaliation (NI/NR)** and **neutral Interaction/retaliation (NI/R)**. 
+
+In the experimental conditions (i.e., AS/NR and AS/R), participants were asked to **recall and visualize a workplace interaction with abusive supervision**. While in the control conditions (i.e., NI/NR and NI/R), participants were asked to **recall and visualize a workplace neutral interaction**.
+
+Then, participants did another task that involved an online voodoo doll:
+
+- In the retaliation condition, participants used voodoo doll by labelling the voodoo doll with their supervisor's initials and by using pins, pliers, fire on the doll.
+
+- In the no retaliation condition, participants were shown a screenshot of the voodoo doll, they were asked to label the doll as “Nobody”, and trace the outline of the doll with a cursor.
+
+Participants were then asked to do another task that involved **completing five word fragments**, which was used to assess participants' implicit injustice perceptions. Each of the five word fragments can be completed to form either an injustice related word or a neutral word. For example, the fragment un_ _ual can be completed as “unusual” (i.e., neutral word), or “unequal” (i.e., injustice word).
+
+---
+class: title-slide, middle
+
+## Exercise: Reformulate Liang et al. (2018)'s hypothesis
+
+Retaliation moderates the positive relation between abusive supervision and subordinate injustice perceptions, such that the relationship is weaker when retaliation is high rather than low.
+
+```{r}
+countdown(minutes = 5, warn_when = 60)
+```
+
+---
+
+# Liang et al. (2018)'s Hypothesis
+
+The effect of retaliation on implicit injustice perceptions is higher in the abusive supervision than it is in the neutral interaction.
+
+```{r}
+include_graphics("https://ars.els-cdn.com/content/image/1-s2.0-S104898431730276X-gr1.jpg")
+```
+
+Note, this model involves also the two main effects of retaliation on implicit injustice perceptions and condition on implicit injustice perceptions such as:
+- the average implicit injustice perception is higher in the condition without retaliation than the average implicit injustice perception with retaliation
+- the average implicit injustice perception is higher in the condition of abusive supervision than the average implicit injustice perception in the condition of neutral interaction
+
+---
+class: title-slide, middle
+
+## Exercise: Set the data up in Jamovi or in R
+
+Open the file "**liang_data_2.csv**"
+
+```{r}
+countdown(minutes = 3, warn_when = 60)
+```
+
+---
+
+# R Setup
+
+### Load libraries
+
+```{r echo=TRUE}
+library(tidyverse)
+```
+
+### Load data
+```{r echo=TRUE, eval=FALSE}
+watkins_data <- 
+  read_csv("~/mt612/data/liang_2019/liang_data.csv")
+```
+
+
+---
+class: title-slide, middle
+
+## Exercise: Test the following General Linear Model, check its assumptions, and interpret its effects
+
+$$implicit\,injustice\,perception_{i} = b_{0} + b_{1}\,retaliation_{i} + b_{2}\,condition_{i} + \\b_{3}\,retaliation*condition_{i} + e_{i}$$
+
+$$e_{i} \sim \mathcal{N}(0, \sigma_{i})$$
+
+```{r}
+countdown(minutes = 3, warn_when = 60)
+```
+
+---
+
+# General Linear Model
+
+```{r echo=TRUE, fig.width=10, fig.height=3}
+liang_data |> 
+  summarise(m_iip = mean(TARGET, na.rm = TRUE), .by = c(AS, Ret)) |> 
+  ggplot(aes(as.factor(AS), m_iip, fill = as.factor(Ret)))  +
+  geom_col(position = position_dodge()) +
+  labs(
+    x = "Condition (NI vs AS)", 
+    y = "Implicit Injustice Perception", 
+    fill = "Retaliation"
+  ) +
+  theme_bw() +
+  theme(text = element_text(size = 20))
+```
+
+```{r echo=TRUE}
+model <- lm(TARGET ~ AS + Ret + AS : Ret, data = liang_data)
+```
+
+---
+
+# General Linear Model
+
+```{r echo=TRUE}
+summary(model)
+```
+
+---
+
+# General Linear Model
+
+```{r echo=TRUE, results='asis'}
+library(report)
+report(model)
+```
+
+---
+
+# General Linear Model
+
+```{r echo=TRUE, fig.width=10, fig.height=5}
+library(performance)
+check_model(model, check = "qq")
+check_normality(model)
+```
+
+---
+
+# General Linear Model
+
+```{r echo=TRUE, fig.width=10, fig.height=5}
+liang_data |> 
+  ggplot(aes(TARGET)) +
+  geom_histogram() +
+  theme_bw() +
+  theme(text = element_text(size = 20))
+```
+
+As the outcome variable is a count, a Generalized Linear Model with Poisson distribution would actually be better than a regular General Linear Model with Normal distribution of the residuals.
+
+---
+class: title-slide, middle
+
+## Exercise: Test the following Generalized Linear Model
+
+$$implicit\,injustice\,perception_{i} = b_{0} + b_{1}\,retaliation_{i} + b_{2}\,condition_{i} + \\b_{3}\,retaliation*condition_{i}$$
+
+$$implicit\,injustice\,perception_{i} \sim Poisson(\lambda_{i})$$
+
+```{r}
+countdown(minutes = 5, warn_when = 60)
+```
+
+---
+
+# Generalized Linear Model
+
+```{r echo=TRUE, eval=FALSE}
+model <- glm(TARGET ~ AS + Ret + AS : Ret, data = liang_data, family = poisson)
+summary(model)
+```
+
+.small[
+```{r}
+model <- glm(TARGET ~ AS + Ret + AS : Ret, data = liang_data, family = poisson)
+summary(model)
 ```
 ]
 
 ---
 
-# Basic SEM Conventions
+# Generalized Linear Model
+
+```{r echo=TRUE, results='asis'}
+library(report)
+report(model)
+```
+
+---
+class: inverse, mline, center, middle
+
+# Watkins et al. (2019) 
+
+## National income inequality predicts cultural variation in mouth to mouth kissing
+
+---
+
+# Watkins et al. (2019)
+
+Watkins et al. won the IG Nobel prize of Economics with the paper **"National income inequality predicts cultural variation in mouth to mouth kissing"** published in Scientific Reports for trying to quantify the relationship between different countries’ national income inequality and the average amount of mouth-to-mouth kissing (https://www.nature.com/articles/s41598-019-43267-7).
 
 ```{r}
-include_graphics("img/sem_convention_2.jpg")
+include_graphics("https://improbable.com/wp-content/uploads/2019/05/kssingpaper.jpg")
+```
+
+2379 participants eligible for analyses comparing nations answered a **survey about their attitudes toward mouth-to-mouth kissing** (643 males, Mage = 32.34 years, SD = 11.85 years, 71% in a long-term romantic relationship, 89% reported their orientation as heterosexual).
+
+---
+
+# Watkins et al. (2019)
+
+Participants were asked:
+
+- **how important they thought kissing** was i) at the very initial stages of a romantic relationship and ii) during the established phases of a committed, long-term relationship on a 0 (not at all important) to 100 (extremely important) scale.
+
+- when they are **in a romantic relationship** i) how often they kiss their partner, ii) just hug or cuddle their partner (a single hug or cuddle without kissing involved), iii) have sexual intercourse with their partner, on a 0 (not at all) to 100 (very often) scale. 
+
+- their **satisfaction with the amount of kissing/hugging-cuddling/sexual intercourse** (in general, when they are in a romantic relationship) on a 0 (not at all satisfied) to 100 (very satisfied) scale.
+
+---
+class: title-slide, middle
+
+## Exercise: Set the data up in Jamovi or in R
+
+Open the file "**watkins_data.csv**"
+
+```{r}
+countdown(minutes = 3, warn_when = 60)
+```
+
+---
+
+# R Setup
+
+### Load libraries
+
+```{r echo=TRUE}
+library(tidyverse)
+```
+
+### Load data
+```{r echo=TRUE, eval=FALSE}
+watkins_data <- 
+  read_csv("~/mt612/data/watkins_2019_data/watkins_data.csv")
 ```
 
 ---
 class: title-slide, middle
 
-## SEM with R
+## Exercise: Test the following General Linear Model, check its assumptions, and interpret its effects
 
----
+$$Kiss\_Freq_{i} = b_{0} + b_{1}\,Kiss\_Imp\_Initial_{i} + b_{2}\,Kiss\_Imp\_Est_{i} + \\b_{3}\,Kiss\_Satis_{i} + e_{i}$$
 
-# SEM with R
+$$e_{i} \sim \mathcal{N}(0, \sigma_{i})$$
 
-As we have seen with Path Analysis and CFA, the package {lavaan} provides a specific coding structure to define the SEM, see https://lavaan.ugent.be/
-
-.pull-left[
+```{r}
+countdown(minutes = 3, warn_when = 60)
 ```
-   # latent variables
-     ind60 =~ x1 + x2 + x3
-     dem60 =~ y1 + y2 + y3 + y4
-     dem65 =~ y5 + y6 + y7 + y8
-   # regressions
-     dem60 ~ ind60
-     dem65 ~ ind60 + dem60
-   # residual covariances
-     y1 ~~ y5
-     y2 ~~ y4 + y6
-     y3 ~~ y7
-     y4 ~~ y8
-     y6 ~~ y8
+
+---
+
+# General Linear Model
+
+```{r echo=TRUE, fig.width=10, fig.height=3}
+watkins_data |> 
+  pivot_longer(c(Kiss_Imp_Initial, Kiss_Imp_Est, Kiss_Satis)) |> 
+  ggplot(aes(value, Kiss_Freq)) +
+  geom_point(alpha = 0.1, size = 1) +
+  geom_smooth(method = "lm", se = FALSE) +
+  facet_wrap(~ name) +
+  theme_bw() +
+  theme(text = element_text(size = 20))
 ```
-]
 
-.pull-right[
-```{r out.width='100%'}
-include_graphics("https://lavaan.ugent.be/tutorial/figure/sem.png")
+```{r echo=TRUE}
+model <- lm(
+  formula = Kiss_Freq ~ Kiss_Imp_Initial + Kiss_Imp_Est + Kiss_Satis, 
+  data = watkins_data)
 ```
-]
 
 ---
 
-# Lavaan
+# General Linear Model
 
-- R package {lavaan} (**LA**tent **VA**riable **AN**alysis) (Rosseel, 2012)
-
-  - Free and open-source
-  - Easy and intuitive to use
-  - Reliable and advanced with commercial-quality
-  - Extensible
-  - Constantly upgrading
+```{r echo=TRUE}
+summary(model)
+```
 
 ---
 
-# Lavaan Syntax
+# General Linear Model
 
-Formula type | Operator | Example | Description | Diagram
-:----------- | :-------: | :------| :----------| :------:
-.aqua[regression] | `~` | `y ~ x`|.aqua[y is .aqua[regressed] on x ]| <img src="img/regression.png" height="50px"/> 
-.moss[latent variable definition] | `=~` | `f =~ y1 + y2 + y3` | .moss[f is .moss[measured] by y1, y2, y3] | <img src="img/latent_var.png" height="120px"/>
-.sea_green[(co)variance] |`~~` | `y1 ~~ y1` <br> `y2 ~~ y3` |.sea_green[Variance of y1 <br> Covariance between y2 and y3] | <img src="img/co_var.png" height="120px"/> 
-.dark_coral[intercept] | `~1` | `y1 ~ 1` | .dark_coral[The intercept (mean) of y1] | <img src="img/intercept.png" height="50px"/> 
+```{r echo=TRUE, results='asis'}
+library(report)
+report(model)
+```
 
 ---
 
-# Lavaan Syntax 
+# General Linear Model
 
-Formula type | Operator | Example | Description | Diagram
-:----------- | :-------: | :------| :----------| :----:
-fixed parameter | `*`| `1*y1` | Fix the parameter (factor loading) of y1 to 1 | <img src="img/fix_para.png" height="50px"/>
-free parameter | `NA*` |`NA*y1`| The parameter (factor loading) of y1 is freely estimated  | <img src="img/free_para.png" height="50px"/>
+```{r echo=TRUE, fig.width=10, fig.height=5}
+library(performance)
+check_model(model, check = "linearity")
+```
+
+---
+
+# General Linear Model
+
+```{r echo=TRUE, fig.width=10, fig.height=5}
+library(performance)
+check_model(model, check = "qq")
+check_normality(model)
+```
+
+---
+
+# General Linear Model
+
+```{r echo=TRUE, fig.width=10, fig.height=5}
+library(performance)
+check_model(model, check = "homogeneity")
+check_heteroscedasticity(model)
+```
+
+---
+class: title-slide, middle
+
+## Exercise: Convert Kiss_Freq as a binomial variable and test the following Generalized Linear Model
+
+$$\textrm{logit}(p_{\texttt{high kiss}}) = b_{0} + b_{1}\,Kiss\_Imp\_Initial_{i} + b_{2}\,Kiss\_Imp\_Est_{i} + b_{3}\,Kiss\_Satis_{i} \\
+\texttt{Kiss_Freq} \sim Bern(p_{\texttt{high kiss}})$$
+
+```{r}
+countdown(minutes = 5, warn_when = 60)
+```
+
+---
+
+# Generalized Linear Model
+
+```{r echo=TRUE}
+watkins_transformed_data <- watkins_data |> 
+  mutate(Kiss_Freq_c = case_when(
+    Kiss_Freq > mean(Kiss_Freq, na.rm = TRUE) ~ 1, # Kiss_Freq > 50 ~ 1,
+    Kiss_Freq <= mean(Kiss_Freq, na.rm = TRUE) ~ 0) # Kiss_Freq <= 50 ~ 0)
+  )
+```
+
+---
+
+# Generalized Linear Model
+
+```{r echo=TRUE, fig.width=10, fig.height=3}
+watkins_transformed_data  |> 
+  pivot_longer(c(Kiss_Imp_Initial, Kiss_Imp_Est, Kiss_Satis)) |> 
+  ggplot(aes(value, Kiss_Freq_c)) +
+  geom_point(alpha = 0.1, size = 1) +
+  stat_smooth(method = "glm", method.args = list(family = "binomial"), se = FALSE) +
+  facet_wrap(~ name) +
+  theme_bw() +
+  theme(text = element_text(size = 20))
+```
+
+```{r echo=TRUE}
+model <- glm(
+  formula = Kiss_Freq_c ~ Kiss_Imp_Initial + Kiss_Imp_Est + Kiss_Satis, 
+  data = watkins_transformed_data, 
+  family = binomial)
+```
+
+---
+
+# Generalized Linear Model
+
+```{r echo=TRUE}
+summary(model)
+```
+
+---
+
+# Generalized Linear Model
+
+```{r echo=TRUE, results='asis'}
+library(report)
+report(model)
+```
+
+---
+
+# Generalized Linear Model
+
+Beta regression would work for response values in (0,1); because we have response values in (0,1] (with a fair number of these values equal to 1), we will need to consider **one-inflated beta regression**
+
+```{r echo=TRUE, ev=FALSE}
+watkins_transformed_data <- 
+  watkins_data |> 
+  dplyr::select(Kiss_Freq, Kiss_Imp_Initial, Kiss_Imp_Est, Kiss_Satis) |> 
+  mutate(Kiss_Freq = Kiss_Freq/100) |> 
+  drop_na()
+
+# install.packages("gamlss")
+library(gamlss)
+
+model <- gamlss(
+  Kiss_Freq ~ Kiss_Imp_Initial + Kiss_Imp_Est + Kiss_Satis, 
+  family = BEINF(), 
+  data = watkins_transformed_data)
+```
+
+---
+
+# Generalized Linear Model
+
+`model <- gamlss()`: This creates a GAMLSS model object and assigns it to the variable model.
+
+`Kiss_Freq ~ Kiss_Imp_Initial + Kiss_Imp_Est + Kiss_Satis`: This is the formula for the model, which specifies the outcome variable (Kiss_Freq) and the predictor variables (Kiss_Imp_Initial, Kiss_Imp_Est, and Kiss_Satis).
+
+`family = BEINF()`: This specifies the distributional family for the model. `BEINF()` stands for beta inflated distribution, which is a type of one-inflated beta regression model.
+
+`data = Kissing_transformed_data`: This specifies the data set to use for the model, which is called Kissing_transformed_data.
+
+---
+
+# Generalized Linear Model
+
+```{r echo=TRUE}
+summary(model)
+```
+
+---
+class: title-slide, middle
+
+## Exercise: Let's forget about the linear assumptions, let's test the following Mediation Model, and interpret its effects
+
+$$Kiss\_Freq_{i} = b_{0} + c_{1}\,Kiss\_Imp\_Initial_{i} + c_{2}\,Kiss\_Imp\_Est_{i} + e_{i}$$
+
+$$Kiss\_Satis_{i} = b_{0} + a_{1}\,Kiss\_Imp\_Initial_{i} + a_{2}\,Kiss\_Imp\_Est_{i} + e_{i}$$
+
+$$Kiss\_Freq_{i} = b_{0} + b\,Kiss\_Satis_{i} + c'_{1}\,Kiss\_Imp\_Initial_{i} + c'_{2}\,Kiss\_Imp\_Est_{i} + e_{i}$$
+
+$$e_{i} \overset{iid}\sim \mathcal{N}(0, \sigma_{i})$$
+
+```{r}
+countdown(minutes = 5, warn_when = 60)
+```
+
+---
+
+# Mediation Model
+
+```{r echo=TRUE, results='asis'}
+library(psych)
+model <- mediate(
+  Kiss_Freq ~ Kiss_Imp_Initial + Kiss_Imp_Est + (Kiss_Satis), 
+  data = watkins_data)
+```
+
+---
+
+# Mediation Model
+
+```{r echo=TRUE, eval=FALSE}
+print(model)
+```
+
+```{r results='asis'}
+print(model) |> 
+  capture.output() |> 
+  str_replace("p =  0.000.*$", "p < 0.001") |> 
+  cat(sep = "\n")
+```
 
 ---
 class: inverse, mline, left, middle
@@ -164,7 +560,7 @@ class: inverse, mline, left, middle
 
 # Thanks for your attention and don't hesitate if you have any questions!
 
-- [`r fa(name = "twitter")` @damien_dupre](http://twitter.com/damien_dupre)
-- [`r fa(name = "github")` @damien-dupre](http://github.com/damien-dupre)
-- [`r fa(name = "link")` damien-datasci-blog.netlify.app](https://damien-datasci-blog.netlify.app)
-- [`r fa(name = "paper-plane")` damien.dupre@dcu.ie](mailto:damien.dupre@dcu.ie)
+- [`r fontawesome::fa(name = "twitter")` @damien_dupre](http://twitter.com/damien_dupre)
+- [`r fontawesome::fa(name = "github")` @damien-dupre](http://github.com/damien-dupre)
+- [`r fontawesome::fa(name = "link")` damien-datasci-blog.netlify.app](https://damien-datasci-blog.netlify.app)
+- [`r fontawesome::fa(name = "paper-plane")` damien.dupre@dcu.ie](mailto:damien.dupre@dcu.ie)

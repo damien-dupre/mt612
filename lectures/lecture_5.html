@@ -4,11 +4,11 @@
     <title>MT612 - Advanced Quant. Research Methods</title>
     <meta charset="utf-8" />
     <meta name="author" content="Damien Dupré" />
-    <script src="libs/header-attrs-2.20/header-attrs.js"></script>
+    <script src="libs/header-attrs-2.21/header-attrs.js"></script>
     <link href="libs/remark-css-0.0.1/default.css" rel="stylesheet" />
     <link href="libs/remark-css-0.0.1/metropolis.css" rel="stylesheet" />
     <link href="libs/remark-css-0.0.1/metropolis-fonts.css" rel="stylesheet" />
-    <script src="libs/htmlwidgets-1.6.1/htmlwidgets.js"></script>
+    <script src="libs/htmlwidgets-1.6.2/htmlwidgets.js"></script>
     <script src="libs/viz-1.8.2/viz.js"></script>
     <link href="libs/DiagrammeR-styles-0.2/styles.css" rel="stylesheet" />
     <script src="libs/grViz-binding-1.0.9/grViz.js"></script>
@@ -190,11 +190,11 @@ Data analysis is also presented in the [Jamovi Advanced Mediation Model website]
 
 Imagine that previous studies have suggested that higher grades predict higher happiness. This is the **Total Effect**.
 
-&lt;img src="https://data.library.virginia.edu/files/mediation_ex1.png" width="50%" style="display: block; margin: auto;" /&gt;
+&lt;img src="https://library.virginia.edu/sites/default/files/inline-images/mediation_ex1_0.png" width="50%" style="display: block; margin: auto;" /&gt;
 
 However, grades are not the real reason that happiness increases. Let's hypothesize that good grades boost one’s self-esteem and then high self-esteem boosts one’s happiness. This is the **Indirect Effect**.
 
-&lt;img src="https://data.library.virginia.edu/files/mediation_ex2.png" width="50%" style="display: block; margin: auto;" /&gt;
+&lt;img src="https://library.virginia.edu/sites/default/files/inline-images/mediation_ex2.png" width="50%" style="display: block; margin: auto;" /&gt;
 
 Self-esteem is a mediator that explains the underlying mechanism of the relationship between grades (or `\(X\)`) and happiness (or `\(Y\)`).
 
@@ -204,7 +204,7 @@ A mediation analysis is comprised of **three sets of regression**: `\(X\)` → `
 
 # Analyse Mediation Effects - Step 1
 
-&lt;img src="https://data.library.virginia.edu/files/mediation_step1.png" width="70%" style="display: block; margin: auto;" /&gt;
+&lt;img src="https://library.virginia.edu/sites/default/files/inline-images/mediation_step1.png" width="70%" style="display: block; margin: auto;" /&gt;
 
 `$$Y = b_{0} + c\,X + e$$`
 
@@ -214,7 +214,7 @@ Is `\(c\)` significant? We want `\(X\)` to affect `\(Y\)` (Direct Effect). If th
 
 # Analyse Mediation Effects - Step 2
 
-&lt;img src="https://data.library.virginia.edu/files/mediation_step2.png" width="70%" style="display: block; margin: auto;" /&gt;
+&lt;img src="https://library.virginia.edu/sites/default/files/inline-images/mediation_step2.png" width="70%" style="display: block; margin: auto;" /&gt;
 
 `$$M = b_{0} + a\,X + e$$`
 
@@ -224,7 +224,7 @@ Is `\(a\)` significant? We want `\(X\)` to affect `\(M\)`. If `\(X\)` and `\(M\)
 
 # Analyse Mediation Effects - Step 3
 
-&lt;img src="https://data.library.virginia.edu/files/mediation_step3.png" width="70%" style="display: block; margin: auto;" /&gt;
+&lt;img src="https://library.virginia.edu/sites/default/files/inline-images/mediation_step3.png" width="70%" style="display: block; margin: auto;" /&gt;
 
 `$$Y = b_{0} + c'\,X + b\,M + e$$`
 
@@ -521,7 +521,7 @@ muller_mediation &lt;- haven::read_sav("https://github.com/mcfanda/jamm_docs/blo
 
 
 
-<div class="countdown" id="timer_eefa8a29" data-warn-when="60" data-update-every="1" tabindex="0" style="right:0;bottom:0;">
+<div class="countdown" id="timer_610a5e6e" data-warn-when="60" data-update-every="1" tabindex="0" style="right:0;bottom:0;">
 <div class="countdown-controls"><button class="countdown-bump-down">&minus;</button><button class="countdown-bump-up">&plus;</button></div>
 <code class="countdown-time"><span class="countdown-digits minutes">10</span><span class="countdown-digits colon">:</span><span class="countdown-digits seconds">00</span></code>
 </div>
@@ -544,7 +544,7 @@ As `medmod` in Jamovi or in R is not suitable for more than 1 mediator variable:
 - Test this hypothesis in Jamovi with the `jAMM` module
 - Test this hypothesis in R with the {psych} packages
 
-<div class="countdown" id="timer_e7adbf54" data-warn-when="60" data-update-every="1" tabindex="0" style="right:0;bottom:0;">
+<div class="countdown" id="timer_15d22f16" data-warn-when="60" data-update-every="1" tabindex="0" style="right:0;bottom:0;">
 <div class="countdown-controls"><button class="countdown-bump-down">&minus;</button><button class="countdown-bump-up">&plus;</button></div>
 <code class="countdown-time"><span class="countdown-digits minutes">05</span><span class="countdown-digits colon">:</span><span class="countdown-digits seconds">00</span></code>
 </div>
@@ -594,7 +594,7 @@ The DV (Y) was  BEH . The IV (X) was  prime . The mediating variable(s) =  EXP S
 Total effect(c) of  prime  on  BEH  =  9.18   S.E. =  2.8  t  =  3.27  df=  98   with p =  0.0015
 Direct effect (c') of  prime  on  BEH  removing  EXP SVO  =  5.99   S.E. =  2.81  t  =  2.13  df=  96   with p =  0.036
 Indirect effect (ab) of  prime  on  BEH  through  EXP SVO   =  3.2 
-Mean bootstrapped indirect effect =  3.29  with standard error =  1.69  Lower CI =  0.46    Upper CI =  7.14
+Mean bootstrapped indirect effect =  3.27  with standard error =  1.69  Lower CI =  0.45    Upper CI =  7.13
 R = 0.46 R2 = 0.21   F = 8.74 on 3 and 96 DF   p-value:  0.00000465 
 
  To see the longer output, specify short = FALSE in the print statement or ask for the summary
@@ -693,17 +693,17 @@ The DV (Y) was  BEH . The IV (X) was  prime SVO prime*SVO . The mediating variab
 Total effect(c) of  prime  on  BEH  =  9.16   S.E. =  2.69  t  =  3.4  df=  96   with p =  0.00099
 Direct effect (c') of  prime  on  BEH  removing  EXP  =  6.02   S.E. =  2.72  t  =  2.21  df=  95   with p =  0.029
 Indirect effect (ab) of  prime  on  BEH  through  EXP   =  3.14 
-Mean bootstrapped indirect effect =  3.18  with standard error =  1.61  Lower CI =  0.63    Upper CI =  6.87
+Mean bootstrapped indirect effect =  3.13  with standard error =  1.57  Lower CI =  0.52    Upper CI =  6.73
 
 Total effect(c) of  SVO  on  BEH  =  2.04   S.E. =  0.98  t  =  2.09  df=  96   with p =  0.039
 Direct effect (c') of  SVO  on  BEH  removing  EXP  =  2.09   S.E. =  0.93  t  =  2.25  df=  95   with p =  0.026
 Indirect effect (ab) of  SVO  on  BEH  through  EXP   =  -0.05 
-Mean bootstrapped indirect effect =  -0.07  with standard error =  0.37  Lower CI =  -0.92    Upper CI =  0.62
+Mean bootstrapped indirect effect =  -0.08  with standard error =  0.36  Lower CI =  -0.9    Upper CI =  0.62
 
 Total effect(c) of  prime*SVO  on  BEH  =  5.15   S.E. =  1.95  t  =  2.64  df=  96   with p =  0.0098
 Direct effect (c') of  prime*SVO  on  BEH  removing  EXP  =  5.05   S.E. =  1.86  t  =  2.72  df=  95   with p =  0.0078
 Indirect effect (ab) of  prime*SVO  on  BEH  through  EXP   =  0.1 
-Mean bootstrapped indirect effect =  0.17  with standard error =  0.72  Lower CI =  -1.22    Upper CI =  1.76
+Mean bootstrapped indirect effect =  0.17  with standard error =  0.71  Lower CI =  -1.16    Upper CI =  1.82
 R = 0.52 R2 = 0.27   F = 8.84 on 4 and 95 DF   p-value:  0.000000646 
 
  To see the longer output, specify short = FALSE in the print statement or ask for the summary
@@ -905,7 +905,7 @@ summary(results_lavaan)
 ```
 
 ```
-lavaan 0.6.14 ended normally after 1 iteration
+lavaan 0.6.15 ended normally after 1 iteration
 
   Estimator                                         ML
   Optimization method                           NLMINB
@@ -951,7 +951,7 @@ summary(results_lavaan)
 ```
 
 ```
-lavaan 0.6.14 ended normally after 1 iteration
+lavaan 0.6.15 ended normally after 1 iteration
 
   Estimator                                         ML
   Optimization method                           NLMINB
@@ -1107,7 +1107,7 @@ summary(results_lavaan, ci = TRUE)
 ```
 
 ```
-lavaan 0.6.14 ended normally after 1 iteration
+lavaan 0.6.15 ended normally after 1 iteration
 
   Estimator                                         ML
   Optimization method                           NLMINB
@@ -1170,7 +1170,7 @@ summary(results_lavaan, ci = TRUE)
 ```
 
 ```
-lavaan 0.6.14 ended normally after 1 iteration
+lavaan 0.6.15 ended normally after 1 iteration
 
   Estimator                                         ML
   Optimization method                           NLMINB

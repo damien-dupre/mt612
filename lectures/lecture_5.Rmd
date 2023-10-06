@@ -243,13 +243,14 @@ DiagrammeR::grViz("
 Imagine that previous studies have suggested that higher grades predict higher happiness. This is the **Total Effect**.
 
 ```{r out.width="50%"}
-include_graphics("https://data.library.virginia.edu/files/mediation_ex1.png")
+# https://library.virginia.edu/data/articles/introduction-to-mediation-analysis
+include_graphics("https://library.virginia.edu/sites/default/files/inline-images/mediation_ex1_0.png")
 ```
 
 However, grades are not the real reason that happiness increases. Let's hypothesize that good grades boost one’s self-esteem and then high self-esteem boosts one’s happiness. This is the **Indirect Effect**.
 
 ```{r out.width="50%"}
-include_graphics("https://data.library.virginia.edu/files/mediation_ex2.png")
+include_graphics("https://library.virginia.edu/sites/default/files/inline-images/mediation_ex2.png")
 ```
 
 Self-esteem is a mediator that explains the underlying mechanism of the relationship between grades (or $X$) and happiness (or $Y$).
@@ -261,7 +262,7 @@ A mediation analysis is comprised of **three sets of regression**: $X$ → $Y$, 
 # Analyse Mediation Effects - Step 1
 
 ```{r out.width="70%"}
-include_graphics("https://data.library.virginia.edu/files/mediation_step1.png")
+include_graphics("https://library.virginia.edu/sites/default/files/inline-images/mediation_step1.png")
 ```
 
 $$Y = b_{0} + c\,X + e$$
@@ -273,7 +274,7 @@ Is $c$ significant? We want $X$ to affect $Y$ (Direct Effect). If there is no re
 # Analyse Mediation Effects - Step 2
 
 ```{r out.width = "70%"}
-include_graphics("https://data.library.virginia.edu/files/mediation_step2.png")
+include_graphics("https://library.virginia.edu/sites/default/files/inline-images/mediation_step2.png")
 ```
 
 $$M = b_{0} + a\,X + e$$
@@ -285,7 +286,7 @@ Is $a$ significant? We want $X$ to affect $M$. If $X$ and $M$ have no relationsh
 # Analyse Mediation Effects - Step 3
 
 ```{r out.width = "70%"}
-include_graphics("https://data.library.virginia.edu/files/mediation_step3.png")
+include_graphics("https://library.virginia.edu/sites/default/files/inline-images/mediation_step3.png")
 ```
 
 $$Y = b_{0} + c'\,X + b\,M + e$$
